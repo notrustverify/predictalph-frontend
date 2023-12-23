@@ -76,7 +76,7 @@ jobs:
       - name: Build with Next.js
         run: ${{ steps.detect-package-manager.outputs.runner }} testnet:build
         env: 
-          NEXT_PUBLIC_API_HOST: "predictalph-api.notrusverify.ch"
+          NEXT_PUBLIC_API_HOST: "predictalph-api.notrustverify.ch"
       - name: Static HTML export with Next.js
         run: ${{ steps.detect-package-manager.outputs.runner }} next export
       - name: Upload artifact
