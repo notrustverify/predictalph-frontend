@@ -35,6 +35,7 @@ const nodeProvider = new NodeProvider(
 
 const currentDate = Date.now();
 
+const intPriceDivision = 10_000
 
 export const TokenDapp: FC<{
   config: PredictAlphConfig
@@ -135,7 +136,6 @@ export const TokenDapp: FC<{
   const priceCallback = async() => { 
     const priceCall = await cgClient.simplePrice({ vs_currencies: "usd",ids: "alephium" })
       setPrice(priceCall.alephium.usd.toFixed(3))
-      console.log("call")
   }
 
   
@@ -160,7 +160,7 @@ export const TokenDapp: FC<{
           <>
             <h2 className={styles.title}>Predict price of ALPH on {config.network}</h2>
             <p>Actual ALPH price: ${price}</p>
-            <p>Price locked: ${roundStates?.priceStart.toString()}</p>
+            <p>Price locked: ${(Number(roundStates?.priceStart)/intPriceDivision).toString()}</p>
             <p>Round end at: { roundStates?.bidEndTimestamp ? (
                     <Timer drawTimestamp={Number(roundStates?.bidEndTimestamp)} /> 
                   ) : (
