@@ -64,7 +64,7 @@ export const TokenDapp: FC<{
   const claimSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     clickedClaimed = true
-    const res = await fetch(`http://localhost:8080/round/${account?.address}`, {
+    const res = await fetch(`https://NEXT_PUBLIC_API_HOST/round/${account?.address}`, {
     headers: {
       'Content-Type': 'application/json',
     },
