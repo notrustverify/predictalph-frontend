@@ -49,6 +49,7 @@ export const TokenDapp: FC<{
   const [roundStates, setRoundStates] = useState<RoundTypes.Fields>()
   const [userRound, setUserRound] = useState([])
 
+
   const [ongoingTxId, setOngoingTxId] = useState<string>()
 
   let clickedClaimed = false
@@ -56,6 +57,8 @@ export const TokenDapp: FC<{
 
   const bidSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    clickedClaimed = true
+
     if (signer) {
       const result = await bid(signer,config.predictAlphId ,BigInt(bidAmount), bidUser)
       setOngoingTxId(result.txId)
@@ -64,31 +67,10 @@ export const TokenDapp: FC<{
 
   const claimSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    clickedClaimed = true
-    const res = await fetch(`https://${process.env.NEXT_PUBLIC_API_HOST}/round/${account?.address}`, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-
-  if( !res.ok ) return 
-  const data = await res.json()
-  if(data.length <= 0)
-    return
-
-  const intEpoch = data.map((el: string)  => { 
-    const intElement = parseInt(el)
-    console.log(intElement)
-
-    if(intElement != Number(predictStates?.epoch)) {
-      return intElement
-    }
-    })
-
-    setUserRound(intEpoch)
+    
 
     if (signer) {
-      const result = await withdraw(signer,config.predictAlphId ,intEpoch)
+      const result = await withdraw(signer,config.predictAlphId ,userRound)
       setOngoingTxId(result.txId)
     }
   }
@@ -104,6 +86,33 @@ export const TokenDapp: FC<{
     [setOngoingTxId]
   )
 
+
+  const roundToClaim = useCallback(
+    async(): Promise<any> => {
+      const res = await fetch(`https://${process.env.NEXT_PUBLIC_API_HOST}/round/${account?.address}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+  
+    if( !res.ok ) return 
+    const data = await res.json()
+    if(data.length <= 0)
+      return
+  
+    const intEpoch = data.map((el: string)  => { 
+      const intElement = parseInt(el)
+      console.log(intElement)
+  
+      if(intElement != Number(predictStates?.epoch)) {
+        return intElement
+      }
+      })
+  
+      setUserRound(intEpoch)
+    },[account?.address, predictStates?.epoch]
+  )
+  
 
   const getStatesPrediction = useCallback(async () => {
     if (config !== undefined && connectionStatus == 'connected') {
@@ -145,6 +154,7 @@ export const TokenDapp: FC<{
   }
 
   getStatesPrediction()
+  roundToClaim()
 
   return (
     <>
