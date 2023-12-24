@@ -169,7 +169,6 @@ export const TokenDapp: FC<{
             
             return (
               <div key={index}>
-                <p>{Number(state.priceEnd)} {Number(state.priceStart)}</p>
                 <p><b>Round: {Number(state.epoch)}</b> -  { state.epoch != predictStates?.epoch ? state.priceEnd == state.priceStart ? "House Won" :state.priceEnd > state.priceStart ? "Bull won": "Bear won" : "In progress"}</p>
                 <p>Total amount in pool: {Number(state.rewardBaseCalAmount/ONE_ALPH)} ALPH</p>
               </div>
