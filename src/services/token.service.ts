@@ -7,16 +7,20 @@ import { arrayEpochToBytes } from './utils';
 export const bid = async (
   signer: SignerProvider,
   predictalphId: string,
-  amount: bigint,
+  amount: string,
   up: boolean
 ):Promise<ExecuteScriptResult> => {
+
+  // permit float amount
+  const amountInt = BigInt(parseFloat(amount)*Number(ONE_ALPH))
+
   return await Bid.execute(signer, {
     initialFields: {
       predictalph: predictalphId,
-      amount: amount*ONE_ALPH+ONE_ALPH,
+      amount: amountInt+ONE_ALPH,
       up: up,
     },
-    attoAlphAmount: amount*ONE_ALPH +ONE_ALPH + 2n * DUST_AMOUNT,
+    attoAlphAmount: amountInt +ONE_ALPH + 2n * DUST_AMOUNT,
   });
 }
 

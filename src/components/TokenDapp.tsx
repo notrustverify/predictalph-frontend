@@ -51,7 +51,7 @@ export const TokenDapp: FC<{
     e.preventDefault()
 
     if (signer) {
-      const result = await bid(signer, config.predictAlphId, BigInt(bidAmount), bidUser)
+      const result = await bid(signer, config.predictAlphId, bidAmount, bidUser)
       setOngoingTxId(result.txId)
     }
   }
@@ -180,6 +180,7 @@ export const TokenDapp: FC<{
               id="transfer-amount"
               name="amount"
               value={bidAmount}
+              step="any"
               onChange={(e) => setBidAmount(e.target.value)}
               autoFocus
             />
