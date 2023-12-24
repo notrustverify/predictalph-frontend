@@ -47,11 +47,8 @@ export const TokenDapp: FC<{
 
   const [ongoingTxId, setOngoingTxId] = useState<string>()
 
-  let clickedClaimed = false
-
   const bidSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    clickedClaimed = true
 
     if (signer) {
       const result = await bid(signer, config.predictAlphId, BigInt(bidAmount), bidUser)
@@ -158,7 +155,7 @@ export const TokenDapp: FC<{
 
   return (
     <>
-      <div className="columns">
+      <div className={styles.grid}>
 
         <form onSubmit={claimSubmit}>
           <input type="submit" disabled={!!ongoingTxId || userRound.length <= 0 || userAlreadyPlayed} value="Claim rewards" />
