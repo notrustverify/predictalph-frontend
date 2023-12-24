@@ -157,21 +157,7 @@ export const TokenDapp: FC<{
     <>
       <div className={styles.grid}>
 
-        <form onSubmit={claimSubmit}>
-          <input type="submit" disabled={!!ongoingTxId || userRound.length <= 0 || userAlreadyPlayed} value="Claim rewards" />
-          <p>Round participation: {userRound.length}</p>
-
-          <h5>Your round information:</h5>
-          {userRoundState.map((state, index) => {
-            
-            return (
-              <div key={index}>
-                <p><b>Round: {Number(state.epoch)}</b> -  { state.epoch != predictStates?.epoch ? state.priceEnd == state.priceStart ? "House Won" :state.priceEnd > state.priceStart ? "Bull won": "Bear won" : "In progress"}</p>
-                <p>Total amount in pool: {Number(state.rewardBaseCalAmount/ONE_ALPH)} ALPH</p>
-              </div>
-            )
-          })}
-        </form>
+        
 
         <form onSubmit={bidSubmit}>
           <>
@@ -223,6 +209,23 @@ export const TokenDapp: FC<{
               />
             </div>
           </>
+        </form>
+
+
+        <form onSubmit={claimSubmit}>
+          <input type="submit" disabled={!!ongoingTxId || userRound.length <= 0 || userAlreadyPlayed} value="Claim rewards" />
+          <p>Round participation: {userRound.length}</p>
+
+          <h5>Your round information:</h5>
+          {userRoundState.map((state, index) => {
+            
+            return (
+              <div key={index}>
+                <p><b>Round: {Number(state.epoch)}</b> -  { state.epoch != predictStates?.epoch ? state.priceEnd == state.priceStart ? "House Won" :state.priceEnd > state.priceStart ? "Bull won": "Bear won" : "In progress"}</p>
+                <p>Total amount in pool: {Number(state.rewardBaseCalAmount/ONE_ALPH)} ALPH</p>
+              </div>
+            )
+          })}
         </form>
       </div>
     </>
