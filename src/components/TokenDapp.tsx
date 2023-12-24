@@ -157,8 +157,6 @@ export const TokenDapp: FC<{
     <>
       <div className={styles.grid}>
 
-        
-
         <form onSubmit={bidSubmit}>
           <>
             <h2 className={styles.title}>Predict price of ALPH on {config.network}</h2>
