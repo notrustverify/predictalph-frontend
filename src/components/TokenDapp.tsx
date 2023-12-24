@@ -179,8 +179,6 @@ export const TokenDapp: FC<{
               type="number"
               id="transfer-amount"
               name="amount"
-              min="2"
-              defaultValue="2"
               value={bidAmount}
               onChange={(e) => setBidAmount(e.target.value)}
               autoFocus
