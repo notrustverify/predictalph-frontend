@@ -1,6 +1,6 @@
 import { NetworkId, addressFromContractId, groupOfAddress, subContractId, web3 } from '@alephium/web3'
 import { loadDeployments } from '../../artifacts/ts/deployments'
-import { Round } from 'artifacts/ts'
+import { Round, RoundTypes } from 'artifacts/ts'
 
 export interface PredictAlphConfig {
   network: NetworkId
@@ -66,6 +66,17 @@ export async function contractExists(address: string): Promise<boolean> {
   }
 }
 
+
+export function getRoundStateFromArray(arrayEpoch: [], predictAlphContractId: string, groupIndex: number): RoundTypes.Fields[]{
+
+const roundsState: RoundTypes.Fields[] = []
+  arrayEpoch.forEach(async element => {
+  const state = await (await getRoundContractState(predictAlphContractId,element, groupIndex)).fields
+  roundsState.push(state)
+});
+
+return roundsState
+}
 
 export function getExplorerUrl(): string {
   return getNetwork() == 'mainnet' ? "https://explorer.alephium.org" : "https://testnet.alephium.org" 
