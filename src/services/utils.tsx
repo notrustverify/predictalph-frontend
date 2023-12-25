@@ -1,6 +1,7 @@
 import { NetworkId, addressFromContractId, groupOfAddress, subContractId, web3 } from '@alephium/web3'
 import { loadDeployments } from '../../artifacts/ts/deployments'
-import { Round, RoundTypes } from 'artifacts/ts'
+import { Punter, Round, RoundTypes } from 'artifacts/ts'
+import * as base58 from 'bs58'
 
 export interface PredictAlphConfig {
   network: NetworkId
@@ -80,4 +81,24 @@ return roundsState
 
 export function getExplorerUrl(): string {
   return getNetwork() == 'mainnet' ? "https://explorer.alephium.org" : "https://testnet.alephium.org" 
+}
+
+export function getBetInfoPath(address: string, epoch: bigint ){
+  const decodeAddrr = base58.decode(address)
+  return "01" + decodeAddrr+epoch.toString(16).padStart(8, "0");
+
+}
+
+export function getBetInfoContractId(predictAlphContractId: string, address: string ,epoch: bigint, groupIndex: number){
+  return subContractId(predictAlphContractId,getBetInfoPath(address ,epoch), groupIndex)
+}
+
+
+export async function getBetInfoContractState(predictAlphContractId: string, address: string,epoch: bigint, groupIndex: number) {
+
+  const betInfoContractId = getBetInfoContractId(predictAlphContractId,address,epoch, groupIndex)
+
+  const roundContract = Punter.at(addressFromContractId(betInfoContractId));
+  const state = await roundContract.fetchState();
+  return state;
 }

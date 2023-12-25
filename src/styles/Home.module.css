@@ -156,6 +156,19 @@
   background-clip: content-box;
 }
 
+
+.buttonAmount {
+  width: auto;
+  min-width: 5em;
+  height: 2em;
+  padding: 0px;
+  box-sizing: border-box;
+  background-color: grey;
+  border: grey;
+  font-size: 0.7em;
+  margin-right: 0.3em;
+}
+
 /* Enable hover only on non-touch devices */
 @media (hover: hover) and (pointer: fine) {
   .card:hover {
@@ -191,6 +204,7 @@
     text-align: center;
     gap: 1em;
   }
+
 
   .card {
     padding: 1rem 2.5rem;
@@ -282,3 +296,5 @@
     transform: rotate(0deg);
   }
 }
+
+

@@ -3,9 +3,15 @@ import { FC, useState } from 'react'
 import styles from '../styles/Home.module.css'
 import { bid, withdraw } from '@/services/token.service'
 import { TxStatus } from './TxStatus'
-import { useWallet } from '@alephium/web3-react'
+import { useBalance, useWallet } from '@alephium/web3-react'
 import { NetworkId, NodeProvider, ONE_ALPH, addressFromContractId, node, web3 } from '@alephium/web3'
-import { PredictAlphConfig, contractExists, getRoundContractId, getRoundContractState, getRoundStateFromArray } from '@/services/utils'
+import {
+  PredictAlphConfig,
+  contractExists,
+  getRoundContractId,
+  getRoundContractState,
+  getRoundStateFromArray
+} from '@/services/utils'
 import { PredictalphInstance, Predictalph, PredictalphTypes } from 'artifacts/ts/Predictalph'
 import { CoinGeckoClient } from 'coingecko-api-v3'
 import configuration from 'alephium.config'
@@ -35,6 +41,8 @@ export const TokenDapp: FC<{
   config: PredictAlphConfig
 }> = ({ config }) => {
   const { signer, account, connectionStatus } = useWallet()
+
+  const { balance, updateBalanceForTx } = useBalance()
   const addressGroup = config.groupIndex
   const [bidAmount, setBidAmount] = useState('')
   const [bidUser, setBid] = useState(false)
@@ -78,6 +86,9 @@ export const TokenDapp: FC<{
 
   useEffect(() => {
     const roundToClaim = async (): Promise<any> => {
+      if (userAlreadyPlayed) {
+        console.log(userAlreadyPlayed)
+      }
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/round/${account?.address}`, {
         headers: {
           'Content-Type': 'application/json'
@@ -91,21 +102,19 @@ export const TokenDapp: FC<{
 
       const data = await res.json()
 
-      if(data.length <= 0) {
-        
-          setUserRound([])
-          return
-        
+      if (data.length <= 0) {
+        setUserRound([])
+        return
       }
 
       const intEpoch = data.map(Number)
 
-      setUserRoundState(getRoundStateFromArray(intEpoch, config.predictAlphId,addressGroup))
+      setUserRoundState(getRoundStateFromArray(intEpoch, config.predictAlphId, addressGroup))
 
       setUserRound(intEpoch)
     }
     roundToClaim()
-  }, [account?.address, addressGroup, config.predictAlphId])
+  }, [account?.address, addressGroup, config.predictAlphId, userAlreadyPlayed])
 
   const getStatesPrediction = useCallback(async () => {
     if (config !== undefined && connectionStatus == 'connected') {
@@ -141,7 +150,6 @@ export const TokenDapp: FC<{
 
   useEffect(() => {
     if (userRound?.includes(Number(predictStates?.epoch))) {
-      console.log(true)
       setUserPlayed(true)
     }
   }, [predictStates?.epoch, userRound])
@@ -156,7 +164,6 @@ export const TokenDapp: FC<{
   return (
     <>
       <div className={styles.grid}>
-
         <form onSubmit={bidSubmit}>
           <>
             <h2 className={styles.title}>Predict price of ALPH on {config.network}</h2>
@@ -184,10 +191,28 @@ export const TokenDapp: FC<{
               onChange={(e) => setBidAmount(e.target.value)}
               autoFocus
             />
-            <p>Fees: {Number(predictStates?.feesBasisPts) * 0.0001*100}%</p>
-            {ongoingTxId && <TxStatus txId={ongoingTxId} txStatusCallback={txStatusCallback} />}
-
+            <small>Total: {parseFloat(bidAmount) + 1} ALPH</small>
             <br />
+            {[5, 10, 25, 50].map((percent, index) => {
+              return (
+                <div key={index} style={{ display: 'inline' }}>
+                  <button
+                    className={styles.buttonAmount}
+                    type="button"
+                    onClick={() =>
+                      setBidAmount(
+                        ((Number(balance?.balance) / Number(ONE_ALPH)) * (percent / 100)).toFixed(3).toString()
+                      )
+                    }
+                  >
+                    {percent}%
+                  </button>
+                </div>
+              )
+            })}
+
+            <p>Fees: {Number(predictStates?.feesBasisPts) * 0.0001 * 100}%</p>
+            {ongoingTxId && <TxStatus txId={ongoingTxId} txStatusCallback={txStatusCallback} />}
             <p>{userAlreadyPlayed ? 'You already played in this round, wait the round to end' : ''}</p>
             <div style={{ display: 'inline' }}>
               <input
@@ -208,18 +233,29 @@ export const TokenDapp: FC<{
           </>
         </form>
 
-
         <form onSubmit={claimSubmit}>
-          <input type="submit" disabled={!!ongoingTxId || userRound.length <= 0 || userAlreadyPlayed} value="Claim rewards" />
+          <input
+            type="submit"
+            disabled={!!ongoingTxId || userRound.length <= 0 || userAlreadyPlayed}
+            value="Claim rewards"
+          />
           <p>Round participation: {userRound.length}</p>
 
           <h5>Your round information:</h5>
           {userRoundState.map((state, index) => {
-            
             return (
               <div key={index}>
-                <p><b>Round: {Number(state.epoch)}</b> -  { state.epoch != predictStates?.epoch ? state.priceEnd == state.priceStart ? "House Won" :state.priceEnd > state.priceStart ? "Bull won": "Bear won" : "In progress"}</p>
-                <p>Total amount in pool: {Number(state.rewardBaseCalAmount/ONE_ALPH)} ALPH</p>
+                <p>
+                  <b>Round: {Number(state.epoch)}</b> -{' '}
+                  {state.epoch != predictStates?.epoch
+                    ? state.priceEnd == state.priceStart
+                      ? 'House Won'
+                      : state.priceEnd > state.priceStart
+                      ? 'Bull won'
+                      : 'Bear won'
+                    : 'In progress'}
+                </p>
+                <p>Total amount in pool: {Number(state.rewardBaseCalAmount / ONE_ALPH)} ALPH</p>
               </div>
             )
           })}

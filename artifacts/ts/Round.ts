@@ -154,7 +154,7 @@ export const Round = new Factory(
   Contract.fromJson(
     RoundContractJson,
     "",
-    "7cfb21d60afb3fb0a4e681a3e38084114395cd5f846e4c86d5346074a8edca57"
+    "2bab46585681232579cf321d3e592bc5240b7ffaf7a78cb8c787f61ae68daeaf"
   )
 );
 
