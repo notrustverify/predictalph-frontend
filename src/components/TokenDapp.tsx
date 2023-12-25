@@ -78,7 +78,7 @@ export const TokenDapp: FC<{
       if ((status.type === 'Confirmed' && numberOfChecks > 1) || (status.type === 'TxNotFound' && numberOfChecks > 2)) {
         setOngoingTxId(undefined)
       }
-
+      if(ongoingTxId !== undefined) updateBalanceForTx(ongoingTxId,1)
       return Promise.resolve()
     },
     [setOngoingTxId]
