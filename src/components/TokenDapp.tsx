@@ -44,7 +44,7 @@ export const TokenDapp: FC<{
 
   const { balance, updateBalanceForTx } = useBalance()
   const addressGroup = config.groupIndex
-  const [bidAmount, setBidAmount] = useState('')
+  const [bidAmount, setBidAmount] = useState('0')
   const [bidUser, setBid] = useState(false)
   const [price, setPrice] = useState('')
   const [predictStates, setPredictStates] = useState<PredictalphTypes.Fields>()
