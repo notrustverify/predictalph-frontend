@@ -18,7 +18,7 @@ export default function Home() {
 
         <Head>
           <title>PredictALPH</title>
-          <meta name="description" content="Bet on the price" />
+          <meta name="description" content="Are you up for the challenge of outperforming the market? Test your skills by making predictions on the future price of ALPH." />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
