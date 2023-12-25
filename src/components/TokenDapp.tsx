@@ -91,9 +91,7 @@ export const TokenDapp: FC<{
 
   useEffect(() => {
     const roundToClaim = async (): Promise<any> => {
-      if (userAlreadyPlayed) {
-        console.log(userAlreadyPlayed)
-      }
+
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/round/${account?.address}`, {
         headers: {
           'Content-Type': 'application/json'
@@ -155,10 +153,16 @@ export const TokenDapp: FC<{
     }
   }, [account?.group, config, connectionStatus])
 
-  const priceCallback = async () => {
-    const priceCall = await cgClient.simplePrice({ vs_currencies: 'usd', ids: 'alephium' })
-    setPrice(priceCall.alephium.usd.toFixed(3))
+
+  useEffect(() => {
+    const getPrice = async() =>{
+        const priceCall = await cgClient.simplePrice({ vs_currencies: 'usd', ids: 'alephium' })
+        setPrice(priceCall.alephium.usd.toFixed(3))
   }
+  if(price == "")
+    getPrice()
+}, [price])
+ 
 
   useEffect(() => {
     if (userRound?.includes(Number(predictStates?.epoch))) {
@@ -166,10 +170,6 @@ export const TokenDapp: FC<{
     }
   }, [predictStates?.epoch, userRound])
 
-  if (price === '') {
-    priceCallback()
-    //setInterval(priceCallback,60*1000)
-  }
 
   getStatesPrediction()
   console.log(betsInfo)
