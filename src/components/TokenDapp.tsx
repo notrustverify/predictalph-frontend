@@ -4,10 +4,13 @@ import styles from '../styles/Home.module.css'
 import { bid, withdraw } from '@/services/token.service'
 import { TxStatus } from './TxStatus'
 import { useBalance, useWallet } from '@alephium/web3-react'
-import { NetworkId, NodeProvider, ONE_ALPH, addressFromContractId, node, web3 } from '@alephium/web3'
+import { Fields, NetworkId, NodeProvider, ONE_ALPH, addressFromContractId, node, web3 } from '@alephium/web3'
 import {
   PredictAlphConfig,
   contractExists,
+  getBetInfoContractId,
+  getBetInfoContractState,
+  getRoundBetInfoStateFromArray,
   getRoundContractId,
   getRoundContractState,
   getRoundStateFromArray
@@ -16,9 +19,10 @@ import { PredictalphInstance, Predictalph, PredictalphTypes } from 'artifacts/ts
 import { CoinGeckoClient } from 'coingecko-api-v3'
 import configuration from 'alephium.config'
 import * as fetchRetry from 'fetch-retry'
-import { Round, RoundTypes } from 'artifacts/ts'
+import { PunterTypes, Round, RoundTypes } from 'artifacts/ts'
 import { Timer } from './Countdown'
 import { getNetwork } from '@alephium/cli/dist/utils'
+import { group } from 'console'
 
 const cgClient = new CoinGeckoClient({
   timeout: 10000,
@@ -50,8 +54,9 @@ export const TokenDapp: FC<{
   const [predictStates, setPredictStates] = useState<PredictalphTypes.Fields>()
   const [roundStates, setRoundStates] = useState<RoundTypes.Fields>()
   const [userRound, setUserRound] = useState<number[]>([])
+  const [betsInfo, setBetsInfo] = useState<Fields[]>([])
+
   const [userAlreadyPlayed, setUserPlayed] = useState(false)
-  const [userRoundState, setUserRoundState] = useState<RoundTypes.Fields[]>([])
 
   const [ongoingTxId, setOngoingTxId] = useState<string>()
 
@@ -78,10 +83,10 @@ export const TokenDapp: FC<{
       if ((status.type === 'Confirmed' && numberOfChecks > 1) || (status.type === 'TxNotFound' && numberOfChecks > 2)) {
         setOngoingTxId(undefined)
       }
-      if(ongoingTxId !== undefined) updateBalanceForTx(ongoingTxId,1)
+      if (ongoingTxId !== undefined) updateBalanceForTx(ongoingTxId, 1)
       return Promise.resolve()
     },
-    [setOngoingTxId]
+    [ongoingTxId, updateBalanceForTx]
   )
 
   useEffect(() => {
@@ -109,7 +114,8 @@ export const TokenDapp: FC<{
 
       const intEpoch = data.map(Number)
 
-      setUserRoundState(getRoundStateFromArray(intEpoch, config.predictAlphId, addressGroup))
+      if(account?.address !== undefined)
+      setBetsInfo(getRoundBetInfoStateFromArray(intEpoch, account.address ,config.predictAlphId, addressGroup))
 
       setUserRound(intEpoch)
     }
@@ -128,6 +134,12 @@ export const TokenDapp: FC<{
         addressFromContractId(getRoundContractId(config.predictAlphId, initialState.fields.epoch, account.group))
       )
 
+      const getBetInfoExist = await contractExists(
+        addressFromContractId(
+          getBetInfoContractId(config.predictAlphId, account.address, initialState.fields.epoch, account.group)
+        )
+      )
+      //console.log(getBetInfoExist)
       if (roundContractExist) {
         const roundStates = await getRoundContractState(config.predictAlphId, initialState.fields.epoch, account.group)
         setRoundStates(roundStates.fields)
@@ -138,10 +150,14 @@ export const TokenDapp: FC<{
           initialState.fields.epoch - 1n,
           account.group
         )
+
         setRoundStates(roundStates.fields)
       }
+
+
+      
     }
-  }, [account?.group, config, connectionStatus])
+  }, [account?.address, account?.group, config, connectionStatus])
 
   const priceCallback = async () => {
     const priceCall = await cgClient.simplePrice({ vs_currencies: 'usd', ids: 'alephium' })
@@ -160,6 +176,8 @@ export const TokenDapp: FC<{
   }
 
   getStatesPrediction()
+  console.log(betsInfo)
+
 
   return (
     <>
@@ -242,20 +260,21 @@ export const TokenDapp: FC<{
           <p>Round participation: {userRound.length}</p>
 
           <h5>Your round information:</h5>
-          {userRoundState.map((state, index) => {
+          {betsInfo.map((state, index) => {
             return (
               <div key={index}>
                 <p>
-                  <b>Round: {Number(state.epoch)}</b> -{' '}
+                  <b>Round: {Number(state.epoch)}</b> -{' '} 
+                 
                   {state.epoch != predictStates?.epoch
                     ? state.priceEnd == state.priceStart
                       ? 'House Won'
                       : state.priceEnd > state.priceStart
                       ? 'Bull won'
                       : 'Bear won'
-                    : 'In progress'}
+                    : 'In progress'} -  { state.epoch != predictStates?.epoch && (state.upBid && state.priceEnd > state.priceStart || !state.upBid && state.priceEnd < state.priceStart )?  `your rewards: `+(((Number(state.amountBid) * Number(state.rewardAmount)) / Number(state.rewardBaseCalAmount))/Number(ONE_ALPH)).toFixed(2)+"ℵ" : "" }
                 </p>
-                <p>Total amount in pool: {Number(state.rewardBaseCalAmount / ONE_ALPH)} ALPH</p>
+                <p>Total amount in pool: {Number(state.rewardBaseCalAmount) / Number(ONE_ALPH)}ℵ</p>
               </div>
             )
           })}

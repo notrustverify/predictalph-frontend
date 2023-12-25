@@ -1,6 +1,6 @@
-import { NetworkId, addressFromContractId, groupOfAddress, subContractId, web3 } from '@alephium/web3'
+import { Fields, NetworkId, addressFromContractId, encodeContractField, groupOfAddress, subContractId, web3 } from '@alephium/web3'
 import { loadDeployments } from '../../artifacts/ts/deployments'
-import { Punter, Round, RoundTypes } from 'artifacts/ts'
+import { Punter, PunterTypes, Round, RoundTypes } from 'artifacts/ts'
 import * as base58 from 'bs58'
 
 export interface PredictAlphConfig {
@@ -72,20 +72,36 @@ export function getRoundStateFromArray(arrayEpoch: [], predictAlphContractId: st
 
 const roundsState: RoundTypes.Fields[] = []
   arrayEpoch.forEach(async element => {
-  const state = await (await getRoundContractState(predictAlphContractId,element, groupIndex)).fields
+  const state =  (await getRoundContractState(predictAlphContractId,element, groupIndex)).fields
   roundsState.push(state)
 });
 
 return roundsState
 }
 
+export function getRoundBetInfoStateFromArray(arrayEpoch: [],address: string,  predictAlphContractId: string, groupIndex: number): Fields[]{
+
+  const states: PunterTypes.Fields[] = []
+    arrayEpoch.forEach(async element => {
+    const stateBetInfo = (await getBetInfoContractState(predictAlphContractId,address,element ,groupIndex)).fields
+    const roundState =  (await getRoundContractState(predictAlphContractId,element, groupIndex)).fields
+    
+    states.push({ ...stateBetInfo, ...roundState })
+  });
+  
+  return states
+  }
+
 export function getExplorerUrl(): string {
   return getNetwork() == 'mainnet' ? "https://explorer.alephium.org" : "https://testnet.alephium.org" 
 }
 
 export function getBetInfoPath(address: string, epoch: bigint ){
-  const decodeAddrr = base58.decode(address)
-  return "01" + decodeAddrr+epoch.toString(16).padStart(8, "0");
+  const buff = Buffer.from(base58.decode(address));
+
+  const path = "01"+buff.toString('hex')+epoch.toString(16).padStart(8, "0")
+  //console.log(path)
+  return path
 
 }
 
