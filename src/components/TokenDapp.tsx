@@ -134,11 +134,7 @@ export const TokenDapp: FC<{
         addressFromContractId(getRoundContractId(config.predictAlphId, initialState.fields.epoch, account.group))
       )
 
-      const getBetInfoExist = await contractExists(
-        addressFromContractId(
-          getBetInfoContractId(config.predictAlphId, account.address, initialState.fields.epoch, account.group)
-        )
-      )
+
       //console.log(getBetInfoExist)
       if (roundContractExist) {
         const roundStates = await getRoundContractState(config.predictAlphId, initialState.fields.epoch, account.group)
@@ -157,7 +153,7 @@ export const TokenDapp: FC<{
 
       
     }
-  }, [account?.address, account?.group, config, connectionStatus])
+  }, [account?.group, config, connectionStatus])
 
   const priceCallback = async () => {
     const priceCall = await cgClient.simplePrice({ vs_currencies: 'usd', ids: 'alephium' })
@@ -280,6 +276,8 @@ export const TokenDapp: FC<{
           })}
         </form>
       </div>
+
+
     </>
   )
 }
