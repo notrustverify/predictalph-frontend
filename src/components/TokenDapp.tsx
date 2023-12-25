@@ -272,9 +272,9 @@ export const TokenDapp: FC<{
                       : state.priceEnd > state.priceStart
                       ? 'Bull won'
                       : 'Bear won'
-                    : 'In progress'} -  { state.epoch != predictStates?.epoch && (state.upBid && state.priceEnd > state.priceStart || !state.upBid && state.priceEnd < state.priceStart )?  `your rewards: `+(((Number(state.amountBid) * Number(state.rewardAmount)) / Number(state.rewardBaseCalAmount))/Number(ONE_ALPH)).toFixed(2)+"ℵ" : "" }
+                    : 'In progress'}  { state.epoch != predictStates?.epoch && (state.upBid && state.priceEnd > state.priceStart || !state.upBid && state.priceEnd < state.priceStart )?  ` - your rewards: `+(((Number(state.amountBid) * Number(state.rewardAmount)) / Number(state.rewardBaseCalAmount))/Number(ONE_ALPH)).toFixed(2)+"ℵ" : ` - Your bet: ${ state.amountBid ? "Bull" : "Bear" }` }
                 </p>
-                <p>Total amount in pool: {Number(state.rewardBaseCalAmount) / Number(ONE_ALPH)}ℵ</p>
+                <p>{ state.epoch != predictStates?.epoch ? `Total amount in pool: ${Number(state.rewardBaseCalAmount) / Number(ONE_ALPH)}ℵ` : ""}</p>
               </div>
             )
           })}
