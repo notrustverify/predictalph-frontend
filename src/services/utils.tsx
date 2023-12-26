@@ -1,4 +1,4 @@
-import { Fields, NetworkId, addressFromContractId, encodeContractField, groupOfAddress, subContractId, web3 } from '@alephium/web3'
+import { Fields, NetworkId, addressFromContractId, encodeContractField, groupOfAddress, sleep, subContractId, web3 } from '@alephium/web3'
 import { loadDeployments } from '../../artifacts/ts/deployments'
 import { Punter, PunterTypes, Round, RoundTypes } from 'artifacts/ts'
 import * as base58 from 'bs58'
@@ -83,7 +83,10 @@ export function getRoundBetInfoStateFromArray(arrayEpoch: [],address: string,  p
 
   const states: PunterTypes.Fields[] = []
     arrayEpoch.forEach(async element => {
+    await sleep(4*1000)
     const stateBetInfo = (await getBetInfoContractState(predictAlphContractId,address,element ,groupIndex)).fields
+    await sleep(4*1000)
+
     const roundState =  (await getRoundContractState(predictAlphContractId,element, groupIndex)).fields
     
     states.push({ ...stateBetInfo, ...roundState })
