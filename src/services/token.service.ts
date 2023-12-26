@@ -29,8 +29,8 @@ export const withdraw = async (
   predictalphId: string,
   epochParticipationArray: number[]
 ):Promise<ExecuteScriptResult> => {
-  const epochParticipation = arrayEpochToBytes(epochParticipationArray)
-  console.log(epochParticipation)
+  const epochParticipation = arrayEpochToBytes(epochParticipationArray.splice(0,10))
+
   return await Withdraw.execute(signer, {
     initialFields: { predictalph: predictalphId, epochParticipation },
     attoAlphAmount: DUST_AMOUNT,

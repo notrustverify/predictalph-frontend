@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { FC, useState } from 'react'
 import styles from '../styles/Home.module.css'
 import { bid, withdraw } from '@/services/token.service'
 import { TxStatus } from './TxStatus'
 import { useBalance, useWallet } from '@alephium/web3-react'
-import { Fields, NetworkId, NodeProvider, ONE_ALPH, addressFromContractId, node, web3 } from '@alephium/web3'
+import { Fields, NetworkId, NodeProvider, ONE_ALPH, addressFromContractId, node, sleep, web3 } from '@alephium/web3'
 import {
   PredictAlphConfig,
   contractExists,
@@ -66,6 +66,7 @@ export const TokenDapp: FC<{
     if (signer) {
       const result = await bid(signer, config.predictAlphId, bidAmount, bidUser)
       setOngoingTxId(result.txId)
+      setUserPlayed(true)
     }
   }
 
@@ -91,7 +92,6 @@ export const TokenDapp: FC<{
 
   useEffect(() => {
     const roundToClaim = async (): Promise<any> => {
-
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/round/${account?.address}`, {
         headers: {
           'Content-Type': 'application/json'
@@ -112,13 +112,20 @@ export const TokenDapp: FC<{
 
       const intEpoch = data.map(Number)
 
-      if(account?.address !== undefined)
-      setBetsInfo(getRoundBetInfoStateFromArray(intEpoch, account.address ,config.predictAlphId, addressGroup))
-
-      setUserRound(intEpoch)
+      if (intEpoch.length !== userRound.length) setUserRound(intEpoch)
     }
     roundToClaim()
-  }, [account?.address, addressGroup, config.predictAlphId, userAlreadyPlayed])
+  }, [account?.address, addressGroup, config.predictAlphId, userAlreadyPlayed, userRound.length])
+
+  useEffect(() => {
+    if (userRound.length > 0 && account != undefined) {
+      const allInfo = getRoundBetInfoStateFromArray(userRound, account?.address, config.predictAlphId, addressGroup)
+
+      console.log(userRound.length, betsInfo.length)
+
+      if (betsInfo.length <= 0 || betsInfo.length !== userRound.length) setBetsInfo(allInfo)
+    }
+  }, [account, addressGroup, betsInfo.length, config.predictAlphId, userRound])
 
   const getStatesPrediction = useCallback(async () => {
     if (config !== undefined && connectionStatus == 'connected') {
@@ -127,42 +134,36 @@ export const TokenDapp: FC<{
 
       const initialState = await PredictionStates.fetchState()
       setPredictStates(initialState.fields)
+      if (initialState.fields.epoch !== predictStates?.epoch) setUserPlayed(false)
+    }
+  }, [config, connectionStatus, predictStates?.epoch])
 
+  const getRoundStates = useCallback(async () => {
+    if (predictStates != undefined) {
       const roundContractExist = await contractExists(
-        addressFromContractId(getRoundContractId(config.predictAlphId, initialState.fields.epoch, account.group))
+        addressFromContractId(getRoundContractId(config.predictAlphId, predictStates?.epoch, addressGroup))
       )
 
-
       //console.log(getBetInfoExist)
-      if (roundContractExist) {
-        const roundStates = await getRoundContractState(config.predictAlphId, initialState.fields.epoch, account.group)
+      if (roundContractExist || predictStates?.epoch !== predictStates?.epoch) {
+        const roundStates = await getRoundContractState(config.predictAlphId, predictStates?.epoch, addressGroup)
         setRoundStates(roundStates.fields)
       } else {
         //using old epoch to get the last contract because it means the next round didnt start yet
-        const roundStates = await getRoundContractState(
-          config.predictAlphId,
-          initialState.fields.epoch - 1n,
-          account.group
-        )
+        const roundStates = await getRoundContractState(config.predictAlphId, predictStates?.epoch - 1n, addressGroup)
 
         setRoundStates(roundStates.fields)
       }
-
-
-      
     }
-  }, [account?.group, config, connectionStatus])
-
+  }, [addressGroup, config.predictAlphId, predictStates])
 
   useEffect(() => {
-    const getPrice = async() =>{
-        const priceCall = await cgClient.simplePrice({ vs_currencies: 'usd', ids: 'alephium' })
-        setPrice(priceCall.alephium.usd.toFixed(3))
-  }
-  if(price == "")
-    getPrice()
-}, [price])
- 
+    const getPrice = async () => {
+      const priceCall = await cgClient.simplePrice({ vs_currencies: 'usd', ids: 'alephium' })
+      setPrice(priceCall.alephium.usd.toFixed(3))
+    }
+    if (price == '') getPrice()
+  }, [price])
 
   useEffect(() => {
     if (userRound?.includes(Number(predictStates?.epoch))) {
@@ -170,9 +171,10 @@ export const TokenDapp: FC<{
     }
   }, [predictStates?.epoch, userRound])
 
-
-  getStatesPrediction()
-  console.log(betsInfo)
+  useEffect(() => {
+    getStatesPrediction()
+    getRoundStates()
+  })
 
 
   return (
@@ -207,7 +209,7 @@ export const TokenDapp: FC<{
             />
             <small>Total: {parseFloat(bidAmount) + 1} ALPH</small>
             <br />
-            {[5, 10, 25, 50].map((percent, index) => {
+            {[1,5, 10, 25, 50].map((percent, index) => {
               return (
                 <div key={index} style={{ display: 'inline' }}>
                   <button
@@ -250,7 +252,7 @@ export const TokenDapp: FC<{
         <form onSubmit={claimSubmit}>
           <input
             type="submit"
-            disabled={!!ongoingTxId || userRound.length <= 0 || userAlreadyPlayed}
+            disabled={!!ongoingTxId || userRound.length <= 0}
             value="Claim rewards"
           />
           <p>Round participation: {userRound.length}</p>
@@ -260,24 +262,36 @@ export const TokenDapp: FC<{
             return (
               <div key={index}>
                 <p>
-                  <b>Round: {Number(state.epoch)}</b> -{' '} 
-                 
+                  <b>Round: {Number(state.epoch)}</b> -{' '}
                   {state.epoch != predictStates?.epoch
                     ? state.priceEnd == state.priceStart
                       ? 'House Won'
                       : state.priceEnd > state.priceStart
                       ? 'Bull won'
                       : 'Bear won'
-                    : 'In progress'}  { state.epoch != predictStates?.epoch && (state.upBid && state.priceEnd > state.priceStart || !state.upBid && state.priceEnd < state.priceStart )?  ` - your rewards: `+(((Number(state.amountBid) * Number(state.rewardAmount)) / Number(state.rewardBaseCalAmount))/Number(ONE_ALPH)).toFixed(2)+"ℵ" : ` - Your bet: ${ state.amountBid ? "Bull" : "Bear" }` }
+                    : 'In progress'}{' '}
+                  {state.epoch != predictStates?.epoch &&
+                  ((state.upBid && state.priceEnd > state.priceStart) ||
+                    (!state.upBid && state.priceEnd < state.priceStart))
+                    ? ` - your rewards: ` +
+                      (
+                        (Number(state.amountBid) * Number(state.rewardAmount)) /
+                        Number(state.rewardBaseCalAmount) /
+                        Number(ONE_ALPH)
+                      ).toFixed(2) +
+                      'ℵ'
+                    : ` - Your bet: ${state.amountBid ? 'Bull' : 'Bear'}`}
                 </p>
-                <p>{ state.epoch != predictStates?.epoch ? `Total amount in pool: ${Number(state.rewardBaseCalAmount) / Number(ONE_ALPH)}ℵ` : ""}</p>
+                <p>
+                  {state.epoch != predictStates?.epoch
+                    ? `Total amount in pool: ${Number(state.rewardBaseCalAmount) / Number(ONE_ALPH)}ℵ`
+                    : ''}
+                </p>
               </div>
             )
           })}
         </form>
       </div>
-
-
     </>
   )
 }

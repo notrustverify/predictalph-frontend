@@ -1,4 +1,13 @@
-import { Fields, NetworkId, addressFromContractId, encodeContractField, groupOfAddress, sleep, subContractId, web3 } from '@alephium/web3'
+import {
+  Fields,
+  NetworkId,
+  addressFromContractId,
+  encodeContractField,
+  groupOfAddress,
+  sleep,
+  subContractId,
+  web3
+} from '@alephium/web3'
 import { loadDeployments } from '../../artifacts/ts/deployments'
 import { Punter, PunterTypes, Round, RoundTypes } from 'artifacts/ts'
 import * as base58 from 'bs58'
@@ -26,98 +35,114 @@ function getPredictAlphConfig(): PredictAlphConfig {
 
 export const tokenFaucetConfig = getPredictAlphConfig()
 
-
 export async function getRoundContractState(predictAlphContractId: string, epoch: bigint, groupIndex: number) {
+  const roundContractId = getRoundContractId(predictAlphContractId, epoch, groupIndex)
 
-  const roundContractId = getRoundContractId(predictAlphContractId,epoch, groupIndex)
-
-  const roundContract = Round.at(addressFromContractId(roundContractId));
-  const state = await roundContract.fetchState();
-  return state;
+  const roundContract = Round.at(addressFromContractId(roundContractId))
+  const state = await roundContract.fetchState()
+  return state
 }
 
-export function getRoundContractId(predictAlphContractId: string, epoch: bigint, groupIndex: number){
-  return subContractId(predictAlphContractId,getEpochPath(epoch), groupIndex)
+export function getRoundContractId(predictAlphContractId: string, epoch: bigint, groupIndex: number) {
+  return subContractId(predictAlphContractId, getEpochPath(epoch), groupIndex)
 }
 
 function getEpochPath(epoch: bigint) {
-  return "00" + epoch.toString(16).padStart(8, "0");
+  return '00' + epoch.toString(16).padStart(8, '0')
 }
 
-
-export function arrayEpochToBytes(arrayEpoch: number[]){
+export function arrayEpochToBytes(arrayEpoch: number[]) {
   const buffer = Buffer.alloc(arrayEpoch.length * 4)
   arrayEpoch.forEach((value, index) => buffer.writeUInt32BE(value, index * 4))
   return buffer.toString('hex')
-
 }
 
 export async function contractExists(address: string): Promise<boolean> {
   try {
-    const nodeProvider = web3.getCurrentNodeProvider();
+    const nodeProvider = web3.getCurrentNodeProvider()
     await nodeProvider.contracts.getContractsAddressState(address, {
-      group: groupOfAddress(address),
-    });
-    return true;
+      group: groupOfAddress(address)
+    })
+    return true
   } catch (error: any) {
-    if (error instanceof Error && error.message.includes("KeyNotFound")) {
-      return false;
+    if (error instanceof Error && error.message.includes('KeyNotFound')) {
+      return false
     }
-    throw error;
+    throw error
   }
 }
 
+export function getRoundStateFromArray(
+  arrayEpoch: [],
+  predictAlphContractId: string,
+  groupIndex: number
+): RoundTypes.Fields[] {
+  const roundsState: RoundTypes.Fields[] = []
+  arrayEpoch.forEach(async (element) => {
+    const state = (await getRoundContractState(predictAlphContractId, element, groupIndex)).fields
+    roundsState.push(state)
+  })
 
-export function getRoundStateFromArray(arrayEpoch: [], predictAlphContractId: string, groupIndex: number): RoundTypes.Fields[]{
-
-const roundsState: RoundTypes.Fields[] = []
-  arrayEpoch.forEach(async element => {
-  const state =  (await getRoundContractState(predictAlphContractId,element, groupIndex)).fields
-  roundsState.push(state)
-});
-
-return roundsState
+  return roundsState
 }
 
-export function getRoundBetInfoStateFromArray(arrayEpoch: [],address: string,  predictAlphContractId: string, groupIndex: number): Fields[]{
-
+export function getRoundBetInfoStateFromArray(
+  arrayEpoch: number[],
+  address: string,
+  predictAlphContractId: string,
+  groupIndex: number
+): Fields[] {
   const states: PunterTypes.Fields[] = []
-    arrayEpoch.forEach(async element => {
-    await sleep(4*1000)
-    const stateBetInfo = (await getBetInfoContractState(predictAlphContractId,address,element ,groupIndex)).fields
-    await sleep(4*1000)
+  arrayEpoch.forEach(async (element) => {
+    const castElement = BigInt(element)
 
-    const roundState =  (await getRoundContractState(predictAlphContractId,element, groupIndex)).fields
-    
-    states.push({ ...stateBetInfo, ...roundState })
-  });
-  
+    const betInfoExists = await contractExists(
+      addressFromContractId(getBetInfoContractId(predictAlphContractId, address, castElement, groupIndex))
+    )
+    if (betInfoExists) {
+      process.env.NEXT_PUBLIC_NETWORK == 'testnet' && (await sleep(4 * 1000))
+      const stateBetInfo = (await getBetInfoContractState(predictAlphContractId, address, castElement, groupIndex))
+        .fields
+      process.env.NEXT_PUBLIC_NETWORK == 'testnet' && (await sleep(4 * 1000))
+      const roundState = (await getRoundContractState(predictAlphContractId, castElement, groupIndex)).fields
+
+      states.push({ ...stateBetInfo, ...roundState })
+    }
+  })
+
   return states
-  }
+}
 
 export function getExplorerUrl(): string {
-  return getNetwork() == 'mainnet' ? "https://explorer.alephium.org" : "https://testnet.alephium.org" 
+  return getNetwork() == 'mainnet' ? 'https://explorer.alephium.org' : 'https://testnet.alephium.org'
 }
 
-export function getBetInfoPath(address: string, epoch: bigint ){
-  const buff = Buffer.from(base58.decode(address));
+export function getBetInfoPath(address: string, epoch: bigint) {
+  const buff = Buffer.from(base58.decode(address))
 
-  const path = "01"+buff.toString('hex')+epoch.toString(16).padStart(8, "0")
+  const path = '01' + buff.toString('hex') + epoch.toString(16).padStart(8, '0')
   //console.log(path)
   return path
-
 }
 
-export function getBetInfoContractId(predictAlphContractId: string, address: string ,epoch: bigint, groupIndex: number){
-  return subContractId(predictAlphContractId,getBetInfoPath(address ,epoch), groupIndex)
+export function getBetInfoContractId(
+  predictAlphContractId: string,
+  address: string,
+  epoch: bigint,
+  groupIndex: number
+) {
+  return subContractId(predictAlphContractId, getBetInfoPath(address, epoch), groupIndex)
 }
 
+export async function getBetInfoContractState(
+  predictAlphContractId: string,
+  address: string,
+  epoch: bigint,
+  groupIndex: number
+) {
+  const betInfoContractId = getBetInfoContractId(predictAlphContractId, address, epoch, groupIndex)
 
-export async function getBetInfoContractState(predictAlphContractId: string, address: string,epoch: bigint, groupIndex: number) {
-
-  const betInfoContractId = getBetInfoContractId(predictAlphContractId,address,epoch, groupIndex)
-
-  const roundContract = Punter.at(addressFromContractId(betInfoContractId));
-  const state = await roundContract.fetchState();
-  return state;
+  const roundContract = Punter.at(addressFromContractId(betInfoContractId))
+  const state = await roundContract.fetchState()
+  return state
 }
