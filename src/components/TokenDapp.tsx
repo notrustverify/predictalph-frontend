@@ -77,7 +77,9 @@ export const TokenDapp: FC<{
     e.preventDefault()
 
     if (signer) {
-      const result = await withdraw(signer, config.predictAlphId, userRound)
+      //remove on going epoch
+      const roundClaim = userRound.filter((round) => round != Number(predictStates?.epoch))
+      const result = await withdraw(signer, config.predictAlphId, roundClaim)
       setOngoingTxId(result.txId)
     }
   }

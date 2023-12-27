@@ -29,7 +29,10 @@ export const withdraw = async (
   predictalphId: string,
   epochParticipationArray: number[]
 ):Promise<ExecuteScriptResult> => {
-  const epochParticipation = arrayEpochToBytes(epochParticipationArray.splice(0,10))
+  let epochParticipation = arrayEpochToBytes(epochParticipationArray)
+
+  if (epochParticipationArray.length > 10) epochParticipation = arrayEpochToBytes(epochParticipationArray.splice(0,10))
+
 
   return await Withdraw.execute(signer, {
     initialFields: { predictalph: predictalphId, epochParticipation },
