@@ -95,6 +95,7 @@ export async function getRoundBetInfoStateFromArray(
   const states: Fields[] = []
 
   // old school but works
+
   for (let i = 0, len = arrayEpoch.length; i < len; i++) { 
     const castElement = BigInt(arrayEpoch[i])
 
@@ -114,9 +115,6 @@ export async function getRoundBetInfoStateFromArray(
     }
   }
 
-
-  //console.log(states)
-  console.log("return "+states.length)
   return states
 }
 

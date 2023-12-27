@@ -103,7 +103,7 @@ export const TokenDapp: FC<{
       console.log("get new round")
       
       if(ongoingTxId != undefined)
-      await waitTxConfirmed(nodeProvider,ongoingTxId,1,1000)
+      await waitTxConfirmed(nodeProvider,ongoingTxId,2,1000)
       try {
         if (res.ok){
         const data = await res.json()
@@ -116,9 +116,10 @@ export const TokenDapp: FC<{
           });
       
         if (intEpoch.length > userRound.length) setUserRound([...userRound, ...newEpoch])
-        if(intEpoch.length < userRound.length) setUserRound(intEpoch)
+        if(intEpoch.length < userRound.length) setUserRound(newEpoch)
         }
       } catch (error) {
+        setUserRound([])
         console.error(`Error get user round: ${error}, Error text${res.statusText}, ${res.status}`)
       }
      
@@ -284,14 +285,14 @@ export const TokenDapp: FC<{
                   {state.epoch != predictStates?.epoch &&
                   ((state.upBid && state.priceEnd > state.priceStart) ||
                     (!state.upBid && state.priceEnd < state.priceStart))
-                    ? ` - your rewards: ` +
+                    ? ` - ✅ your rewards: ` +
                       (
                         (Number(state.amountBid) * Number(state.rewardAmount)) /
                         Number(state.rewardBaseCalAmount) /
                         Number(ONE_ALPH)
                       ).toFixed(2) +
                       'ℵ (+1 ALPH)'
-                    : ` - Your bet: ${state.amountBid ? 'Bull' : 'Bear'}`}
+                    : ` - your bet: ${state.bidUp ? 'Bull' : 'Bear'}`}
                 </p>
                 <p>
                   {state.epoch != predictStates?.epoch
