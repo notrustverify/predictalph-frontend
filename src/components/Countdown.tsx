@@ -2,7 +2,9 @@ import React  from 'react';
 import Countdown from 'react-countdown'
 
 interface Timestamp {
-    drawTimestamp: number
+    drawTimestamp: number,
+    resetCounterId: number
+
 }
 
 interface Time {
@@ -10,10 +12,10 @@ interface Time {
     hours: number,
     minutes: number,
     seconds: number,
-    completed: boolean
+    completed: boolean,
 }
 
-export const Timer = ( { drawTimestamp }: Timestamp ) => {
+export const Timer = ( { drawTimestamp, resetCounterId }: Timestamp ) => {
     const dateNow = Date.now()
     const Completionist = () => <span>progress</span>;
 
@@ -33,7 +35,8 @@ export const Timer = ( { drawTimestamp }: Timestamp ) => {
       <React.Fragment>
             <Countdown 
             date={dateNow + (drawTimestamp - dateNow)} 
-            renderer={renderer} 
+            renderer={renderer}
+            key={resetCounterId}
             /> 
       </React.Fragment>
     )

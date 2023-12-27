@@ -4,7 +4,7 @@ import styles from '../styles/Home.module.css'
 import { bid, withdraw } from '@/services/token.service'
 import { TxStatus } from './TxStatus'
 import { useBalance, useWallet } from '@alephium/web3-react'
-import { Fields, NetworkId, NodeProvider, ONE_ALPH, addressFromContractId, node, sleep, web3 } from '@alephium/web3'
+import { Fields, NetworkId, NodeProvider, ONE_ALPH, addressFromContractId, node, web3 } from '@alephium/web3'
 import {
   PredictAlphConfig,
   contractExists,
@@ -21,9 +21,9 @@ import configuration from 'alephium.config'
 import * as fetchRetry from 'fetch-retry'
 import { PunterTypes, Round, RoundTypes } from 'artifacts/ts'
 import { Timer } from './Countdown'
-import { getNetwork } from '@alephium/cli/dist/utils'
 import { group } from 'console'
 import { useRef, memo } from 'react';
+import { waitTxConfirmed } from '@alephium/cli'
 
 const cgClient = new CoinGeckoClient({
   timeout: 10000,
@@ -101,11 +101,13 @@ export const TokenDapp: FC<{
         }
       })
       console.log("get new round")
-
+      
+      if(ongoingTxId != undefined)
+      await waitTxConfirmed(nodeProvider,ongoingTxId,1,1000)
       try {
         if (res.ok){
         const data = await res.json()
-
+          console.log(data)
         const intEpoch = data.map(Number)
         const newEpoch: number[] = []
           intEpoch.forEach((element: number) => {
@@ -113,7 +115,8 @@ export const TokenDapp: FC<{
             newEpoch.push(element)
           });
       
-        if (intEpoch.length !== userRound.length) setUserRound([...userRound, ...newEpoch])
+        if (intEpoch.length > userRound.length) setUserRound([...userRound, ...newEpoch])
+        if(intEpoch.length < userRound.length) setUserRound(intEpoch)
         }
       } catch (error) {
         console.error(`Error get user round: ${error}, Error text${res.statusText}, ${res.status}`)
@@ -129,7 +132,7 @@ export const TokenDapp: FC<{
     if (userRound.length > 0 && account != undefined) {
       const allInfo = await getRoundBetInfoStateFromArray(userRound, account?.address, config.predictAlphId, addressGroup)
       console.log(userRound.length, betsInfo.length, allInfo.length)
-      if ( allInfo.length > 0) setBetsInfo(allInfo)
+      if ( allInfo.length > 0 ) setBetsInfo(allInfo)
     }}
     getRoundData()
   }, [account, addressGroup, betsInfo, betsInfo.length, config.predictAlphId, userRound])
@@ -199,9 +202,8 @@ export const TokenDapp: FC<{
             <p>Price locked: ${(Number(roundStates?.priceStart) / intPriceDivision).toString()}</p>
             <p>
               Round end at:{' '}
-              {roundStates?.bidEndTimestamp ? <Timer drawTimestamp={Number(roundStates?.bidEndTimestamp)} /> : ''} -
-              epoch ({Number(roundStates?.epoch)})
-            </p>
+              {roundStates?.bidEndTimestamp ? <Timer drawTimestamp={Number(roundStates?.bidEndTimestamp)} resetCounterId={Math.random()} /> : ''} -
+              round {Number(roundStates?.epoch)}            </p>
             <p>Pool size: {Number(roundStates?.totalAmount) / Number(ONE_ALPH)} ALPH </p>
             <small>
               Bear pool: {Number(roundStates?.amountDown) / Number(ONE_ALPH)} ALPH / Bull pool:{' '}

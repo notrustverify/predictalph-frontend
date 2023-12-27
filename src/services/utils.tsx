@@ -103,11 +103,11 @@ export async function getRoundBetInfoStateFromArray(
     )
  
     if (betInfoExists) {
-      //process.env.NEXT_PUBLIC_NETWORK == 'testnet' && (await sleep(4 * 1000))
+      process.env.NEXT_PUBLIC_NETWORK == 'testnet' && (await sleep(4 * 1000))
       const stateBetInfo = await getBetInfoContractState(predictAlphContractId, address, castElement, groupIndex)
       
 
-      //process.env.NEXT_PUBLIC_NETWORK == 'testnet' && (await sleep(4 * 1000))
+      process.env.NEXT_PUBLIC_NETWORK == 'testnet' && (await sleep(4 * 1000))
       const roundState = await getRoundContractState(predictAlphContractId, castElement, groupIndex)
 
       states.push({ ...stateBetInfo.fields, ...roundState.fields })
