@@ -23,6 +23,7 @@ import { PunterTypes, Round, RoundTypes } from 'artifacts/ts'
 import { Timer } from './Countdown'
 import { getNetwork } from '@alephium/cli/dist/utils'
 import { group } from 'console'
+import { useRef, memo } from 'react';
 
 const cgClient = new CoinGeckoClient({
   timeout: 10000,
@@ -31,7 +32,7 @@ const cgClient = new CoinGeckoClient({
 
 const retryFetch = fetchRetry.default(fetch, {
   retries: 10,
-  retryDelay: 1000
+  retryDelay: 100000
 })
 
 const networkId = (process.env.NEXT_PUBLIC_NETWORK ?? 'devnet') as NetworkId
@@ -40,6 +41,8 @@ const nodeProvider = new NodeProvider(configuration.networks[networkId].nodeUrl,
 const currentDate = Date.now()
 
 const intPriceDivision = 10_000
+
+
 
 export const TokenDapp: FC<{
   config: PredictAlphConfig
@@ -97,35 +100,39 @@ export const TokenDapp: FC<{
           'Content-Type': 'application/json'
         }
       })
+      console.log("get new round")
 
-      if (!res.ok) {
-        setUserRound([])
-        return
+      try {
+        if (res.ok){
+        const data = await res.json()
+
+        const intEpoch = data.map(Number)
+        const newEpoch: number[] = []
+          intEpoch.forEach((element: number) => {
+            if(!userRound.includes(element))
+            newEpoch.push(element)
+          });
+      
+        if (intEpoch.length !== userRound.length) setUserRound([...userRound, ...newEpoch])
+        }
+      } catch (error) {
+        console.error(`Error get user round: ${error}, Error text${res.statusText}, ${res.status}`)
       }
-
-      const data = await res.json()
-
-      if (data.length <= 0) {
-        setUserRound([])
-        return
-      }
-
-      const intEpoch = data.map(Number)
-
-      if (intEpoch.length !== userRound.length) setUserRound(intEpoch)
+     
     }
     roundToClaim()
-  }, [account?.address, addressGroup, config.predictAlphId, userAlreadyPlayed, userRound.length])
+  }, [account?.address, addressGroup, config.predictAlphId, ongoingTxId, userAlreadyPlayed, userRound, userRound.length])
 
   useEffect(() => {
+    console.log(userRound)
+    const getRoundData = async() => {
     if (userRound.length > 0 && account != undefined) {
-      const allInfo = getRoundBetInfoStateFromArray(userRound, account?.address, config.predictAlphId, addressGroup)
-
-      console.log(userRound.length, betsInfo.length)
-
-      if (betsInfo.length <= 0 || betsInfo.length !== userRound.length) setBetsInfo(allInfo)
-    }
-  }, [account, addressGroup, betsInfo.length, config.predictAlphId, userRound])
+      const allInfo = await getRoundBetInfoStateFromArray(userRound, account?.address, config.predictAlphId, addressGroup)
+      console.log(userRound.length, betsInfo.length, allInfo.length)
+      if ( allInfo.length > 0) setBetsInfo(allInfo)
+    }}
+    getRoundData()
+  }, [account, addressGroup, betsInfo, betsInfo.length, config.predictAlphId, userRound])
 
   const getStatesPrediction = useCallback(async () => {
     if (config !== undefined && connectionStatus == 'connected') {
@@ -145,7 +152,7 @@ export const TokenDapp: FC<{
       )
 
       //console.log(getBetInfoExist)
-      if (roundContractExist || predictStates?.epoch !== predictStates?.epoch) {
+      if (roundContractExist) {
         const roundStates = await getRoundContractState(config.predictAlphId, predictStates?.epoch, addressGroup)
         setRoundStates(roundStates.fields)
       } else {
@@ -177,6 +184,9 @@ export const TokenDapp: FC<{
   })
 
 
+
+
+
   return (
     <>
       <div className={styles.grid}>
@@ -192,11 +202,14 @@ export const TokenDapp: FC<{
               {roundStates?.bidEndTimestamp ? <Timer drawTimestamp={Number(roundStates?.bidEndTimestamp)} /> : ''} -
               epoch ({Number(roundStates?.epoch)})
             </p>
-
-            <p>
+            <p>Pool size: {Number(roundStates?.totalAmount) / Number(ONE_ALPH)} ALPH </p>
+            <small>
               Bear pool: {Number(roundStates?.amountDown) / Number(ONE_ALPH)} ALPH / Bull pool:{' '}
               {Number(roundStates?.amountUp) / Number(ONE_ALPH)} ALPH
-            </p>
+              <br />
+              <br />
+            </small>
+
             <label htmlFor="withdraw-amount">Amount (+ 1 ALPH for contract creation)</label>
             <input
               type="number"
@@ -209,7 +222,7 @@ export const TokenDapp: FC<{
             />
             <small>Total: {parseFloat(bidAmount) + 1} ALPH</small>
             <br />
-            {[1,5, 10, 25, 50].map((percent, index) => {
+            {[1, 5, 10, 25, 50].map((percent, index) => {
               return (
                 <div key={index} style={{ display: 'inline' }}>
                   <button
@@ -250,11 +263,7 @@ export const TokenDapp: FC<{
         </form>
 
         <form onSubmit={claimSubmit}>
-          <input
-            type="submit"
-            disabled={!!ongoingTxId || userRound.length <= 0}
-            value="Claim rewards"
-          />
+          <input type="submit" disabled={!!ongoingTxId || userRound.length <= 0} value="Claim rewards" />
           <p>Round participation: {userRound.length}</p>
 
           <h5>Your round information:</h5>
@@ -279,7 +288,7 @@ export const TokenDapp: FC<{
                         Number(state.rewardBaseCalAmount) /
                         Number(ONE_ALPH)
                       ).toFixed(2) +
-                      'ℵ'
+                      'ℵ (+1 ALPH)'
                     : ` - Your bet: ${state.amountBid ? 'Bull' : 'Bear'}`}
                 </p>
                 <p>
@@ -292,6 +301,7 @@ export const TokenDapp: FC<{
           })}
         </form>
       </div>
+      
     </>
   )
 }

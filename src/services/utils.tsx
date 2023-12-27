@@ -86,30 +86,37 @@ export function getRoundStateFromArray(
   return roundsState
 }
 
-export function getRoundBetInfoStateFromArray(
+export async function getRoundBetInfoStateFromArray(
   arrayEpoch: number[],
   address: string,
   predictAlphContractId: string,
   groupIndex: number
-): Fields[] {
-  const states: PunterTypes.Fields[] = []
-  arrayEpoch.forEach(async (element) => {
-    const castElement = BigInt(element)
+): Promise<Fields[]> {
+  const states: Fields[] = []
+
+  // old school but works
+  for (let i = 0, len = arrayEpoch.length; i < len; i++) { 
+    const castElement = BigInt(arrayEpoch[i])
 
     const betInfoExists = await contractExists(
       addressFromContractId(getBetInfoContractId(predictAlphContractId, address, castElement, groupIndex))
     )
+ 
     if (betInfoExists) {
-      process.env.NEXT_PUBLIC_NETWORK == 'testnet' && (await sleep(4 * 1000))
-      const stateBetInfo = (await getBetInfoContractState(predictAlphContractId, address, castElement, groupIndex))
-        .fields
-      process.env.NEXT_PUBLIC_NETWORK == 'testnet' && (await sleep(4 * 1000))
-      const roundState = (await getRoundContractState(predictAlphContractId, castElement, groupIndex)).fields
+      //process.env.NEXT_PUBLIC_NETWORK == 'testnet' && (await sleep(4 * 1000))
+      const stateBetInfo = await getBetInfoContractState(predictAlphContractId, address, castElement, groupIndex)
+      
 
-      states.push({ ...stateBetInfo, ...roundState })
+      //process.env.NEXT_PUBLIC_NETWORK == 'testnet' && (await sleep(4 * 1000))
+      const roundState = await getRoundContractState(predictAlphContractId, castElement, groupIndex)
+
+      states.push({ ...stateBetInfo.fields, ...roundState.fields })
     }
-  })
+  }
 
+
+  //console.log(states)
+  console.log("return "+states.length)
   return states
 }
 
@@ -146,3 +153,5 @@ export async function getBetInfoContractState(
   const state = await roundContract.fetchState()
   return state
 }
+
+

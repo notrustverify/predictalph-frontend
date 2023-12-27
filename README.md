@@ -1,71 +1,20 @@
-This is a Alephium template project for the
-[Next.js](https://nextjs.org/) framework, it is bootstrapped with the
-following command:
+# [alph.bet](https://alph.bet)
 
-```
-npx @alephium/cli init $project-name --template nextjs
-```
+[alph.bet](https://alph.bet) is a decentralized application developed on [Alephium](https://alephium.org).
 
-This template project demonstrates how to implement a simple token
-faucet and expose it with a Web UI using Next.js.
+The goal here is to find the sentiment of ALPH price, native token of Alephium. The player has two choices, Up or Down.
+Voting up means after the end of the interval the bidder thinks that the price is going to be higher than it was at the beginning of the round. If the price at the end of the round is higher than it was at the beginning then all the bidders who bid Up will won (with a ratio) everything that the bidder who bid Down.
 
-## Getting Started
+If price is equal as it was at the beginning it means the house won and there's no rewards for the bidders.
 
-### Install
 
-```
-npm install
-```
+## Claim rewards
 
-### Start a local devnet for testing and development
+When you bid the bidder have to "lock" 1 ALPH, it's a feature developed by Alephium to limit what is stored on-chain. 
+This 1 ALPH can be retrieved when the rewards are claimed even if the bidder didn't choose the right side.
 
-```
-npx @alephium/cli@latest devnet start
-```
+There's another feature on this dApp is that **anyone can claimed the rewards of any address after a certain period of time.** This incentive the need to get the rewards back.
 
-### Deploy the token faucet contract
+## How do you get the price
 
-```bash
-# In this case devnet
-npx @alephium/cli deploy -n devnet
-```
-
-This will compile and deploy the token faucet contracts to all of the
-4 groups on devnet.
-
-Before deployment, you might want to just compile and test the
-contracts first:
-
-```bash
-# Compile
-npx @alephium/cli compile
-
-# Test
-npx @alephium/cli test
-```
-
-### Run the development server
-
-```bash
-npm run dev
-# or
-yarn dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser
-to see the token faucet application.
-
-Download the [Alephium Extension Wallet](https://github.com/alephium/extension-wallet)
-to interact with the application.
-
-## Learn More
-
-To learn more about smart contract development on Alephium, take a
-look at the following resources:
-
-- [Alephium Web3 SDK Guide](https://docs.alephium.org/dapps/alephium-web3/) - Learn about Alephium Web3 SDK
-- [Ralph Language](https://docs.alephium.org/ralph/getting-started) - A guide to the Ralph programming language
-
-You can check out the [Alephium GitHub
-repositories](https://github.com/alephium) for more information - your
-feedback and contributions are welcome!
+For now it's an off-chain process, we are using coingecko to fetch the price but everything is written on-chain so anyone can check the price
