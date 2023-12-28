@@ -248,18 +248,19 @@ export const TokenDapp: FC<{
             <p>Fees: {Number(predictStates?.feesBasisPts) * 0.0001 * 100}%</p>
             {ongoingTxId && <TxStatus txId={ongoingTxId} txStatusCallback={txStatusCallback} />}
             <p>{userAlreadyPlayed ? 'You already played in this round, wait the round to end' : ''}</p>
+            { userRound.length > 9 && <p><b>Claim your rewards before continuing</b></p>}
             <div style={{ display: 'inline' }}>
               <input
                 style={{ display: 'inline' }}
                 type="submit"
-                disabled={!!ongoingTxId || currentDate >= Number(roundStates?.bidEndTimestamp) || userAlreadyPlayed}
+                disabled={!!ongoingTxId || currentDate >= Number(roundStates?.bidEndTimestamp) || userAlreadyPlayed || userRound.length > 9}
                 value="Up"
                 onClick={(e) => setBid(true)}
               />{' '}
               <input
                 style={{ display: 'inline' }}
                 type="submit"
-                disabled={!!ongoingTxId || currentDate >= Number(roundStates?.bidEndTimestamp) || userAlreadyPlayed}
+                disabled={!!ongoingTxId || currentDate >= Number(roundStates?.bidEndTimestamp) || userAlreadyPlayed || userRound.length > 9}
                 value="Down"
                 onClick={(e) => setBid(false)}
               />
