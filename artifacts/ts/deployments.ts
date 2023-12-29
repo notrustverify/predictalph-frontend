@@ -9,11 +9,10 @@ import {
   PunterInstance,
   Round,
   RoundInstance,
-  DynamicArrayForInt,
-  DynamicArrayForIntInstance,
   Predictalph,
   PredictalphInstance,
 } from ".";
+import { default as mainnetDeployments } from "../.deployments.mainnet.json";
 import { default as testnetDeployments } from "../.deployments.testnet.json";
 import { default as devnetDeployments } from "../.deployments.devnet.json";
 
@@ -22,7 +21,6 @@ export type Deployments = {
   contracts: {
     Punter: DeployContractExecutionResult<PunterInstance>;
     Round: DeployContractExecutionResult<RoundInstance>;
-    DynamicArrayForInt: DeployContractExecutionResult<DynamicArrayForIntInstance>;
     Predictalph: DeployContractExecutionResult<PredictalphInstance>;
   };
 };
@@ -41,18 +39,18 @@ function toDeployments(json: any): Deployments {
         json.contracts["Round"].contractInstance.address
       ),
     },
-    DynamicArrayForInt: {
-      ...json.contracts["DynamicArrayForInt"],
-      contractInstance: DynamicArrayForInt.at(
-        json.contracts["DynamicArrayForInt"].contractInstance.address
-      ),
-    },
     Predictalph: {
       ...json.contracts["Predictalph"],
       contractInstance: Predictalph.at(
         json.contracts["Predictalph"].contractInstance.address
       ),
     },
+    DynamicArrayForInt:
+      json.contracts["DynamicArrayForInt"] === undefined
+        ? undefined
+        : {
+            ...json.contracts["DynamicArrayForInt"],
+          },
   };
   return {
     ...json,
@@ -65,7 +63,9 @@ export function loadDeployments(
   deployerAddress?: string
 ): Deployments {
   const deployments =
-    networkId === "testnet"
+    networkId === "mainnet"
+      ? mainnetDeployments
+      : networkId === "testnet"
       ? testnetDeployments
       : networkId === "devnet"
       ? devnetDeployments

@@ -175,6 +175,7 @@ export const TokenDapp: FC<{
       const priceCall = await cgClient.simplePrice({ vs_currencies: 'usd', ids: 'alephium' })
       setPrice(priceCall.alephium.usd.toFixed(3))
     }
+    
     if (price == '') getPrice()
   }, [price])
 
