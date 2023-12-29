@@ -203,7 +203,7 @@ export const TokenDapp: FC<{
             <p>
               <a href="https://www.coingecko.com/en/coins/alephium">Actual ALPH price: </a> ${price}
             </p>
-            <p>Price locked: ${(Number(roundStates?.priceStart) / intPriceDivision).toString()} ({(Number(price)-(Number(roundStates?.priceStart) / intPriceDivision)/(Number(roundStates?.priceStart) / intPriceDivision)*100).toFixed(2)}%)</p>
+            <p>Price locked: ${(Number(roundStates?.priceStart) / intPriceDivision).toString()} ({((Number(price)-(Number(roundStates?.priceStart) / intPriceDivision))/(Number(roundStates?.priceStart) / intPriceDivision)*100).toFixed(2)}%)</p>
             <p>
               Round end at:{' '}
               {roundStates?.bidEndTimestamp ? <Timer drawTimestamp={Number(roundStates?.bidEndTimestamp)} resetCounterId={Math.random()} /> : ''} -
