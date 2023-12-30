@@ -31,7 +31,7 @@ const cgClient = new CoinGeckoClient({
 })
 
 const retryFetch = fetchRetry.default(fetch, {
-  retries: 10,
+  retries: 0,
   retryDelay: 100000
 })
 
@@ -105,7 +105,7 @@ export const TokenDapp: FC<{
       console.log("get new round")
       
       if(ongoingTxId != undefined)
-      await waitTxConfirmed(nodeProvider,ongoingTxId,2,1000)
+      await waitTxConfirmed(nodeProvider,ongoingTxId,2,3000)
       try {
         if (res.ok){
         const data = await res.json()
@@ -140,18 +140,25 @@ export const TokenDapp: FC<{
     getRoundData()
   }, [account, addressGroup, betsInfo, betsInfo.length, config.predictAlphId, userRound])
 
-  const getStatesPrediction = useCallback(async () => {
+  useEffect( () => {
+    const getStatesPrediction = async () => {
     if (config !== undefined && connectionStatus == 'connected') {
       web3.setCurrentNodeProvider(nodeProvider)
       const PredictionStates = Predictalph.at(config.predictAlphAddress)
 
+      console.log("shit ton of requets")
       const initialState = await PredictionStates.fetchState()
       setPredictStates(initialState.fields)
       if (initialState.fields.epoch !== predictStates?.epoch) setUserPlayed(false)
-    }
+    }}
+
+    getStatesPrediction()
+    
   }, [config, connectionStatus, predictStates?.epoch])
 
-  const getRoundStates = useCallback(async () => {
+   useEffect( () => {
+    
+    const getRoundStates = async () => {
     if (predictStates != undefined) {
       const roundContractExist = await contractExists(
         addressFromContractId(getRoundContractId(config.predictAlphId, predictStates?.epoch, addressGroup))
@@ -167,7 +174,9 @@ export const TokenDapp: FC<{
 
         setRoundStates(roundStates.fields)
       }
-    }
+    }}
+    getRoundStates()
+  
   }, [addressGroup, config.predictAlphId, predictStates])
 
   useEffect(() => {
@@ -184,14 +193,6 @@ export const TokenDapp: FC<{
       setUserPlayed(true)
     }
   }, [predictStates?.epoch, userRound])
-
-  useEffect(() => {
-    getStatesPrediction()
-    getRoundStates()
-  })
-
-
-
 
 
   return (
