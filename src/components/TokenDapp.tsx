@@ -4,7 +4,7 @@ import styles from '../styles/Home.module.css'
 import { bid, withdraw } from '@/services/token.service'
 import { TxStatus } from './TxStatus'
 import { useBalance, useWallet } from '@alephium/web3-react'
-import { Fields, NetworkId, NodeProvider, ONE_ALPH, addressFromContractId, node, web3 } from '@alephium/web3'
+import { DUST_AMOUNT, Fields, NetworkId, NodeProvider, ONE_ALPH, addressFromContractId, node, web3 } from '@alephium/web3'
 import {
   PredictAlphConfig,
   contractExists,
@@ -97,7 +97,6 @@ export const TokenDapp: FC<{
         }
       })
       console.log('get new round')
-
       if (ongoingTxId != undefined) {
         await waitTxConfirmed(web3.getCurrentNodeProvider(), ongoingTxId, 1, 2000)
         updateBalanceForTx(ongoingTxId, 1)
@@ -141,6 +140,7 @@ export const TokenDapp: FC<{
           config.predictAlphId,
           addressGroup
         )
+        console.log(allInfo)
         console.log(userRound.length, allInfo.length)
         if(userRound.length <= 0) setBetsInfo([])
         if (allInfo.length > 0) setBetsInfo(allInfo)
@@ -258,6 +258,7 @@ export const TokenDapp: FC<{
               id="transfer-amount"
               name="amount"
               value={bidAmount}
+              min={Number(DUST_AMOUNT/ONE_ALPH)}
               step="any"
               onChange={(e) => setBidAmount(e.target.value)}
               autoFocus
@@ -324,10 +325,12 @@ export const TokenDapp: FC<{
           <p>Round participation: {userRound.length}</p>
 
           <h5>Your round information:</h5>
-          {betsInfo.map((state, index) => {
+          {betsInfo.length ?  betsInfo?.map((state, index) => {
             return (
+        
               <div key={index}>
                 <p>
+                  
                   <b>Round: {Number(state.epoch)}</b> -{' '}
                   {state.epoch != predictStates?.epoch
                     ? state.priceEnd == state.priceStart
@@ -346,16 +349,11 @@ export const TokenDapp: FC<{
                         Number(ONE_ALPH)
                       ).toFixed(2) +
                       'ℵ (+1 ALPH)'
-                    : ` - your bet: ${state.bidUp ? 'Bull' : 'Bear'}`}
-                </p>
-                <p>
-                  {state.epoch != predictStates?.epoch
-                    ? `Total amount in pool: ${Number(state.rewardBaseCalAmount) / Number(ONE_ALPH)}ℵ`
-                    : ''}
+                    : ` - your bet: ${state.upBid ? 'Bull' : 'Bear'}`}
                 </p>
               </div>
             )
-          })}
+      }) : ''}
         </form>
       </div>
     </>
