@@ -319,7 +319,7 @@ export const TokenDapp: FC<{
         </form>
 
         <form onSubmit={claimSubmit}>
-          <input type="submit" disabled={!!ongoingTxId || userRound.length <= 0 ||userRound?.includes(Number(predictStates?.epoch)) } value="Claim rewards" />
+          <input type="submit" disabled={!!ongoingTxId || userRound.length <= 0 || (userRound?.includes(Number(predictStates?.epoch && userRound.length == 1))) } value="Claim rewards" />
           <p>Round participation: {userRound.length}</p>
 
           <h5>Your round information:</h5>
