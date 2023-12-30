@@ -156,6 +156,8 @@ export const TokenDapp: FC<{
   useEffect(() => {
     const getStatesPrediction = async () => {
       if (config !== undefined && connectionStatus == 'connected') {
+
+        web3.setCurrentNodeProvider(nodeProvider)
         const PredictionStates = Predictalph.at(config.predictAlphAddress)
 
         console.log('shit ton of requets')
