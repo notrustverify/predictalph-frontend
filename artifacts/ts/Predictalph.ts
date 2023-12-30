@@ -156,7 +156,10 @@ class Factory extends ContractFactory<
       return testMethod(this, "getBetInfoByEpoch", params);
     },
     startRound: async (
-      params: TestContractParams<PredictalphTypes.Fields, { price: bigint }>
+      params: TestContractParams<
+        PredictalphTypes.Fields,
+        { from: Address; price: bigint }
+      >
     ): Promise<TestContractResult<null>> => {
       return testMethod(this, "startRound", params);
     },
@@ -244,8 +247,8 @@ class Factory extends ContractFactory<
 export const Predictalph = new Factory(
   Contract.fromJson(
     PredictalphContractJson,
-    "=10-2+54=2-1+8=3-1+9=2-2+145419=2-3+2=1-1=1-1=2-1=1-2=1-1=2-2+8d=2-1=1+1=2-2+f044004=1-3+104420=1-3=2-2+0=81-1+e=24+7e0212526f756e6420636f6e747261637420696420001600=25-1+d=22+7e0212526f756e6420636f6e747261637420696420001601=81-1+e=52+16027e0212526f756e6420636f6e74726163742069642000a00016007e031041637475616c2065706f6368206973201220776974682073746172742070726963652000=1626",
-    "d04434cddc3d5d90244ed8cbabb4bfcdff4d1ffb2deac48cf56728de3f14fe3f"
+    "=10-2+54=2-1+8=3-1+9=2-2=1+54=2+a=1-1=1-1+25=1-1=2-1=1-2=1-1=2-2+9e=2-1=1+24401441144214=2-2+1=1-3=1-3=1-3+1=81-1+e=24+7e0212526f756e6420636f6e747261637420696420001600=25-1+d=22+7e0212526f756e6420636f6e747261637420696420001601=81-1+8=82+16037e0212526f756e6420636f6e74726163742069642000a00016017e031041637475616c2065706f6368206973201220776974682073746172742070726963652000=1630",
+    "0ac29513c4719fe384ef331f1fbc66b3804c052ac7764de4483dd28b2bfe6883"
   )
 );
 

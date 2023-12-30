@@ -22,7 +22,7 @@ import * as fetchRetry from 'fetch-retry'
 import { PunterTypes, Round, RoundTypes } from 'artifacts/ts'
 import { Timer } from './Countdown'
 import { group } from 'console'
-import { useRef, memo } from 'react';
+import { useRef, memo } from 'react'
 import { waitTxConfirmed } from '@alephium/cli'
 
 const cgClient = new CoinGeckoClient({
@@ -31,7 +31,7 @@ const cgClient = new CoinGeckoClient({
 })
 
 const retryFetch = fetchRetry.default(fetch, {
-  retries: 0,
+  retries: 10,
   retryDelay: 100000
 })
 
@@ -41,8 +41,6 @@ const nodeProvider = new NodeProvider(configuration.networks[networkId].nodeUrl,
 const currentDate = Date.now()
 
 const intPriceDivision = 10_000
-
-
 
 export const TokenDapp: FC<{
   config: PredictAlphConfig
@@ -102,81 +100,103 @@ export const TokenDapp: FC<{
           'Content-Type': 'application/json'
         }
       })
-      console.log("get new round")
-      
-      if(ongoingTxId != undefined)
-      await waitTxConfirmed(nodeProvider,ongoingTxId,2,3000)
+      console.log('get new round')
+
+      if (ongoingTxId != undefined) await waitTxConfirmed(web3.getCurrentNodeProvider(), ongoingTxId, 2, 2000)
       try {
-        if (res.ok){
-        const data = await res.json()
+        if (res.ok) {
+          const data = await res.json()
           console.log(data)
-        const intEpoch = data.map(Number)
-        const newEpoch: number[] = []
+          const intEpoch = data.map(Number)
+          const newEpoch: number[] = []
           intEpoch.forEach((element: number) => {
-            if(!userRound.includes(element))
-            newEpoch.push(element)
-          });
-      
-        if (intEpoch.length > userRound.length) setUserRound([...userRound, ...newEpoch])
-        if(intEpoch.length < userRound.length) setUserRound(newEpoch)
+            if (!userRound.includes(element)) newEpoch.push(element)
+          })
+
+          if (intEpoch.length > userRound.length) setUserRound([...userRound, ...newEpoch])
+          if (intEpoch.length < userRound.length) setUserRound(newEpoch)
         }
       } catch (error) {
         setUserRound([])
         console.error(`Error get user round: ${error}, Error text${res.statusText}, ${res.status}`)
       }
-     
     }
     roundToClaim()
-  }, [account?.address, addressGroup, config.predictAlphId, ongoingTxId, userAlreadyPlayed, userRound, userRound.length])
+    const interval = setInterval(() => {
+      roundToClaim()
+    }, 5000)
+    return () => clearInterval(interval)
+  }, [
+    account?.address,
+    addressGroup,
+    config.predictAlphId,
+    ongoingTxId,
+    userAlreadyPlayed,
+    userRound,
+    userRound.length
+  ])
 
   useEffect(() => {
     console.log(userRound)
-    const getRoundData = async() => {
-    if (userRound.length > 0 && account != undefined) {
-      const allInfo = await getRoundBetInfoStateFromArray(userRound, account?.address, config.predictAlphId, addressGroup)
-      console.log(userRound.length, betsInfo.length, allInfo.length)
-      if ( allInfo.length > 0 ) setBetsInfo(allInfo)
-    }}
+    const getRoundData = async () => {
+      if (userRound.length > 0 && account != undefined) {
+        const allInfo = await getRoundBetInfoStateFromArray(
+          userRound,
+          account?.address,
+          config.predictAlphId,
+          addressGroup
+        )
+        console.log(userRound.length, betsInfo.length, allInfo.length)
+        if (allInfo.length > 0) setBetsInfo(allInfo)
+      }
+    }
     getRoundData()
   }, [account, addressGroup, betsInfo, betsInfo.length, config.predictAlphId, userRound])
 
-  useEffect( () => {
+  useEffect(() => {
     const getStatesPrediction = async () => {
-    if (config !== undefined && connectionStatus == 'connected') {
-      web3.setCurrentNodeProvider(nodeProvider)
-      const PredictionStates = Predictalph.at(config.predictAlphAddress)
+      if (config !== undefined && connectionStatus == 'connected') {
+        const PredictionStates = Predictalph.at(config.predictAlphAddress)
 
-      console.log("shit ton of requets")
-      const initialState = await PredictionStates.fetchState()
-      setPredictStates(initialState.fields)
-      if (initialState.fields.epoch !== predictStates?.epoch) setUserPlayed(false)
-    }}
-
+        console.log('shit ton of requets')
+        const initialState = await PredictionStates.fetchState()
+        if (initialState.fields.epoch != predictStates?.epoch) {
+          setPredictStates(initialState.fields)
+          setUserPlayed(false)
+        }
+      }
+    }
     getStatesPrediction()
-    
+    const interval = setInterval(() => {
+      getStatesPrediction()
+    }, 1000)
+    return () => clearInterval(interval)
   }, [config, connectionStatus, predictStates?.epoch])
 
-   useEffect( () => {
-    
+  useEffect(() => {
     const getRoundStates = async () => {
-    if (predictStates != undefined) {
-      const roundContractExist = await contractExists(
-        addressFromContractId(getRoundContractId(config.predictAlphId, predictStates?.epoch, addressGroup))
-      )
+      if (predictStates != undefined) {
+        const roundContractExist = await contractExists(
+          addressFromContractId(getRoundContractId(config.predictAlphId, predictStates?.epoch, addressGroup))
+        )
+        console.log('fgfghf')
+        //console.log(getBetInfoExist)
+        if (roundContractExist) {
+          const roundStates = await getRoundContractState(config.predictAlphId, predictStates?.epoch, addressGroup)
+          setRoundStates(roundStates.fields)
+        } else {
+          //using old epoch to get the last contract because it means the next round didnt start yet
+          const roundStates = await getRoundContractState(config.predictAlphId, predictStates?.epoch - 1n, addressGroup)
 
-      //console.log(getBetInfoExist)
-      if (roundContractExist) {
-        const roundStates = await getRoundContractState(config.predictAlphId, predictStates?.epoch, addressGroup)
-        setRoundStates(roundStates.fields)
-      } else {
-        //using old epoch to get the last contract because it means the next round didnt start yet
-        const roundStates = await getRoundContractState(config.predictAlphId, predictStates?.epoch - 1n, addressGroup)
-
-        setRoundStates(roundStates.fields)
+          setRoundStates(roundStates.fields)
+        }
       }
-    }}
-    getRoundStates()
-  
+    }
+
+    const interval = setInterval(() => {
+      getRoundStates()
+    }, 3000)
+    return () => clearInterval(interval)
   }, [addressGroup, config.predictAlphId, predictStates])
 
   useEffect(() => {
@@ -184,7 +204,7 @@ export const TokenDapp: FC<{
       const priceCall = await cgClient.simplePrice({ vs_currencies: 'usd', ids: 'alephium' })
       setPrice(priceCall.alephium.usd.toFixed(3))
     }
-    
+
     if (price == '') getPrice()
   }, [price])
 
@@ -194,6 +214,11 @@ export const TokenDapp: FC<{
     }
   }, [predictStates?.epoch, userRound])
 
+  useEffect(() => {
+    web3.setCurrentNodeProvider(nodeProvider)
+    // getStatesPrediction()
+    //getRoundStates()
+  })
 
   return (
     <>
@@ -204,11 +229,24 @@ export const TokenDapp: FC<{
             <p>
               <a href="https://www.coingecko.com/en/coins/alephium">Actual ALPH price: </a> ${price}
             </p>
-            <p>Price locked: ${(Number(roundStates?.priceStart) / intPriceDivision).toString()} ({((Number(price)-(Number(roundStates?.priceStart) / intPriceDivision))/(Number(roundStates?.priceStart) / intPriceDivision)*100).toFixed(2)}%)</p>
+            <p>
+              Price locked: ${(Number(roundStates?.priceStart) / intPriceDivision).toString()} (
+              {(
+                ((Number(price) - Number(roundStates?.priceStart) / intPriceDivision) /
+                  (Number(roundStates?.priceStart) / intPriceDivision)) *
+                100
+              ).toFixed(2)}
+              %)
+            </p>
             <p>
               Round end at:{' '}
-              {roundStates?.bidEndTimestamp ? <Timer drawTimestamp={Number(roundStates?.bidEndTimestamp)} resetCounterId={Math.random()} /> : ''} -
-              round {Number(roundStates?.epoch)}            </p>
+              {roundStates?.bidEndTimestamp ? (
+                <Timer drawTimestamp={Number(roundStates?.bidEndTimestamp)} resetCounterId={Math.random()} />
+              ) : (
+                ''
+              )}{' '}
+              &nbsp; round {Number(roundStates?.epoch)}
+            </p>
             <p>Pool size: {Number(roundStates?.totalAmount) / Number(ONE_ALPH)} ALPH </p>
             <small>
               Bear pool: {Number(roundStates?.amountDown) / Number(ONE_ALPH)} ALPH / Bull pool:{' '}
@@ -250,19 +288,33 @@ export const TokenDapp: FC<{
             <p>Fees: {Number(predictStates?.feesBasisPts) * 0.0001 * 100}%</p>
             {ongoingTxId && <TxStatus txId={ongoingTxId} txStatusCallback={txStatusCallback} />}
             <p>{userAlreadyPlayed ? 'You already played in this round, wait the round to end' : ''}</p>
-            { userRound.length > 9 && <p><b>Claim your rewards before continuing</b></p>}
+            {userRound.length > 9 && (
+              <p>
+                <b>Claim your rewards before continuing</b>
+              </p>
+            )}
             <div style={{ display: 'inline' }}>
               <input
                 style={{ display: 'inline' }}
                 type="submit"
-                disabled={!!ongoingTxId || currentDate >= Number(roundStates?.bidEndTimestamp) || userAlreadyPlayed || userRound.length > 9}
+                disabled={
+                  !!ongoingTxId ||
+                  currentDate >= Number(roundStates?.bidEndTimestamp) ||
+                  userAlreadyPlayed ||
+                  userRound.length > 9
+                }
                 value="Up"
                 onClick={(e) => setBid(true)}
               />{' '}
               <input
                 style={{ display: 'inline' }}
                 type="submit"
-                disabled={!!ongoingTxId || currentDate >= Number(roundStates?.bidEndTimestamp) || userAlreadyPlayed || userRound.length > 9}
+                disabled={
+                  !!ongoingTxId ||
+                  currentDate >= Number(roundStates?.bidEndTimestamp) ||
+                  userAlreadyPlayed ||
+                  userRound.length > 9
+                }
                 value="Down"
                 onClick={(e) => setBid(false)}
               />
@@ -309,7 +361,6 @@ export const TokenDapp: FC<{
           })}
         </form>
       </div>
-      
     </>
   )
 }

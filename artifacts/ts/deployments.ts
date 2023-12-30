@@ -11,6 +11,7 @@ import {
   RoundInstance,
   Predictalph,
   PredictalphInstance,
+
 } from ".";
 import { default as mainnetDeployments } from "../.deployments.mainnet.json";
 import { default as devnetDeployments } from "../.deployments.devnet.json";
@@ -49,6 +50,7 @@ function toDeployments(json: any): Deployments {
         ? undefined
         : {
             ...json.contracts["DynamicArrayForInt"],
+
           },
   };
   return {
