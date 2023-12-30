@@ -104,7 +104,6 @@ export const TokenDapp: FC<{
       try {
         if (res.ok) {
           const data = await res.json()
-          console.log(data)
           const intEpoch = data.map(Number)
           const newEpoch: number[] = []
           intEpoch.forEach((element: number) => {
@@ -140,7 +139,6 @@ export const TokenDapp: FC<{
           config.predictAlphId,
           addressGroup
         )
-        console.log(allInfo)
         console.log(userRound.length, allInfo.length)
         if(userRound.length <= 0) setBetsInfo([])
         if (allInfo.length > 0) setBetsInfo(allInfo)
