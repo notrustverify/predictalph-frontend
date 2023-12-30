@@ -17,7 +17,7 @@ interface Time {
 
 export const Timer = ( { drawTimestamp, resetCounterId }: Timestamp ) => {
     const dateNow = Date.now()
-    const Completionist = () => <span>new round is starting , ending </span>;
+    const Completionist = () => <span>new round is starting , ending</span>;
 
     const renderer = ({ days ,hours, minutes, seconds, completed }: Time) => {
         if (completed) {

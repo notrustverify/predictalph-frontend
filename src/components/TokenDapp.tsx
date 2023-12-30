@@ -82,16 +82,12 @@ export const TokenDapp: FC<{
     }
   }
 
-  const txStatusCallback = useCallback(
-    async (status: node.TxStatus, numberOfChecks: number): Promise<any> => {
-      if ((status.type === 'Confirmed' && numberOfChecks > 1) || (status.type === 'TxNotFound' && numberOfChecks > 2)) {
-        setOngoingTxId(undefined)
-      }
-      if (ongoingTxId !== undefined) updateBalanceForTx(ongoingTxId, 1)
-      return Promise.resolve()
-    },
-    [ongoingTxId, updateBalanceForTx]
-  )
+  const txStatusCallback = useCallback(async (status: node.TxStatus, numberOfChecks: number): Promise<any> => {
+    if ((status.type === 'Confirmed' && numberOfChecks > 1) || (status.type === 'TxNotFound' && numberOfChecks > 2)) {
+      setOngoingTxId(undefined)
+    }
+    return Promise.resolve()
+  }, [])
 
   useEffect(() => {
     const roundToClaim = async (): Promise<any> => {
@@ -102,7 +98,10 @@ export const TokenDapp: FC<{
       })
       console.log('get new round')
 
-      if (ongoingTxId != undefined) await waitTxConfirmed(web3.getCurrentNodeProvider(), ongoingTxId, 2, 2000)
+      if (ongoingTxId != undefined) {
+        await waitTxConfirmed(web3.getCurrentNodeProvider(), ongoingTxId, 1, 2000)
+        updateBalanceForTx(ongoingTxId, 1)
+      }
       try {
         if (res.ok) {
           const data = await res.json()
@@ -115,7 +114,11 @@ export const TokenDapp: FC<{
 
           if (intEpoch.length > userRound.length) setUserRound([...userRound, ...newEpoch])
           if (intEpoch.length < userRound.length) setUserRound(newEpoch)
+        } if (res.status == 404){
+          if (userRound.length  > 0) setUserRound([])
+
         }
+    
       } catch (error) {
         setUserRound([])
         console.error(`Error get user round: ${error}, Error text${res.statusText}, ${res.status}`)
@@ -126,20 +129,12 @@ export const TokenDapp: FC<{
       roundToClaim()
     }, 5000)
     return () => clearInterval(interval)
-  }, [
-    account?.address,
-    addressGroup,
-    config.predictAlphId,
-    ongoingTxId,
-    userAlreadyPlayed,
-    userRound,
-    userRound.length
-  ])
+  }, [account?.address, addressGroup, config.predictAlphId, ongoingTxId, updateBalanceForTx, userAlreadyPlayed, userRound, userRound.length])
 
   useEffect(() => {
     console.log(userRound)
     const getRoundData = async () => {
-      if (userRound.length > 0 && account != undefined) {
+      if (account != undefined) {
         const allInfo = await getRoundBetInfoStateFromArray(
           userRound,
           account?.address,
@@ -147,6 +142,7 @@ export const TokenDapp: FC<{
           addressGroup
         )
         console.log(userRound.length, allInfo.length)
+        if(userRound.length <= 0) setBetsInfo([])
         if (allInfo.length > 0) setBetsInfo(allInfo)
       }
     }
@@ -156,7 +152,6 @@ export const TokenDapp: FC<{
   useEffect(() => {
     const getStatesPrediction = async () => {
       if (config !== undefined && connectionStatus == 'connected') {
-
         web3.setCurrentNodeProvider(nodeProvider)
         const PredictionStates = Predictalph.at(config.predictAlphAddress)
 
@@ -181,7 +176,6 @@ export const TokenDapp: FC<{
         const roundContractExist = await contractExists(
           addressFromContractId(getRoundContractId(config.predictAlphId, predictStates?.epoch, addressGroup))
         )
-        console.log('fgfghf')
         //console.log(getBetInfoExist)
         if (roundContractExist) {
           const roundStates = await getRoundContractState(config.predictAlphId, predictStates?.epoch, addressGroup)
@@ -195,7 +189,7 @@ export const TokenDapp: FC<{
       }
     }
     getRoundStates()
-   
+
     const interval = setInterval(() => {
       getRoundStates()
     }, 10000)
