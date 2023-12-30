@@ -258,7 +258,7 @@ export const TokenDapp: FC<{
               id="transfer-amount"
               name="amount"
               value={bidAmount}
-              min={Number(DUST_AMOUNT/ONE_ALPH)}
+              min={0.0000001}
               step="any"
               onChange={(e) => setBidAmount(e.target.value)}
               autoFocus
@@ -321,7 +321,7 @@ export const TokenDapp: FC<{
         </form>
 
         <form onSubmit={claimSubmit}>
-          <input type="submit" disabled={!!ongoingTxId || userRound.length <= 0} value="Claim rewards" />
+          <input type="submit" disabled={!!ongoingTxId || userRound.length <= 0 ||userRound?.includes(Number(predictStates?.epoch)) } value="Claim rewards" />
           <p>Round participation: {userRound.length}</p>
 
           <h5>Your round information:</h5>
