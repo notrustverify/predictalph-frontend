@@ -146,12 +146,12 @@ export const TokenDapp: FC<{
           config.predictAlphId,
           addressGroup
         )
-        console.log(userRound.length, betsInfo.length, allInfo.length)
+        console.log(userRound.length, allInfo.length)
         if (allInfo.length > 0) setBetsInfo(allInfo)
       }
     }
     getRoundData()
-  }, [account, addressGroup, betsInfo, betsInfo.length, config.predictAlphId, userRound])
+  }, [account, addressGroup, config.predictAlphId, userRound])
 
   useEffect(() => {
     const getStatesPrediction = async () => {
@@ -171,7 +171,7 @@ export const TokenDapp: FC<{
     getStatesPrediction()
     const interval = setInterval(() => {
       getStatesPrediction()
-    }, 1000)
+    }, 10000)
     return () => clearInterval(interval)
   }, [config, connectionStatus, predictStates?.epoch])
 
@@ -194,10 +194,11 @@ export const TokenDapp: FC<{
         }
       }
     }
-
+    getRoundStates()
+   
     const interval = setInterval(() => {
       getRoundStates()
-    }, 3000)
+    }, 10000)
     return () => clearInterval(interval)
   }, [addressGroup, config.predictAlphId, predictStates])
 
