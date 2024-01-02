@@ -21,6 +21,7 @@ export default function Home() {
           <meta name="description" content="Are you up for the challenge of outperforming the market? Test your skills by making predictions on the future price of ALPH." />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <link rel="icon" href="/favicon.ico" />
+          <link rel="manifest" href="/manifest.json" />
         </Head>
 
         <details open={connectionStatus !== 'connected'} >
@@ -51,10 +52,12 @@ export default function Home() {
             </div>
             <h4>What is Price locked</h4>
             <p>
-              It's price set at the begining of the round. It will be used to compute if it's Up or down side who won at
+              It's price set at the beginning of the round. It will be used to compute if it's Up or down side who won at
               the end of the epoch
             </p>
-            <p>Enjoy the game</p>
+
+            <h4>What is happening is if I don't claim my rewards ?</h4>
+            <p>You have 1 week to claim your rewards, if you wait to long to do, after this period of time anybody can claim them</p>
 </details>
 
       
