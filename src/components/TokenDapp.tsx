@@ -131,21 +131,23 @@ export const TokenDapp: FC<{
 
   useEffect(() => {
     console.log(userRound)
+    
     const getRoundData = async () => {
-      if (account != undefined) {
+
+      if (account != undefined && Number(predictStates?.epoch) >= 0) {
         const allInfo = await getRoundBetInfoStateFromArray(
           userRound,
           account?.address,
           config.predictAlphId,
           addressGroup
         )
-        console.log(userRound.length, allInfo.length)
+        console.log(userRound.length, allInfo.length, predictStates?.epoch)
         if(userRound.length <= 0) setBetsInfo([])
         if (allInfo.length > 0) setBetsInfo(allInfo)
       }
     }
     getRoundData()
-  }, [account, addressGroup, config.predictAlphId, userRound])
+  }, [account, addressGroup, config.predictAlphId, ongoingTxId, predictStates?.epoch, updateBalanceForTx, userRound])
 
   useEffect(() => {
     const getStatesPrediction = async () => {
@@ -323,9 +325,8 @@ export const TokenDapp: FC<{
           <p>Round participation: {userRound.length}</p>
 
           <h5>Your round information:</h5>
-          {betsInfo.length ?  betsInfo?.map((state, index) => {
+          {betsInfo.length ?  betsInfo?.map((state, index) => {     
             return (
-        
               <div key={index}>
                 <p>
                   
