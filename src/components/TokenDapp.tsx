@@ -198,6 +198,7 @@ export const TokenDapp: FC<{
 
   useEffect(() => {
     const getPrice = async () => {
+      console.log("update price")
       const priceCall = await cgClient.simplePrice({ vs_currencies: 'usd', ids: 'alephium' })
       setPrice(priceCall.alephium.usd.toFixed(3))
     }
@@ -261,7 +262,7 @@ export const TokenDapp: FC<{
               id="transfer-amount"
               name="amount"
               value={bidAmount}
-              min={0.0000001}
+              min={0.00001}
               step="any"
               onChange={(e) => setBidAmount(e.target.value)}
               autoFocus
@@ -332,7 +333,7 @@ export const TokenDapp: FC<{
             return (
               <div key={index}>
                 <p>
-                  
+
                   <b>Round: {Number(state.epoch)}</b> -{' '}
                   {state.epoch != predictStates?.epoch
                     ? state.priceEnd == state.priceStart
@@ -350,9 +351,15 @@ export const TokenDapp: FC<{
                         Number(state.rewardBaseCalAmount) /
                         Number(ONE_ALPH)
                       ).toFixed(2) +
-                      'ℵ (+1 ALPH)'
-                    : ` - your bet: ${state.upBid ? 'Bull' : 'Bear'}`}
+                      'ℵ (+1 ALPH)' +` / you bet: ${((Number(state.amountBid)-(Number(state.amountBid)*(Number(state.feesBasisPts)/10000)))/
+                      Number(ONE_ALPH)).toFixed(2)}ℵ (+1 ALPH)`
+                    : ` - your bet: ${state.upBid ? 'Bull' : 'Bear'}` 
+                    
+                    }
+                    
+                                    
                 </p>
+
               </div>
             )
       }) : ''}
