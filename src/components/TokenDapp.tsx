@@ -227,7 +227,7 @@ export const TokenDapp: FC<{
           <>
             <h2 className={styles.title}>Predict price of ALPH on {config.network}</h2>
             <p>
-              <a href="https://www.coingecko.com/en/coins/alephium">Actual ALPH price: </a> ${price}
+              <a href="https://www.coingecko.com/en/coins/alephium" target="_blank" rel="noreferrer" >Actual ALPH price: </a> ${price}
             </p>
             <p>
               Price locked: ${(Number(roundStates?.priceStart) / intPriceDivision).toString()} (
