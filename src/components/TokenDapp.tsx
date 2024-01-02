@@ -201,8 +201,11 @@ export const TokenDapp: FC<{
       const priceCall = await cgClient.simplePrice({ vs_currencies: 'usd', ids: 'alephium' })
       setPrice(priceCall.alephium.usd.toFixed(3))
     }
-
-    if (price == '') getPrice()
+    getPrice()
+    const interval = setInterval(() => {
+      getPrice()
+    }, 120*1000)
+    return () => clearInterval(interval)
   }, [price])
 
   useEffect(() => {
@@ -246,8 +249,8 @@ export const TokenDapp: FC<{
             </p>
             <p>Pool size: {Number(roundStates?.totalAmount) / Number(ONE_ALPH)} ALPH </p>
             <small>
-              Bear pool: {Number(roundStates?.amountDown) / Number(ONE_ALPH)} ALPH / Bull pool:{' '}
-              {Number(roundStates?.amountUp) / Number(ONE_ALPH)} ALPH
+            Bull pool:{' '}
+              {Number(roundStates?.amountUp) / Number(ONE_ALPH)} ALPH / Bear pool: {Number(roundStates?.amountDown) / Number(ONE_ALPH)} ALPH
               <br />
               <br />
             </small>
