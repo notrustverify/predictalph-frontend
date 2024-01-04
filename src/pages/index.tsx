@@ -58,7 +58,7 @@ export default function Home() {
               <b>locked price</b>.
             </p>
             <p>
-              And if you choose <b>Down</b>, you will be considered as a bull and think the price at the end of the
+              And if you choose <b>Down</b>, you will be considered as a bear and think the price at the end of the
               counter will be lower than it was
             </p>
             <br />
