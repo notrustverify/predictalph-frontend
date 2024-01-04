@@ -41,7 +41,7 @@ export default function Home() {
           <meta property="twitter:site" content="@alphbet_" />
           <meta property="twitter:title" content="ALPH.bet" />
           <meta property="twitter:description" content="Are you up for the challenge of outperforming the market? Test your skills by making predictions on the future price of ALPH." />
-          <meta property="twitter:image" content="https://alph.bet/images/icons/icon-144x144.png" />
+          <meta property="twitter:image" content="https://alph.bet/images/icons/icon-384x384_noround.png" />
 
 
         </Head>
