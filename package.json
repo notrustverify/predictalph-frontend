@@ -30,8 +30,8 @@
     "trailingComma": "none"
   },
   "dependencies": {
-    "@alephium/web3": "^0.27.5",
-    "@alephium/web3-react": "^0.27.5",
+    "@alephium/web3": "^0.28.1",
+    "@alephium/web3-react": "^0.28.1",
     "@next/font": "13.1.4",
     "bs58": "^5.0.0",
     "coingecko-api-v3": "^0.0.29",
@@ -50,8 +50,8 @@
     "styled-components": "^5.3.5"
   },
   "devDependencies": {
-    "@alephium/cli": "^0.27.5",
-    "@alephium/web3-test": "^0.27.5",
+    "@alephium/cli": "^0.28.1",
+    "@alephium/web3-test": "^0.28.1",
     "@types/jest": "^27.5.1",
     "@types/node": "18.11.18",
     "@types/react": "18.0.27",
