@@ -104,12 +104,18 @@ export const TokenDapp: FC<{
       try {
         if (res.ok) {
           const data = await res.json()
-          const intEpoch = data.map(Number)
+          const intEpoch: number[] = []
+          console.log(data)
+          data.forEach((element: { round: { epoch: string } }) => {
+            console.log(element)
+            intEpoch.push(Number(element.round.epoch))
+          });
+
           const newEpoch: number[] = []
           intEpoch.forEach((element: number) => {
             if (!userRound.includes(element)) newEpoch.push(element)
           })
-
+          console.log(userRound)
           if (intEpoch.length > userRound.length) setUserRound([...userRound, ...newEpoch])
           if (intEpoch.length < userRound.length) setUserRound(newEpoch)
         } if (res.status == 404){
