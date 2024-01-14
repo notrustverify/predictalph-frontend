@@ -9,16 +9,8 @@ import {Round} from "@/domain/round";
 import {ALEPHIUM} from "@/config/blockchain";
 
 export class WalletConnector implements WalletConnector {
-    private readonly wallet: Wallet;
     private account: AlephiumAccount | undefined;
     private window: SignerProvider | undefined;
-    constructor(wallet: Wallet) {
-        this.wallet = wallet;
-    }
-
-    getWallet(): Wallet {
-        return this.wallet;
-    }
 
     async connect(signer: SignerProvider): Promise<Account> {
         this.window = signer
