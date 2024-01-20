@@ -1,8 +1,9 @@
-import {Round} from "@/domain/round";
-import {Bet} from "@/domain/bet";
-import {Game} from "@/domain/game";
-import {WalletConnector} from "@/services/wallet.connector";
-import {BetClient} from "@/services/bet.client";
+
+import {WalletConnector} from "./wallet.connector";
+import {BetClient} from "./bet.client";
+import {Game} from "../domain/game";
+import {Round} from "../domain/round";
+import {Bet} from "../domain/bet";
 
 export class BetService {
     private readonly wallet: WalletConnector;
@@ -29,7 +30,11 @@ export class BetService {
         return this.wallet.bid(amount, choice, round);
     }
 
-    async claim(bet: Bet) {
+    async claimMyRound(bet: Bet) {
         return this.wallet.claim(bet);
+    }
+
+    async claimExpiredRound(): Promise<boolean> {
+        return false;
     }
 }

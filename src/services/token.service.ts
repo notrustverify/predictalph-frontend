@@ -1,7 +1,6 @@
 import { DUST_AMOUNT, ExecuteScriptResult, ONE_ALPH, SignerProvider } from '@alephium/web3'
-import { Withdraw, Bid } from '../../artifacts/ts/scripts'
-import { PredictalphInstance } from 'artifacts/ts/Predictalph'
 import { arrayEpochToBytes } from './utils';
+import {Bid, Withdraw} from "../artifacts/ts";
 
 
 export const bid = async (
@@ -20,7 +19,7 @@ export const bid = async (
       amount: amountInt+ONE_ALPH,
       up: up,
     },
-    attoAlphAmount: amountInt +ONE_ALPH + 2n * DUST_AMOUNT,
+    attoAlphAmount: amountInt + ONE_ALPH + BigInt(2)  * DUST_AMOUNT,
   });
 }
 

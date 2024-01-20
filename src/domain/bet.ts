@@ -1,6 +1,6 @@
-import {Contract} from "@/domain/contract";
-import {Round, RoundStatus} from "@/domain/round";
-import {Account} from "@/domain/account";
+import {Contract} from "./contract";
+import {Round, RoundStatus} from "./round";
+import {Account} from "./account";
 
 export enum BetStatus {
     PENDING,

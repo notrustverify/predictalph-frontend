@@ -1,4 +1,4 @@
-import {Bet} from "@/domain/bet";
+import {Bet} from "./bet";
 
 export class Claim {
     bet: Bet;

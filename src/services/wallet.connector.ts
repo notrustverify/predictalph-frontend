@@ -3,10 +3,10 @@ import {
     SignerProvider
 } from "@alephium/web3";
 import {Wallet} from "@alephium/web3-react";
-import {Account} from "@/domain/account";
-import {Bet} from "@/domain/bet";
-import {Round} from "@/domain/round";
-import {ALEPHIUM} from "@/config/blockchain";
+import {ALEPHIUM} from "../config/blockchain";
+import {Round} from "../domain/round";
+import {Bet} from "../domain/bet";
+import {Account} from "../domain/account";
 
 export class WalletConnector implements WalletConnector {
     private account: AlephiumAccount | undefined;

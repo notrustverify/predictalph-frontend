@@ -2,7 +2,7 @@ import {AlephiumConnectButton, useWallet} from "@alephium/web3-react";
 import * as React from "react";
 import {useContext, useEffect} from "react";
 import {SignerProvider} from "@alephium/web3";
-import {ServiceContext} from "@/pages/_app";
+import {ServiceContext} from "../App";
 
 
 interface ConnectButtonProp {
@@ -11,11 +11,9 @@ interface ConnectButtonProp {
 export function ConnectButton({onConnect}: ConnectButtonProp) {
     const { account, signer } = useWallet();
     const services = useContext(ServiceContext);
-    let already = false;
 
-    if (signer !== undefined && !already) {
+    if (signer !== undefined) {
         onConnect(signer as unknown as SignerProvider);
-        already = true;
     }
 
     return <AlephiumConnectButton />

@@ -1,7 +1,9 @@
+/**
+
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { FC, useState } from 'react'
 import styles from '../styles/Home.module.css'
-import { bid, withdraw } from '@/services/token.service'
+import { bid, withdraw } from './services/token.service'
 import { TxStatus } from './TxStatus'
 import { useBalance, useWallet } from '@alephium/web3-react'
 import { DUST_AMOUNT, Fields, NetworkId, NodeProvider, ONE_ALPH, addressFromContractId, node, web3 } from '@alephium/web3'
@@ -14,7 +16,7 @@ import {
   getRoundContractId,
   getRoundContractState,
   getRoundStateFromArray
-} from '@/services/utils'
+} from './services/utils'
 import { PredictalphInstance, Predictalph, PredictalphTypes } from 'artifacts/ts/Predictalph'
 import { CoinGeckoClient } from 'coingecko-api-v3'
 import configuration from 'alephium.config'
@@ -122,7 +124,7 @@ export const TokenDapp: FC<{
           if (userRound.length  > 0) setUserRound([])
 
         }
-    
+
       } catch (error) {
         setUserRound([])
         console.error(`Error get user round: ${error}, Error text${res.statusText}, ${res.status}`)
@@ -137,7 +139,7 @@ export const TokenDapp: FC<{
 
   useEffect(() => {
     console.log(userRound)
-    
+
     const getRoundData = async () => {
 
       if (account != undefined && Number(predictStates?.epoch) >= 0) {
@@ -335,7 +337,7 @@ export const TokenDapp: FC<{
           <p>Round participation: {userRound.length}</p>
 
           <h5>Your round information:</h5>
-          {betsInfo.length ?  betsInfo?.map((state, index) => {     
+          {betsInfo.length ?  betsInfo?.map((state, index) => {
             return (
               <div key={index}>
                 <p>
@@ -359,11 +361,11 @@ export const TokenDapp: FC<{
                       ).toFixed(2) +
                       'ℵ (+1 ALPH)' +` / you bet: ${((Number(state.amountBid)-(Number(state.amountBid)*(Number(state.feesBasisPts)/10000)))/
                       Number(ONE_ALPH)).toFixed(2)}ℵ (+1 ALPH)`
-                    : ` - your bet: ${state.upBid ? 'Bull' : 'Bear'}` 
-                    
+                    : ` - your bet: ${state.upBid ? 'Bull' : 'Bear'}`
+
                     }
-                    
-                                    
+
+
                 </p>
 
               </div>
@@ -374,3 +376,4 @@ export const TokenDapp: FC<{
     </>
   )
 }
+*/

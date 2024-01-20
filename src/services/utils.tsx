@@ -8,9 +8,9 @@ import {
   subContractId,
   web3
 } from '@alephium/web3'
-import { loadDeployments } from '../../artifacts/ts/deployments'
-import { Punter, PunterTypes, Round, RoundTypes } from 'artifacts/ts'
 import * as base58 from 'bs58'
+import {loadDeployments} from "../artifacts/ts/deployments";
+import {Punter, Round, RoundTypes} from "../artifacts/ts";
 
 export interface PredictAlphConfig {
   network: NetworkId
@@ -20,7 +20,7 @@ export interface PredictAlphConfig {
 }
 
 function getNetwork(): NetworkId {
-  const network = (process.env.NEXT_PUBLIC_NETWORK ?? 'devnet') as NetworkId
+  const network = (process.env.NEXT_PUBLIC_NETWORK ?? 'mainnet') as NetworkId
   return network
 }
 
@@ -96,17 +96,17 @@ export async function getRoundBetInfoStateFromArray(
 
   // old school but works
 
-  for (let i = 0, len = arrayEpoch.length; i < len; i++) { 
+  for (let i = 0, len = arrayEpoch.length; i < len; i++) {
     const castElement = BigInt(arrayEpoch[i])
 
     const betInfoExists = await contractExists(
       addressFromContractId(getBetInfoContractId(predictAlphContractId, address, castElement, groupIndex))
     )
- 
+
     if (betInfoExists) {
       process.env.NEXT_PUBLIC_NETWORK == 'testnet' && (await sleep(4 * 1000))
       const stateBetInfo = await getBetInfoContractState(predictAlphContractId, address, castElement, groupIndex)
-      
+
 
       process.env.NEXT_PUBLIC_NETWORK == 'testnet' && (await sleep(4 * 1000))
       const roundState = await getRoundContractState(predictAlphContractId, castElement, groupIndex)

@@ -1,4 +1,4 @@
-import {Contract} from "@/domain/contract";
+import {Contract} from "./contract";
 
 export class Game {
     name: string;

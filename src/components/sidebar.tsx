@@ -13,8 +13,8 @@ import {
 } from "@mui/material";
 import {Asset} from "../domain/asset";
 import {SignerProvider} from "@alephium/web3";
-import {ServiceContext} from "@/pages/_app";
-import {ConnectButton} from "@/components/connect";
+import {ServiceContext} from "../App";
+import {ConnectButton} from "./connect";
 
 export const drawerWidth = 240;
 

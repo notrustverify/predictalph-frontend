@@ -1,5 +1,5 @@
-import {Game} from "@/domain/game";
-import {Contract} from "@/domain/contract";
+import {Game} from "./game";
+import {Contract} from "./contract";
 
 export enum RoundStatus {
     CLOSE,
