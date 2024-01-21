@@ -1,21 +1,27 @@
-
 import {WalletConnector} from "./wallet.connector";
 import {BetClient} from "./bet.client";
 import {Game} from "../domain/game";
-import {Round} from "../domain/round";
+import {Round, RoundStatus} from "../domain/round";
 import {Bet} from "../domain/bet";
+import {Contract} from "../domain/contract";
 
 export class BetService {
     private readonly wallet: WalletConnector;
     private readonly client: BetClient;
+
+    private readonly games = [
+        new Game("ALPHPRICE", "ALPH Price", new Contract("", "", 0, "", 0, 0, 0), ["Bet BULL", "Bet Bear"])
+    ];
+
+    private readonly tmpBets = new Map<number, Bet>();
 
     constructor(wallet: WalletConnector, client: BetClient) {
         this.wallet = wallet;
         this.client = client;
     }
 
-    async getGames(): Promise<Game[]> {
-        return []
+    getGames(): Game[] {
+        return this.games;
     }
 
     async getRounds(game: Game): Promise<Round[]> {
@@ -36,5 +42,22 @@ export class BetService {
 
     async claimExpiredRound(): Promise<boolean> {
         return false;
+    }
+
+    async bet(bet: Bet): Promise<Bet> {
+        this.tmpBets.set(bet.round.height, bet);
+        return this.wallet.bid(bet.amount, bet.choice, bet.round);
+    }
+
+    async getPlayerBet(round: Round): Promise<Bet | null> {
+        return this.tmpBets.get(round.height) ?? null;
+    }
+
+    getGame(id: string) {
+        return this.games.filter(g => g.id === id)[0];
+    }
+
+    async getCurrentRound(game: Game): Promise<Round> {
+        return new Round(game, RoundStatus.PENDING, 0, [123, 31123], 0, 123);
     }
 }

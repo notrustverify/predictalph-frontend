@@ -1,11 +1,7 @@
-import {
-    Account as AlephiumAccount,
-    SignerProvider
-} from "@alephium/web3";
-import {Wallet} from "@alephium/web3-react";
+import {Account as AlephiumAccount, SignerProvider} from "@alephium/web3";
 import {ALEPHIUM} from "../config/blockchain";
 import {Round} from "../domain/round";
-import {Bet} from "../domain/bet";
+import {Bet, BetStatus} from "../domain/bet";
 import {Account} from "../domain/account";
 
 export class WalletConnector implements WalletConnector {
@@ -27,10 +23,14 @@ export class WalletConnector implements WalletConnector {
     async bid(amount: number, choice: number, round: Round): Promise<Bet> {
         if (this.window === undefined) return Promise.reject("not connected")
 
-        return Promise.reject("Bid not yet implemetend");
+        return new Bet(round, BetStatus.PENDING, this.getAccount(), choice, amount);
     }
 
     async claim(bet: Bet): Promise<boolean> {
         return Promise.resolve(true);
+    }
+
+    getAccount(): Account {
+        return new Account(this.account?.address ?? '', ALEPHIUM);
     }
 }

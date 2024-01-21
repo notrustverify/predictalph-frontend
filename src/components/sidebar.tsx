@@ -9,12 +9,14 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import {DrawerHeader} from "./drawerHeader";
 import {
-    Box,
+    Box, List, ListItem, ListItemButton, ListItemText,
 } from "@mui/material";
 import {Asset} from "../domain/asset";
 import {SignerProvider} from "@alephium/web3";
 import {ServiceContext} from "../App";
 import {ConnectButton} from "./connect";
+import Typography from "@mui/material/Typography";
+import {useNavigate} from "react-router-dom";
 
 export const drawerWidth = 240;
 
@@ -69,6 +71,8 @@ export const AlphBetSidebar = ({open, handleDrawerClose, theme}: AlphBetSidebarP
     const [already, setAlready] = useState(false);
     const [assets, setAssets] = useState(new Array<Asset>());
     const services = useContext(ServiceContext);
+    const navigate = useNavigate();
+
 
     const reload = () => setSeed(Math.random());
 
@@ -96,6 +100,18 @@ export const AlphBetSidebar = ({open, handleDrawerClose, theme}: AlphBetSidebarP
 
                 <Box sx={{marginTop: "10px"}}/>
                     <ConnectButton onConnect={connect}/>
+
+                <List>
+                {services.bet.getGames().map((game) => (
+                    <ListItem sx={{width: "100%"}} key={game.id}>
+                        <ListItemButton onClick={() => navigate(`/bet/${game.id}`)}>
+                            <ListItemText>
+                                <Typography variant="body2">{game.name}</Typography>
+                            </ListItemText>
+                        </ListItemButton>
+                    </ListItem>
+                ))}
+                </List>
 
             </Box>
         </Drawer>

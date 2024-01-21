@@ -9,19 +9,19 @@ export enum BetStatus {
 }
 
 export class Bet {
-    contract: Contract;
     round: Round;
     status: BetStatus;
     owner: Account;
     choice: number;
+    amount: number;
 
 
-    constructor(contract: Contract, round: Round, status: BetStatus, owner: Account, choice: number) {
-        this.contract = contract;
+    constructor(round: Round, status: BetStatus, owner: Account, choice: number, amount: number) {
         this.round = round;
         this.status = status;
         this.owner = owner;
         this.choice = choice;
+        this.amount = amount;
     }
 
     get win(): boolean {

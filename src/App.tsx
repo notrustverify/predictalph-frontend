@@ -10,6 +10,8 @@ import {AlphBetNavbar} from "./components/navbar";
 import {AlphBetSidebar} from "./components/sidebar";
 import {Theme} from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
+import MainContent from "./components/main";
+import {BrowserRouter} from "react-router-dom";
 
 
 class Services {
@@ -37,8 +39,9 @@ export default function App() {
   const darkTheme = createTheme({
     palette: {
       mode: 'dark',
-      primary: {main: '#7E3FF2'},
-      secondary: {main: '#36962f'}
+      primary: {main: '#F72585'},
+      secondary: {main: '#28F606'},
+      warning: {main: '#FF0000'}
     }
   })
 
@@ -56,6 +59,7 @@ export default function App() {
           addressGroup={tokenFaucetConfig.groupIndex}
       >
         <ServiceContext.Provider value={services}>
+          <BrowserRouter>
           <ThemeProvider theme={darkTheme}>
             <Box sx={{display: "flex"}}>
               <CssBaseline/>
@@ -67,10 +71,11 @@ export default function App() {
               />
               <Box component="main" sx={{flexGrow: 1, p: 3}}>
                 <DrawerHeader/>
-                <Typography>Hello</Typography>
+                <MainContent></MainContent>
               </Box>
             </Box>
           </ThemeProvider>
+          </BrowserRouter>
         </ServiceContext.Provider>
       </AlephiumWalletProvider>
   )
