@@ -5,6 +5,7 @@ import {BetPanel} from "../components/betPanel";
 import {useContext} from "react";
 import {ServiceContext} from "../App";
 import {Game} from "../domain/game";
+import {PollComponent} from "../components/poll";
 
 type BetPageProps = {
     id?: string;
@@ -20,6 +21,7 @@ export function BetPage({id}: BetPageProps) {
     return (
         <Box sx={{alignItems: "center", maxWidth: '1000px', margin: '20px'}}>
             <BetPanel game={game}/>
+            <Box sx={{width: '100%', marginTop: '10px'}}/>
         </Box>
     )
 }

@@ -14,6 +14,7 @@ export class BetService {
     ];
 
     private readonly tmpBets = new Map<number, Bet>();
+    private readonly current = new Round(this.games[0], RoundStatus.PENDING, Date.now() + 1000 * 60 * 3, [500, 500], 0, 123);
 
     constructor(wallet: WalletConnector, client: BetClient) {
         this.wallet = wallet;
@@ -46,6 +47,7 @@ export class BetService {
 
     async bet(bet: Bet): Promise<Bet> {
         this.tmpBets.set(bet.round.height, bet);
+        this.current.pollAmounts[bet.choice] += bet.amount;
         return this.wallet.bid(bet.amount, bet.choice, bet.round);
     }
 
@@ -58,6 +60,6 @@ export class BetService {
     }
 
     async getCurrentRound(game: Game): Promise<Round> {
-        return new Round(game, RoundStatus.PENDING, 0, [123, 31123], 0, 123);
+        return this.current;
     }
 }
