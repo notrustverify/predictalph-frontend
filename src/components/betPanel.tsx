@@ -4,6 +4,8 @@ import {Box, Button, FormControl, Grid, InputAdornment, InputLabel, OutlinedInpu
 import {Game} from "../domain/game";
 import {Bet, BetStatus} from "../domain/bet";
 import {Round} from "../domain/round";
+import Typography from "@mui/material/Typography";
+import {Account} from "../domain/account";
 
 type BetPanelProps = {
     game: Game,
@@ -15,33 +17,29 @@ export function BetPanel({game}: BetPanelProps) {
     const [round, setRound] = useState<Round | null>(null);
     const [amount, setAmount] = useState(0);
 
-    const goBet = (choice: number) => {
+    const goBet = async (choice: number): Promise<Bet | undefined> => {
         if (round === null) return;
 
-        const bet = new Bet(round, BetStatus.PENDING, services.wallet.getAccount(), choice, amount);
-        services.bet.bet(bet).then();
+        const account = await services.wallet.getAccount();
+        const bet = new Bet(round, BetStatus.PENDING, account, choice, amount);
+        return services.bet.bet(bet);
     }
 
-    useEffect( () => {
-        console.log("EFFECT", game.id);
-        const interval = await services.bet.getCurrentRound(game).then(res => {
-            setRound(res)
+    const setAccountPct = async (pct: number): Promise<void> => {
+        const account = await services.wallet.getAccount();
+        setAmount(account.amount * pct);
+    }
 
-            return setInterval(() => {
-                console.log('INTERVAL', round);
-                if (round === null) return;
-                console.log("INTERVAL")
+    useEffect(() => {
+        const interval = setInterval(async () => {
+            const currRound: Round = await services.bet.getCurrentRound(game);
+            setRound(currRound);
+            const currBet: Bet | null = await services.bet.getPlayerBet(currRound);
 
-                services.bet.getPlayerBet(round).then(res => {
-                    if (res === null) return;
-                    console.log(res);
-                    setBet(res);
-                });
-
-                return () =>  clearInterval(interval);
-            }, 1000);
-        });
-
+            if (currBet === null) return;
+            setBet(currBet);
+        }, 1000);
+        return () => clearInterval(interval);
     }, [])
 
     return (
@@ -53,16 +51,25 @@ export function BetPanel({game}: BetPanelProps) {
                 alignItems="flex-start"
             >
                 <Grid item style={item} sx={{height: '100%'}} md={4} xs={12}>
-                    <Button
-                        fullWidth
-                        disabled={bet !== null}
-                        onClick={() => goBet(0)}
-                        sx={{height: '100%'}}
-                        color="secondary"
-                        variant="contained"
-                        size="large">
-                        {bet === null ? game.choiceDescriptions[0] : bet.choice === 0 ? 'ALREADY BET' : '\ '}
-                    </Button>
+                    {bet === null
+                    ? <Button
+                            fullWidth
+                            onClick={() => goBet(0)}
+                            sx={{height: '100%'}}
+                            color="secondary"
+                            variant="contained"
+                            size="large">
+                            {game.choiceDescriptions[0]}
+                        </Button>
+                    : <Button
+                            fullWidth
+                            sx={{height: '100%'}}
+                            color='secondary'
+                            variant="contained"
+                            size="large">
+                            {bet.choice === 0 ? 'You already bet': '.'}
+                        </Button>}
+
                 </Grid>
                 <Grid item style={item} md={4} xs={12}>
                     <Grid
@@ -88,31 +95,40 @@ export function BetPanel({game}: BetPanelProps) {
                                 direction="row"
                                 justifyContent="space-between">
                                 <Grid item md={3}>
-                                    <Button fullWidth variant="text">20%</Button>
+                                    <Button fullWidth variant="text" onClick={() => setAccountPct(0.2).then()}>20%</Button>
                                 </Grid>
                                 <Grid item md={3}>
-                                    <Button fullWidth variant="text">50%</Button>
+                                    <Button fullWidth variant="text" onClick={() => setAccountPct(0.5).then()}>50%</Button>
                                 </Grid>
                                 <Grid item md={3}>
-                                    <Button fullWidth variant="text">70%</Button>
+                                    <Button fullWidth variant="text" onClick={() => setAccountPct(0.7).then()}>70%</Button>
                                 </Grid>
                                 <Grid item md={3}>
-                                    <Button fullWidth variant="text">100%</Button>
+                                    <Button fullWidth variant="text" onClick={() => setAccountPct(1).then()}>100%</Button>
                                 </Grid>
                             </Grid>
                         </Grid>
                     </Grid>
                 </Grid>
                 <Grid item style={item} md={4} xs={12}>
-                    <Button
-                        disabled={bet !== null}
-                        onClick={() => goBet(1)}
-                        size="large"
-                        fullWidth
-                        color="warning"
-                        variant="contained">
-                        {bet === null ? game.choiceDescriptions[1] : bet.choice === 1 ? 'ALREADY BET' : '&nbsp;'}
-                    </Button>
+                    {bet === null
+                    ? <Button
+                            onClick={() => goBet(1).then()}
+                            size="large"
+                            fullWidth
+                            color="warning"
+                            variant="contained">
+                            {game.choiceDescriptions[1]}
+                        </Button>
+                    : <Button
+                            fullWidth
+                            sx={{height: '100%'}}
+                            color='warning'
+                            variant="contained"
+                            size="large">
+                            {bet.choice === 1 ? 'You already bet': '.'}
+                        </Button>}
+
                 </Grid>
             </Grid>
         </Box>

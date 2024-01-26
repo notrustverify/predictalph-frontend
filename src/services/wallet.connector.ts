@@ -3,6 +3,7 @@ import {ALEPHIUM} from "../config/blockchain";
 import {Round} from "../domain/round";
 import {Bet, BetStatus} from "../domain/bet";
 import {Account} from "../domain/account";
+import {AddressBalance} from "@alephium/web3/dist/src/api/api-alephium";
 
 export class WalletConnector implements WalletConnector {
     private account: AlephiumAccount | undefined;
@@ -13,7 +14,7 @@ export class WalletConnector implements WalletConnector {
         this.account = await this.window?.getSelectedAccount();
 
         if (this.account) {
-            return Promise.resolve(new Account(this.account.address, ALEPHIUM));
+            return this.getAccount();
         } else {
             return Promise.reject("Can't connect to wallet")
         }
@@ -23,14 +24,16 @@ export class WalletConnector implements WalletConnector {
     async bid(amount: number, choice: number, round: Round): Promise<Bet> {
         if (this.window === undefined) return Promise.reject("not connected")
 
-        return new Bet(round, BetStatus.PENDING, this.getAccount(), choice, amount);
+        // TODO implement bid
+        return new Bet(round, BetStatus.PENDING, await this.getAccount(), choice, amount);
     }
 
     async claim(bet: Bet): Promise<boolean> {
         return Promise.resolve(true);
     }
 
-    getAccount(): Account {
-        return new Account(this.account?.address ?? '', ALEPHIUM);
+    async getAccount(): Promise<Account> {
+        const balance = await this.window?.explorerProvider?.addresses.getAddressesAddressBalance(this.account?.address ?? '')
+        return new Account(this.account?.address ?? '', parseInt(balance?.balance ?? '0') / Math.pow(10, 18), ALEPHIUM);
     }
 }
