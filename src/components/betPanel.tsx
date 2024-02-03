@@ -70,7 +70,7 @@ export function BetPanel({game}: BetPanelProps) {
                                 fullWidth
                                 sx={{height: '100%'}}
                                 color='secondary'
-                                variant="contained"
+                                variant="outlined"
                                 size="large">
                                 {bet.choice === 0 ? 'You already bet' : '.'}
                             </Button>}
@@ -134,7 +134,7 @@ export function BetPanel({game}: BetPanelProps) {
                                 fullWidth
                                 sx={{height: '100%'}}
                                 color='warning'
-                                variant="contained"
+                                variant="outlined"
                                 size="large">
                                 {bet.choice === 1 ? 'You already bet' : '.'}
                             </Button>}

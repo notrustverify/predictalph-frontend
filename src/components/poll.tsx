@@ -1,7 +1,7 @@
 import {Round} from "../domain/round";
-import {useContext} from "react";
+import {useContext, useEffect, useState} from "react";
 import {ServiceContext} from "../App";
-import {Box, Button, FormControl, Grid, InputAdornment, InputLabel, LinearProgress, OutlinedInput} from "@mui/material";
+import {Box, Grid, LinearProgress} from "@mui/material";
 import Typography from "@mui/material/Typography";
 
 type PollComponentType = {
@@ -9,7 +9,16 @@ type PollComponentType = {
 }
 
 export function PollComponent({round}: PollComponentType) {
-    const services = useContext(ServiceContext);
+    const svc = useContext(ServiceContext);
+    const [previous, setPrevious] = useState<Round | null>(null);
+    const [pct, setPct] = useState(0);
+
+    useEffect(() => {
+        svc.bet.getRound(round.previous).then((res) => {
+            setPrevious(res);
+            setPct(computePct(res));
+        });
+    }, [round.height])
 
     const itemStyle = {
         padding: '10px',
@@ -34,6 +43,12 @@ export function PollComponent({round}: PollComponentType) {
         }
     }
 
+    const computePct = (prev: Round): number => {
+        if (prev === null)
+            return 0;
+        return (round.result - prev.result) / prev.result * 100;
+    }
+
     return (
         <Box sx={{width: '100%'}}>
             <Grid
@@ -55,20 +70,14 @@ export function PollComponent({round}: PollComponentType) {
                 <Grid item style={itemStyle} md={4} xs={12}>
                     <Grid
                         container
-                        direction="column"
+                        direction="row"
                         justifyContent="space-around"
                         alignItems="center">
-                        <Grid item md={12}>
-                            <Grid
-                                container
-                                direction="row"
-                                justifyContent="space-around"
-                                alignItems="center">
-                                <Grid item md={6}>2.432 $</Grid>
-                                <Grid item md={6}>2.42 %</Grid>
-                            </Grid>
-                        </Grid>
-                        <Grid item md={12}>{displayDate(round)}</Grid>
+                                <Grid item md={6} sx={{textAlign: "center"}}>{round.result} $</Grid>
+                                <Grid item md={6} sx={{textAlign: "center"}}>
+                                    <Typography color={pct > 0 ? 'secondary': 'warning'}>{pct.toFixed(2)} %</Typography>
+                                </Grid>
+                        <Grid item md={12} sx={{textAlign: "center"}}>{displayDate(round)}</Grid>
                     </Grid>
                 </Grid>
                 <Grid item style={itemStyle} md={4} xs={12}>

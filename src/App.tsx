@@ -9,7 +9,6 @@ import {DrawerHeader} from "./components/drawerHeader";
 import {AlphBetNavbar} from "./components/navbar";
 import {AlphBetSidebar} from "./components/sidebar";
 import {Theme} from "@mui/material/styles";
-import Typography from "@mui/material/Typography";
 import MainContent from "./components/main";
 import {BrowserRouter} from "react-router-dom";
 
