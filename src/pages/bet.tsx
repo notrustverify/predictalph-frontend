@@ -6,6 +6,7 @@ import {useContext} from "react";
 import {ServiceContext} from "../App";
 import {Game} from "../domain/game";
 import {PollComponent} from "../components/poll";
+import {Historic} from "../components/historic";
 
 type BetPageProps = {
     id?: string;
@@ -21,7 +22,8 @@ export function BetPage({id}: BetPageProps) {
     return (
         <Box sx={{alignItems: "center", maxWidth: '1000px', margin: '20px'}}>
             <BetPanel game={game}/>
-            <Box sx={{width: '100%', marginTop: '10px'}}/>
+            <Box sx={{width: '100%', marginTop: '50px'}}/>
+            <Historic game={game}/>
         </Box>
     )
 }

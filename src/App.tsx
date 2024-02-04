@@ -11,23 +11,20 @@ import {AlphBetSidebar} from "./components/sidebar";
 import {Theme} from "@mui/material/styles";
 import MainContent from "./components/main";
 import {BrowserRouter} from "react-router-dom";
+import {RoundService} from "./services/round.service";
 
 
 class Services {
-  wallet: WalletConnector;
-  bet: BetService;
 
 
-  constructor(wallet: WalletConnector, bet: BetService) {
-    this.wallet = wallet;
-    this.bet = bet;
-  }
+  constructor(public readonly wallet: WalletConnector, public readonly bet: BetService, public readonly round: RoundService) {}
 }
 
 const wallet = new WalletConnector();
 const client = new BetClient();
-const bet = new BetService(wallet, client);
-const services = new Services(wallet, bet);
+const round = new RoundService();
+const bet = new BetService(wallet, client, round);
+const services = new Services(wallet, bet, round);
 
 export const ServiceContext = createContext(services);
 
@@ -37,7 +34,7 @@ export default function App() {
 
   const darkTheme = createTheme({
     palette: {
-      mode: 'dark',
+      mode: 'light',
       primary: {main: '#F72585'},
       secondary: {main: '#28F606'},
       warning: {main: '#FF0000'}

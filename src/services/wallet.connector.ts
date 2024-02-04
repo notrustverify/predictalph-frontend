@@ -25,7 +25,7 @@ export class WalletConnector implements WalletConnector {
         if (this.window === undefined) return Promise.reject("not connected")
 
         // TODO implement bid
-        return new Bet(round, BetStatus.PENDING, await this.getAccount(), choice, amount);
+        return new Bet(round, BetStatus.PENDING, await this.getAccount(), choice, amount, 1);
     }
 
     async claim(bet: Bet): Promise<boolean> {

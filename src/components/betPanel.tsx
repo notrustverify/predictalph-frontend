@@ -23,7 +23,7 @@ export function BetPanel({game}: BetPanelProps) {
         if (round === null || amount === 0) return;
 
         const account = await services.wallet.getAccount();
-        const bet = new Bet(round, BetStatus.PENDING, account, choice, amount);
+        const bet = new Bet(round, BetStatus.PENDING, account, choice, amount, 1);
         return services.bet.bet(bet);
     }
 
@@ -32,19 +32,20 @@ export function BetPanel({game}: BetPanelProps) {
         setAmount(account.amount * pct);
     }
 
-    useEffect(() => {
-        const interval = setInterval(async () => {
-            setSeed(Math.random);
-            const currRound: Round = await services.bet.getCurrentRound(game);
-            console.log(currRound);
-            setRound(currRound);
-            const currBet: Bet | null = await services.bet.getPlayerBet(currRound);
+    const fetch = async () => {
+        setSeed(Math.random);
+        const currRound: Round = await services.round.getCurrent(game);
+        setRound(currRound);
+        const currBet: Bet | null = await services.bet.getPlayerBet(currRound);
 
-            if (currBet === null) return;
-            setBet(currBet);
-        }, 1000);
+        if (currBet === null) return;
+        setBet(currBet);
+    }
+
+    useEffect(() => {
+        const interval = setInterval(fetch, 1000);
         return () => clearInterval(interval);
-    }, [])
+    }, []);
 
     return (
         <>

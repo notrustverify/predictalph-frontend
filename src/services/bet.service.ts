@@ -4,42 +4,26 @@ import {Game} from "../domain/game";
 import {Round, RoundStatus} from "../domain/round";
 import {Bet} from "../domain/bet";
 import {Contract} from "../domain/contract";
+import {RoundService} from "./round.service";
 
 export class BetService {
-    private readonly wallet: WalletConnector;
-    private readonly client: BetClient;
 
     private readonly games = [
-        new Game("ALPHPRICE", "ALPH Price", new Contract("", "", 0, "", 0, 0, 0), ["Bet BULL", "Bet Bear"])
+        new Game("ALPHPRICE", "ALPH Price", new Contract("", "", 0, "", 0, 0, 0), ["BULL", "BEAR"])
     ];
 
     private readonly tmpBets = new Map<number, Bet>();
-    private readonly current = new Round(this.games[0], RoundStatus.PENDING, Date.now() + 1000 * 60 * 3, [500, 500], 0, 123, 4.4, 122);
-    private readonly previous = new Round(this.games[0], RoundStatus.PENDING, Date.now() - 1000 * 60 * 3, [500, 500], 0, 122, 3.4, 121);
 
-    constructor(wallet: WalletConnector, client: BetClient) {
-        this.wallet = wallet;
-        this.client = client;
+
+    constructor(private readonly wallet: WalletConnector, private readonly client: BetClient, private readonly roundService: RoundService) {
     }
 
     getGames(): Game[] {
         return this.games;
     }
 
-    async getRounds(game: Game): Promise<Round[]> {
-        return [this.current, this.previous];
-    }
-
-    async getRound(height: number): Promise<Round> {
-        return this.previous;
-    }
-
     async getBets(game: Game): Promise<Bet[]> {
         return [];
-    }
-
-    async bid(amount: number, choice: number, round: Round): Promise<Bet> {
-        return this.wallet.bid(amount, choice, round);
     }
 
     async claimMyRound(bet: Bet) {
@@ -52,11 +36,12 @@ export class BetService {
 
     async bet(bet: Bet): Promise<Bet> {
         this.tmpBets.set(bet.round.height, bet);
-        this.current.pollAmounts[bet.choice] += bet.amount;
+        (await this.roundService.getCurrent(bet.round.game)).pollAmounts[bet.choice] += bet.amount;
         return this.wallet.bid(bet.amount, bet.choice, bet.round);
     }
 
     async getPlayerBet(round: Round): Promise<Bet | null> {
+        console.log("TMPBET", this.tmpBets, round);
         return this.tmpBets.get(round.height) ?? null;
     }
 
@@ -64,7 +49,5 @@ export class BetService {
         return this.games.filter(g => g.id === id)[0];
     }
 
-    async getCurrentRound(game: Game): Promise<Round> {
-        return this.current;
-    }
+
 }

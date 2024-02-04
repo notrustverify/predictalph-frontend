@@ -11,10 +11,10 @@ type PollComponentType = {
 export function PollComponent({round}: PollComponentType) {
     const svc = useContext(ServiceContext);
     const [previous, setPrevious] = useState<Round | null>(null);
-    const [pct, setPct] = useState(0);
+    const [pct, setPct] = useState<number | null>(null);
 
     useEffect(() => {
-        svc.bet.getRound(round.previous).then((res) => {
+        svc.round.get(round.previous).then((res) => {
             setPrevious(res);
             setPct(computePct(res));
         });
@@ -43,9 +43,9 @@ export function PollComponent({round}: PollComponentType) {
         }
     }
 
-    const computePct = (prev: Round): number => {
+    const computePct = (prev: Round): number | null => {
         if (prev === null)
-            return 0;
+            return null;
         return (round.result - prev.result) / prev.result * 100;
     }
 
@@ -75,7 +75,8 @@ export function PollComponent({round}: PollComponentType) {
                         alignItems="center">
                                 <Grid item md={6} sx={{textAlign: "center"}}>{round.result} $</Grid>
                                 <Grid item md={6} sx={{textAlign: "center"}}>
-                                    <Typography color={pct > 0 ? 'secondary': 'warning'}>{pct.toFixed(2)} %</Typography>
+                                    {pct === null ? <Box/> : <Typography color={pct > 0 ? 'secondary': 'warning'}>{pct.toFixed(2)} %</Typography>}
+
                                 </Grid>
                         <Grid item md={12} sx={{textAlign: "center"}}>{displayDate(round)}</Grid>
                     </Grid>

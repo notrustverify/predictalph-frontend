@@ -54,7 +54,7 @@ export function AlphBetNavbar({open, handleDrawerOpen}: AlphBetNavbarProp) {
                     <MenuIcon />
                 </IconButton>
                 <Typography variant="h6" noWrap component="div">
-                    Walph
+                    ALPH.BET
                 </Typography>
             </Toolbar>
         </AppBar>
