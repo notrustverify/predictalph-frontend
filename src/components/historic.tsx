@@ -75,12 +75,12 @@ export function Historic({game}: HistoricProps) {
                         <TableRow>
                             <TableCell>Height</TableCell>
                             <TableCell align="right">Status</TableCell>
-                            {/*
+
                             <TableCell align="right">Result</TableCell>
                             <TableCell align="right">Winner</TableCell>
                             <TableCell align="right">Bet</TableCell>
                             <TableCell align="right">Rewards</TableCell>
-                            */}
+
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -93,7 +93,7 @@ export function Historic({game}: HistoricProps) {
                                     {bet.round.height}
                                 </TableCell>
                                 <TableCell align="right">{bet.status}</TableCell>
-                                {/*
+
                                 <TableCell align="right">{bet.round.result.toFixed(2)} $</TableCell>
                                 <TableCell align="right" color={bet.round.winner === 0 ? 'warning' : 'secondary'}>
                                     {game.choiceDescriptions[bet.round.winner]}
@@ -102,7 +102,7 @@ export function Historic({game}: HistoricProps) {
                                     {bet.amount.toFixed(2)} ALPH on {game.choiceDescriptions[bet.choice]}
                                 </TableCell>
                                 <TableCell align="right">{bet.reward.toFixed(2)} ALPH</TableCell>
-                                   */}
+
                             </TableRow>
                         ))}
                     </TableBody>
