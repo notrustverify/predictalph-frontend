@@ -1,16 +1,16 @@
 import {Contract} from "./contract";
 
+export enum GameType {
+    CHOICE = 'CHOICE',
+    PRICE = 'PRICE',
+}
+
 export class Game {
-    id: string;
-    name: string;
-    contract: Contract;
-    choiceDescriptions: string[];
-
-
-    constructor(id: string, name: string, contract: Contract, choiceDescriptions: string[]) {
-        this.id = id;
-        this.name = name;
-        this.contract = contract;
-        this.choiceDescriptions = choiceDescriptions;
-    }
+    constructor(
+        public id: string,
+        public name: string,
+        public contract: Contract,
+        public choiceDescriptions: string[],
+        public type: GameType
+        ) {}
 }

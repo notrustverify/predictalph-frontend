@@ -10,15 +10,7 @@ type PollComponentType = {
 
 export function PollComponent({round}: PollComponentType) {
     const svc = useContext(ServiceContext);
-    const [previous, setPrevious] = useState<Round | null>(null);
-    const [pct, setPct] = useState<number | null>(null);
-
-    useEffect(() => {
-        svc.round.get(round.previous).then((res) => {
-            setPrevious(res);
-            setPct(computePct(res));
-        });
-    }, [round.height])
+    const pct = 50;
 
     const itemStyle = {
         padding: '10px',
@@ -46,7 +38,7 @@ export function PollComponent({round}: PollComponentType) {
     const computePct = (prev: Round): number | null => {
         if (prev === null)
             return null;
-        return (round.result - prev.result) / prev.result * 100;
+        return 10;
     }
 
     return (

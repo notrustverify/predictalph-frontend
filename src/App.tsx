@@ -1,6 +1,5 @@
 import React, {createContext, useState} from 'react'
 import { AlephiumWalletProvider } from '@alephium/web3-react'
-import { tokenFaucetConfig } from './services/utils'
 import {WalletConnector} from "./services/wallet.connector";
 import {BetService} from "./services/bet.service";
 import {BetClient} from "./services/bet.client";
@@ -12,6 +11,7 @@ import {Theme} from "@mui/material/styles";
 import MainContent from "./components/main";
 import {BrowserRouter} from "react-router-dom";
 import {RoundService} from "./services/round.service";
+import {BlockchainClient} from "./services/blockchain.client";
 
 
 class Services {
@@ -21,9 +21,10 @@ class Services {
 }
 
 const wallet = new WalletConnector();
-const client = new BetClient();
+const client = new BetClient("https://predictalph-api.testnet.notrustverify.ch");
+const blockchain = new BlockchainClient("testnet", '');
 const round = new RoundService();
-const bet = new BetService(wallet, client, round);
+const bet = new BetService(wallet, client, blockchain, round);
 const services = new Services(wallet, bet, round);
 
 export const ServiceContext = createContext(services);
@@ -51,8 +52,8 @@ export default function App() {
 
   return (
       <AlephiumWalletProvider
-          network={tokenFaucetConfig.network}
-          addressGroup={tokenFaucetConfig.groupIndex}
+          network={'testnet'}
+          addressGroup={1}
       >
         <ServiceContext.Provider value={services}>
           <BrowserRouter>

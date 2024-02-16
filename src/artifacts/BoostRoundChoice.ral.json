@@ -1,17 +1,20 @@
 {
   "version": "v2.8.0",
-  "name": "Start",
-  "bytecodeTemplate": "0101030001000bb41700b413c40de0b6b3a7640000a21600{1}0e0c{0}0105",
+  "name": "BoostRoundChoice",
+  "bytecodeTemplate": "0101030001000bb417001600{1}a2{1}{2}0e0c{0}010b",
   "fieldsSig": {
     "names": [
       "predict",
-      "price"
+      "amount",
+      "epochToBoost"
     ],
     "types": [
       "ByteVec",
+      "U256",
       "U256"
     ],
     "isMutable": [
+      false,
       false,
       false
     ]

@@ -3,31 +3,27 @@ import {Round, RoundStatus} from "./round";
 import {Account} from "./account";
 
 export enum BetStatus {
-    PENDING= "PENDING",
-    ACCEPTED = "ACCEPTED",
-    CLAIMED = "CLAIMED"
+    PENDING= "PENDING", // poll txId
+    ACCEPTED = "ACCEPTED", // poll txId
+    NOTCLAIMED = 'NOTCLAIMED', // API -> retourne les rounds non claim
+    CLAIMED = "CLAIMED" // API comme en haut
 }
 
 export class Bet {
-    round: Round;
-    status: BetStatus;
-    owner: Account;
-    choice: number;
-    amount: number;
-    reward: number;
 
-
-
-    constructor(round: Round, status: BetStatus, owner: Account, choice: number, amount: number, reward: number) {
-        this.round = round;
-        this.status = status;
-        this.owner = owner;
-        this.choice = choice;
-        this.amount = amount;
-        this.reward = reward;
-    }
+    constructor(
+        public status: BetStatus,
+        public owner: Account,
+        public choice: number, // contract
+        public amount: number, // contract
+        public reward: number, // cf calcul dans le contract
+        public winner: number,
+        public end: number,
+        public txId: string,
+    ) {}
 
     get win(): boolean {
-        return this.round.status === RoundStatus.FINISHED && this.round.winner === this.choice;
+        return (this.status === BetStatus.CLAIMED || this.status === BetStatus.NOTCLAIMED)
+            && this.winner === this.choice;
     }
 }

@@ -1,12 +1,12 @@
 {
-  "version": "v2.5.9",
-  "name": "Bid",
-  "bytecodeTemplate": "01010300000009b4{1}a2{1}{2}0e0c{0}0106",
+  "version": "v2.8.0",
+  "name": "BidChoice",
+  "bytecodeTemplate": "0101030001000bb417001600{1}a2{1}{2}0e0c{0}0107",
   "fieldsSig": {
     "names": [
-      "predictalph",
+      "predict",
       "amount",
-      "up"
+      "side"
     ],
     "types": [
       "ByteVec",

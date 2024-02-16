@@ -1,20 +1,17 @@
 {
-  "version": "v2.5.9",
-  "name": "WithdrawAddress",
-  "bytecodeTemplate": "01010300000006{1}{2}0e0c{0}0108",
+  "version": "v2.8.0",
+  "name": "NewInterval",
+  "bytecodeTemplate": "01010300000005{1}0d0c{0}010c",
   "fieldsSig": {
     "names": [
-      "predictalph",
-      "epochParticipation",
-      "addressToClaim"
+      "predict",
+      "newRecurrence"
     ],
     "types": [
       "ByteVec",
-      "ByteVec",
-      "Address"
+      "U256"
     ],
     "isMutable": [
-      false,
       false,
       false
     ]

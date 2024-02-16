@@ -24,17 +24,6 @@ function getNetwork(): NetworkId {
   return network
 }
 
-function getPredictAlphConfig(): PredictAlphConfig {
-  const network = getNetwork()
-  const predictAlph = loadDeployments(network).contracts.Predictalph.contractInstance
-  const groupIndex = predictAlph.groupIndex
-  const predictAlphAddress = predictAlph.address
-  const predictAlphId = predictAlph.contractId
-  return { network, groupIndex, predictAlphAddress, predictAlphId }
-}
-
-export const tokenFaucetConfig = getPredictAlphConfig()
-
 export async function getRoundContractState(predictAlphContractId: string, epoch: bigint, groupIndex: number) {
   const roundContractId = getRoundContractId(predictAlphContractId, epoch, groupIndex)
 

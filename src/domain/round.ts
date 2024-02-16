@@ -3,29 +3,17 @@ import {Contract} from "./contract";
 
 export enum RoundStatus {
     CLOSE,
-    PENDING,
+    RUNNING,
     FINISHED
 }
 
 export class Round {
-    game: Game;
-    status: RoundStatus;
-    end: number;
-    pollAmounts: number[];
-    winner: number;
-    height: number;
-    result: number;
-    previous: number;
-
-
-    constructor(game: Game, status: RoundStatus, end: number, pollAmounts: number[], winner: number, height: number, result: number, previous: number) {
-        this.game = game;
-        this.status = status;
-        this.end = end;
-        this.pollAmounts = pollAmounts;
-        this.winner = winner;
-        this.height = height;
-        this.result = result;
-        this.previous = previous;
-    }
+    constructor(
+        public game: Game,
+        public status: RoundStatus,// en function de end
+        public end: number, // artifacts value
+        public pollAmounts: number[],// artifact value
+        public height: number, // artifacts value,
+        public result: number,
+) {}
 }

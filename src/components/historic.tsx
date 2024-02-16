@@ -30,14 +30,7 @@ export function Historic({game}: HistoricProps) {
     const [bets, setBets] = useState<Bet[]>([]);
 
     const fetch = async (): Promise<void> => {
-        const rounds: Round[] = await svc.round.getAll(game);
-        console.log("ROUNDS", rounds);
-
-        const rawBets: (Bet | null)[] = await Promise.all(
-            rounds.map((r) => svc.bet.getPlayerBet(r))
-        );
-
-        console.log("BET", rawBets);
+        const rawBets = await svc.bet.getPlayerBets(game);
         setBets(rawBets.filter(notEmpty));
     }
 
@@ -73,12 +66,10 @@ export function Historic({game}: HistoricProps) {
                 <Table sx={{minWidth: 650}} aria-label="simple table">
                     <TableHead>
                         <TableRow>
-                            <TableCell>Height</TableCell>
+                            <TableCell>End</TableCell>
                             <TableCell align="right">Status</TableCell>
 
                             <TableCell align="right">Result</TableCell>
-                            <TableCell align="right">Winner</TableCell>
-                            <TableCell align="right">Bet</TableCell>
                             <TableCell align="right">Rewards</TableCell>
 
                         </TableRow>
@@ -86,22 +77,20 @@ export function Historic({game}: HistoricProps) {
                     <TableBody>
                         {bets.map((bet) => (
                             <TableRow
-                                key={bet.round.height}
+                                key={bet.end}
                                 sx={{'&:last-child td, &:last-child th': {border: 0}}}
                             >
                                 <TableCell component="th" scope="row">
-                                    {bet.round.height}
+                                    {bet.end}
                                 </TableCell>
                                 <TableCell align="right">{bet.status}</TableCell>
 
-                                <TableCell align="right">{bet.round.result.toFixed(2)} $</TableCell>
-                                <TableCell align="right" color={bet.round.winner === 0 ? 'warning' : 'secondary'}>
-                                    {game.choiceDescriptions[bet.round.winner]}
-                                </TableCell>
-                                <TableCell align="right" color={bet.choice === 0 ? 'warning' : 'secondary'}>
+                                <TableCell align="right" color={bet.win ? 'warning' : 'secondary'}>
                                     {bet.amount.toFixed(2)} ALPH on {game.choiceDescriptions[bet.choice]}
                                 </TableCell>
-                                <TableCell align="right">{bet.reward.toFixed(2)} ALPH</TableCell>
+                                <TableCell align="right" color={bet.win ? 'warning' : 'secondary'}>
+                                    {bet.reward.toFixed(2)} ALPH
+                                </TableCell>
 
                             </TableRow>
                         ))}

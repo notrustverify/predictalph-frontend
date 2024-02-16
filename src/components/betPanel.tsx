@@ -22,9 +22,7 @@ export function BetPanel({game}: BetPanelProps) {
     const goBet = async (choice: number): Promise<Bet | undefined> => {
         if (round === null || amount === 0) return;
 
-        const account = await services.wallet.getAccount();
-        const bet = new Bet(round, BetStatus.PENDING, account, choice, amount, 1);
-        return services.bet.bet(bet);
+        return services.bet.bet(amount, choice, game);
     }
 
     const setAccountPct = async (pct: number): Promise<void> => {
@@ -34,9 +32,9 @@ export function BetPanel({game}: BetPanelProps) {
 
     const fetch = async () => {
         setSeed(Math.random);
-        const currRound: Round = await services.round.getCurrent(game);
+        const currRound: Round = await services.bet.getCurrentRound(game);
         setRound(currRound);
-        const currBet: Bet | null = await services.bet.getPlayerBet(currRound);
+        const currBet: Bet | null = await services.bet.getCurrentBet(game);
 
         if (currBet === null) return;
         setBet(currBet);

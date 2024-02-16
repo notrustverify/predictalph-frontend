@@ -1,9 +1,10 @@
-import {Account as AlephiumAccount, SignerProvider} from "@alephium/web3";
+import {Account as AlephiumAccount, DUST_AMOUNT, ExecutableScript, SignerProvider} from "@alephium/web3";
 import {ALEPHIUM} from "../config/blockchain";
 import {Round} from "../domain/round";
 import {Bet, BetStatus} from "../domain/bet";
 import {Account} from "../domain/account";
-import {AddressBalance} from "@alephium/web3/dist/src/api/api-alephium";
+import {BidChoice, BidPrice} from "../artifacts/ts";
+import {GameType} from "../domain/game";
 
 export class WalletConnector implements WalletConnector {
     private account: AlephiumAccount | undefined;
@@ -23,9 +24,32 @@ export class WalletConnector implements WalletConnector {
 
     async bid(amount: number, choice: number, round: Round): Promise<Bet> {
         if (this.window === undefined) return Promise.reject("not connected")
+        const amnt = BigInt(amount * (10 ** 18))
 
-        // TODO implement bid
-        return new Bet(round, BetStatus.PENDING, await this.getAccount(), choice, amount, 1);
+            if (round.game.type === GameType.PRICE) {
+                 const res = await BidPrice.execute(this.window, {
+                    initialFields: {
+                        predict: round.game.contract.id,
+                        amount: amnt,
+                        side: choice === 0,
+                    },
+                    attoAlphAmount: amnt+ BigInt(2) * DUST_AMOUNT,
+                });
+
+                 return new Bet(BetStatus.PENDING, await this.getAccount(), choice, amount, 0, 0, 0, res.txId);
+            } else  {
+                const res = await BidChoice.execute(this.window, {
+                    initialFields: {
+                        predict: round.game.contract.id,
+                        amount: amnt,
+                        side: choice === 0,
+                    },
+                    attoAlphAmount: amnt + BigInt(2) * DUST_AMOUNT,
+                });
+
+                return new Bet(BetStatus.PENDING, await this.getAccount(), choice, amount, 0, 0, 0, res.txId);
+
+            }
     }
 
     async claim(bet: Bet): Promise<boolean> {
