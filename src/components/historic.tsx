@@ -58,7 +58,7 @@ export function Historic({game}: HistoricProps) {
                 </Grid>
                 <Grid item md={4}>&nbsp;</Grid>
                 <Grid item md={4} sx={{textAlign: "right"}}>
-                    <Button color="primary" variant="contained">CLAIM {computeReward(bets).toFixed(2)} ALPH REWARDS</Button>
+                    <Button color="primary" variant="contained" onClick={() => svc.bet.claimMyRound(game).then()}>CLAIM {computeReward(bets).toFixed(2)} ALPH REWARDS</Button>
                 </Grid>
             </Grid>
             <Box sx={{marginTop: '20px'}}></Box>
@@ -77,11 +77,11 @@ export function Historic({game}: HistoricProps) {
                     <TableBody>
                         {bets.map((bet) => (
                             <TableRow
-                                key={bet.end}
+                                key={bet.epoch}
                                 sx={{'&:last-child td, &:last-child th': {border: 0}}}
                             >
                                 <TableCell component="th" scope="row">
-                                    {bet.end}
+                                    {bet.epoch.toString(10)}
                                 </TableCell>
                                 <TableCell align="right">{bet.status}</TableCell>
 

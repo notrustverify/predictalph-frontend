@@ -36,8 +36,10 @@ export class BetService {
         return this.games;
     }
 
-    async claimMyRound(bet: Bet) {
-        return this.wallet.claim(bet);
+    async claimMyRound(game: Game) {
+        const curr = await this.getCurrentRound(game);
+        const bets = await this.getPlayerBets(game)
+        return this.wallet.claim(bets.filter(b => b.epoch < curr.epoch), game);
     }
 
     async claimExpiredRound(): Promise<boolean> {
@@ -73,7 +75,6 @@ export class BetService {
                 42,
                         dto.priceEnd > dto.priceStart ? 0 : 1,
                 dto.epoch,
-                ''
                 )
         })
     }

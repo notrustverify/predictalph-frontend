@@ -9,11 +9,12 @@ export enum RoundStatus {
 
 export class Round {
     constructor(
+
         public game: Game,
         public status: RoundStatus,// en function de end
         public end: number, // artifacts value
         public pollAmounts: number[],// artifact value
-        public height: number, // artifacts value,
+        public epoch: bigint, // artifacts value,
         public result: number,
 ) {}
 }

@@ -20,7 +20,7 @@ export type BetDTO = {
     amountBid: number,
     claimed: boolean,
     claimedByAnyoneTimestamp: number
-    epoch: number,
+    epoch: bigint,
     priceStart: number,
     priceEnd: number
 }

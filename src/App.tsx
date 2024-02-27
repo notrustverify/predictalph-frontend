@@ -53,7 +53,7 @@ export default function App() {
   return (
       <AlephiumWalletProvider
           network={'testnet'}
-          addressGroup={1}
+          addressGroup={1} // TODO
       >
         <ServiceContext.Provider value={services}>
           <BrowserRouter>

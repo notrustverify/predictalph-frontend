@@ -18,8 +18,7 @@ export class Bet {
         public amount: number, // contract
         public reward: number, // cf calcul dans le contract
         public winner: number,
-        public end: number,
-        public txId: string,
+        public epoch: bigint,
     ) {}
 
     get win(): boolean {
