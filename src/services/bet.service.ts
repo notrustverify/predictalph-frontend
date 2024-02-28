@@ -66,17 +66,46 @@ export class BetService {
         const account = await this.wallet.getAccount();
         const dtos: BetDTO[] = await this.client.getAllPlayerBets(game, account);
 
-        return dtos.map(dto => {
+        const promises: Promise<Bet>[] = dtos.map(async dto =>{
+            const choice = dto.side ? 0 : 1;
+            const reward: number = await this.computeRewards(choice, dto, game);
+            const status: BetStatus = await this.getStatus(reward, dto)
+
             return new Bet(
-                dto.claimed ? BetStatus.CLAIMED : BetStatus.NOTCLAIMED,
+                status,
                 account,
-                dto.side ? 0 : 1,
-                dto.amountBid / (10**18),
-                42,
-                        dto.priceEnd > dto.priceStart ? 0 : 1,
+                choice,
+                Number(BigInt(dto.amountBid) / BigInt(10**18)),
+                reward,
+                dto.priceEnd > dto.priceStart ? 0 : 1,
                 dto.epoch,
                 )
-        })
+        });
+
+        return Promise.all(promises);
+    }
+
+    private async getStatus(reward: number, dto: BetDTO): Promise<BetStatus> {
+        if (reward === 0) {
+            return BetStatus.ACCEPTED;
+        }
+
+        return dto.claimed ? BetStatus.CLAIMED : BetStatus.NOTCLAIMED;
+    }
+
+    private async computeRewards(choice: number, dto: BetDTO, game: Game): Promise<number> {
+        const round: Round = await this.blockchain.getRound(dto.epoch, game);
+
+        if (!round.rewardsComputed) {
+            return 0;
+        }
+
+        if (choice !== round.result) {
+            return 1; // contract close refund
+        }
+
+        return Number(dto.amountBid * round.rewardAmount / round.rewardBaseCalAmount / BigInt(10**18))
+
     }
 
     getGame(id: string) {

@@ -66,9 +66,9 @@ export function Historic({game}: HistoricProps) {
                 <Table sx={{minWidth: 650}} aria-label="simple table">
                     <TableHead>
                         <TableRow>
-                            <TableCell>End</TableCell>
+                            <TableCell>Epoch</TableCell>
                             <TableCell align="right">Status</TableCell>
-
+                            <TableCell align="right">Bet</TableCell>
                             <TableCell align="right">Result</TableCell>
                             <TableCell align="right">Rewards</TableCell>
 
@@ -87,6 +87,9 @@ export function Historic({game}: HistoricProps) {
 
                                 <TableCell align="right" color={bet.win ? 'warning' : 'secondary'}>
                                     {bet.amount.toFixed(2)} ALPH on {game.choiceDescriptions[bet.choice]}
+                                </TableCell>
+                                <TableCell align="right" color={bet.win ? 'warning' : 'secondary'}>
+                                    {bet.win}
                                 </TableCell>
                                 <TableCell align="right" color={bet.win ? 'warning' : 'secondary'}>
                                     {bet.reward.toFixed(2)} ALPH

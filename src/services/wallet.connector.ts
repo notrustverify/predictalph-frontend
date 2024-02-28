@@ -5,16 +5,7 @@ import {Bet, BetStatus} from "../domain/bet";
 import {Account} from "../domain/account";
 import {BidChoice, BidPrice, WithdrawChoice, WithdrawPrice} from "../artifacts/ts";
 import {Game, GameType} from "../domain/game";
-import {Transaction} from "@alephium/web3/dist/src/api/api-alephium";
 
-
-export function getRoundContractId(predictAlphContractId: string, epoch: bigint, groupIndex: number) {
-    return subContractId(predictAlphContractId, getEpochPath(epoch), groupIndex)
-}
-
-function getEpochPath(epoch: bigint) {
-    return '00' + epoch.toString(16).padStart(8, '0')
-}
 
 function arrayEpochToBytes(arrayEpoch: number[]) {
     const buffer = Buffer.alloc(arrayEpoch.length * 4);
@@ -42,7 +33,6 @@ export class WalletConnector implements WalletConnector {
         if (this.window === undefined) return Promise.reject("not connected")
 
         const amnt = BigInt(amount * (10 ** 18));
-        const contractId = getRoundContractId(round.game.contract.id, round.epoch, round.game.contract.index)
 
             if (round.game.type === GameType.PRICE) {
                  const res = await BidPrice.execute(this.window, {

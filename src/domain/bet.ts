@@ -23,6 +23,6 @@ export class Bet {
 
     get win(): boolean {
         return (this.status === BetStatus.CLAIMED || this.status === BetStatus.NOTCLAIMED)
-            && this.winner === this.choice;
+            && (this.winner === this.choice);
     }
 }

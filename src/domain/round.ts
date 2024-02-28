@@ -16,5 +16,8 @@ export class Round {
         public pollAmounts: number[],// artifact value
         public epoch: bigint, // artifacts value,
         public result: number,
+        public rewardAmount: bigint,
+        public rewardBaseCalAmount: bigint,
+        public rewardsComputed: boolean,
 ) {}
 }

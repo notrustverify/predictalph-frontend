@@ -65,10 +65,8 @@ export function PollComponent({round}: PollComponentType) {
                         direction="row"
                         justifyContent="space-around"
                         alignItems="center">
-                                <Grid item md={6} sx={{textAlign: "center"}}>{round.result} $</Grid>
-                                <Grid item md={6} sx={{textAlign: "center"}}>
-                                    {pct === null ? <Box/> : <Typography color={pct > 0 ? 'secondary': 'warning'}>{pct.toFixed(2)} %</Typography>}
-
+                                <Grid item md={12} sx={{textAlign: "center"}}>
+                                    <Typography style={{color: round.result === 0 ? 'primary' : 'warning'}}>{round.game.choiceDescriptions[round.result]}</Typography>
                                 </Grid>
                         <Grid item md={12} sx={{textAlign: "center"}}>{displayDate(round)}</Grid>
                     </Grid>
