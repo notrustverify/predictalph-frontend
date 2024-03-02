@@ -41,7 +41,7 @@ export function Historic({game}: HistoricProps) {
 
     const computeReward = (array: Bet[]): number => {
         const filtered = array
-            .filter(b => b.status === BetStatus.ACCEPTED)
+            .filter(b => b.status === BetStatus.NOTCLAIMED)
             .map(b => b.reward);
         return filtered.length === 0 ? 0 : filtered.reduce((a, b) => a + b);
     }

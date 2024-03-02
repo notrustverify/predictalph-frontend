@@ -17,7 +17,7 @@ import axios from "axios";
 
 export type BetDTO = {
     side: boolean,
-    amountBid: bigint,
+    amountBid: number,
     claimed: boolean,
     claimedByAnyoneTimestamp: number
     epoch: bigint,

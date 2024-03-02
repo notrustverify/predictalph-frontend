@@ -24,12 +24,12 @@ export function PollComponent({round}: PollComponentType) {
     const displayDate = (round: Round): string => {
         const now = Date.now();
         if (round.end > now) {
-            const diff = Math.ceil((round.end - now) / 1000);
-            const sec = diff % 60;
-            const min = (diff - sec) % 60;
-            const hour = (diff - sec - min) % 24;
+            const duration = Math.ceil((round.end - now) / 1000);
+            const hours = Math.floor(duration / 3600); // Hours are in 24-hour format
+            const minutes = Math.floor((duration % 3600) / 60);
+            const secondsRemaining = duration % 60;
 
-            return `${hour}h ${min}m ${sec}s`;
+            return `${hours}h ${minutes}m ${secondsRemaining}s`;
         } else {
             return (new Date(round.end)).toLocaleString();
         }

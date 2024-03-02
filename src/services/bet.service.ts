@@ -11,15 +11,25 @@ export class BetService {
 
     private readonly games = [
         new Game(
-            "ALPHPRICE",
-            "ALPH Price",
+            "ALPHCHOICE",
+            "ALPH Choice",
             new Contract(
                 "8e4501267810166ab78f55b2cd87dac57fa2b7ab01b804e519bd7a0011c85301",
                 "24GK2udXSwkjkD78xpBgZZNJpLbEaDEKrgsEeRNqwjVDi",
                 1),
             ["BULL", "BEAR"],
             GameType.CHOICE
-        )
+        ),
+        new Game(
+            "ALPHPRICE",
+            "ALPH Price",
+            new Contract(
+                "6b861470be487607d789714fe91bcc94d974fe76662dca38cf430dd61fe19701",
+                "21vgKMVTjSMp6ZU3zxjF5nPb4c1MEndkQtqcRD7MfVPYc",
+                1),
+            ["BULL", "BEAR"],
+            GameType.PRICE
+        ),
     ];
 
     private readonly currentBets = new Map<string, Bet>();
@@ -54,7 +64,9 @@ export class BetService {
     }
 
     async getCurrentRound(game: Game): Promise<Round> {
-        return this.blockchain.getCurrentRound(game);
+        const round = await this.blockchain.getCurrentRound(game);
+        console.log('CURRENT ROUND', round);
+        return round;
     }
 
     async getCurrentBet(game: Game): Promise<Bet | null> {
@@ -75,14 +87,14 @@ export class BetService {
                 status,
                 account,
                 choice,
-                Number(BigInt(dto.amountBid) / BigInt(10**18)),
+                (dto.amountBid - 1) / (10**18),
                 reward,
                 dto.priceEnd > dto.priceStart ? 0 : 1,
                 dto.epoch,
                 )
         });
 
-        return Promise.all(promises);
+        return (await Promise.all(promises)).sort((a, b) => Number( b.epoch - a.epoch));
     }
 
     private async getStatus(reward: number, dto: BetDTO): Promise<BetStatus> {
@@ -104,7 +116,7 @@ export class BetService {
             return 1; // contract close refund
         }
 
-        return Number(dto.amountBid * round.rewardAmount / round.rewardBaseCalAmount / BigInt(10**18))
+        return (dto.amountBid - 1) * Number(round.rewardAmount ) / Number(round.rewardBaseCalAmount) / (10**18);
 
     }
 

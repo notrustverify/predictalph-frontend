@@ -20,7 +20,7 @@ export function BetPage({id}: BetPageProps) {
     const game: Game = services.bet.getGame(idGame);
 
     return (
-        <Box sx={{alignItems: "center", maxWidth: '1000px', margin: '20px'}}>
+        <Box key={idGame} sx={{alignItems: "center", maxWidth: '1000px', margin: '20px'}}>
             <BetPanel game={game}/>
             <Box sx={{width: '100%', marginTop: '50px'}}/>
             <Historic game={game}/>

@@ -31,7 +31,6 @@ export class BlockchainClient {
         const subAddress = addressFromContractId(getRoundContractId(game.contract.id, epoch, game.contract.index))
         if (game.type === GameType.PRICE) {
             const roundState = await RoundPrice.at(subAddress).fetchState();
-            console.log('STATE ROUND STATE', roundState.fields);
 
             return new Round(
                 game,
