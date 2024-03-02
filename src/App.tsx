@@ -36,7 +36,7 @@ export default function App() {
   const darkTheme = createTheme({
     palette: {
       mode: 'light',
-      primary: {main: '#F72585'},
+      primary: {main: '#f62485'},
       secondary: {main: '#28F606'},
       warning: {main: '#FF0000'}
     }
