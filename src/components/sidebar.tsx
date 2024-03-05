@@ -9,9 +9,9 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import {DrawerHeader} from "./drawerHeader";
 import {
-    Box, List, ListItem, ListItemButton, ListItemText,
+    Avatar,
+    Box, List, ListItem, ListItemAvatar, ListItemButton, ListItemText,
 } from "@mui/material";
-import {Asset} from "../domain/asset";
 import {SignerProvider} from "@alephium/web3";
 import {ServiceContext} from "../App";
 import {ConnectButton} from "./connect";
@@ -67,24 +67,19 @@ type AlphBetSidebarProp = {
 
 export const AlphBetSidebar = ({open, handleDrawerClose, theme}: AlphBetSidebarProp) => {
 
-    const [seed, setSeed] = useState(1);
     const [already, setAlready] = useState(false);
-    const [assets, setAssets] = useState(new Array<Asset>());
     const services = useContext(ServiceContext);
     const navigate = useNavigate();
-
-
-    const reload = () => setSeed(Math.random());
 
     const connect = async (signer: SignerProvider): Promise<void> => {
         if (already) return;
 
         setAlready(true);
-        const account = await services.wallet.connect(signer);
+        await services.wallet.connect(signer);
     }
 
     return (
-        <Drawer variant="permanent" open={open} key={seed}>
+        <Drawer variant="permanent" open={open}>
             <DrawerHeader>
                 <IconButton onClick={handleDrawerClose}>
                     {theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
@@ -102,14 +97,21 @@ export const AlphBetSidebar = ({open, handleDrawerClose, theme}: AlphBetSidebarP
                     <ConnectButton onConnect={connect}/>
 
                 <List>
-                {services.bet.getGames().map((game) => (
+                {services.bet.getGames().map((game, index) => (
+                    <>
+                    {index > 0 && <Divider/>}
+
                     <ListItem sx={{width: "100%"}} key={game.id}>
+                        <ListItemAvatar>
+                            <Avatar src={game.img} alt=''/>
+                        </ListItemAvatar>
                         <ListItemButton onClick={() => navigate(`/bet/${game.id}`)}>
                             <ListItemText>
                                 <Typography variant="body2">{game.name}</Typography>
                             </ListItemText>
                         </ListItemButton>
                     </ListItem>
+                    </>
                 ))}
                 </List>
 

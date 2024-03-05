@@ -10,7 +10,6 @@ import {
     TableHead,
     TableRow
 } from "@mui/material";
-import {Round} from "../domain/round";
 import {Game} from "../domain/game";
 import {useContext, useEffect, useState} from "react";
 import {ServiceContext} from "../App";
@@ -29,7 +28,7 @@ export function Historic({game}: HistoricProps) {
     const svc = useContext(ServiceContext);
     const [bets, setBets] = useState<Bet[]>([]);
 
-    const fetch = async (): Promise<void> => {
+    async function fetch(): Promise<void> {
         const rawBets = await svc.bet.getPlayerBets(game);
         setBets(rawBets.filter(notEmpty));
     }
@@ -39,7 +38,7 @@ export function Historic({game}: HistoricProps) {
         return () => clearInterval(interval);
     }, []);
 
-    const computeReward = (array: Bet[]): number => {
+    function computeReward(array: Bet[]): number {
         const filtered = array
             .filter(b => b.status === BetStatus.NOTCLAIMED)
             .map(b => b.reward);
@@ -85,14 +84,20 @@ export function Historic({game}: HistoricProps) {
                                 </TableCell>
                                 <TableCell align="right">{bet.status}</TableCell>
 
-                                <TableCell align="right" color={bet.win ? 'warning' : 'secondary'}>
-                                    {bet.amount.toFixed(2)} ALPH on {game.choiceDescriptions[bet.choice]}
+                                <TableCell align="right">
+                                    <Typography variant='body2' color={bet.win() ? 'secondary.main' : 'warning.main'}>
+                                        {bet.amount.toFixed(2)} ALPH on {game.choiceDescriptions[bet.choice]}
+                                    </Typography>
                                 </TableCell>
-                                <TableCell align="right" color={bet.win ? 'warning' : 'secondary'}>
-                                    {bet.win}
+                                <TableCell align="right">
+                                    <Typography variant='body2' color={bet.win() ? 'secondary.main' : 'warning.main'}>
+                                    {bet.win() ? 'WIN' : 'LOSE'}
+                                    </Typography>
                                 </TableCell>
-                                <TableCell align="right" color={bet.win ? 'warning' : 'secondary'}>
+                                <TableCell align="right">
+                                    <Typography variant='body2' color={bet.win() ? 'secondary.main' : 'warning.main'}>
                                     {bet.reward.toFixed(2)} ALPH
+                                    </Typography>
                                 </TableCell>
 
                             </TableRow>

@@ -1,5 +1,3 @@
-import {Contract} from "./contract";
-import {Round, RoundStatus} from "./round";
 import {Account} from "./account";
 
 export enum BetStatus {
@@ -21,8 +19,9 @@ export class Bet {
         public epoch: bigint,
     ) {}
 
-    get win(): boolean {
-        return (this.status === BetStatus.CLAIMED || this.status === BetStatus.NOTCLAIMED)
-            && (this.winner === this.choice);
+    win(): boolean {
+        const a= (this.winner === this.choice);
+        console.log("WIN", a, this)
+        return a;
     }
 }

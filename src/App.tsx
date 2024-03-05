@@ -10,22 +10,22 @@ import {AlphBetSidebar} from "./components/sidebar";
 import {Theme} from "@mui/material/styles";
 import MainContent from "./components/main";
 import {BrowserRouter} from "react-router-dom";
-import {RoundService} from "./services/round.service";
 import {BlockchainClient} from "./services/blockchain.client";
+import {CoinGeckoClient} from "./services/coinGeckoClient";
 
 
 class Services {
 
 
-  constructor(public readonly wallet: WalletConnector, public readonly bet: BetService, public readonly round: RoundService) {}
+  constructor(public readonly wallet: WalletConnector, public readonly bet: BetService) {}
 }
 
 const wallet = new WalletConnector();
 const client = new BetClient("https://predictalph-api.testnet.notrustverify.ch");
-const blockchain = new BlockchainClient("testnet", '');
-const round = new RoundService();
-const bet = new BetService(wallet, client, blockchain, round);
-const services = new Services(wallet, bet, round);
+const coingecko = new CoinGeckoClient();
+const blockchain = new BlockchainClient("testnet", '', coingecko);
+const bet = new BetService(wallet, client, blockchain);
+const services = new Services(wallet, bet);
 
 export const ServiceContext = createContext(services);
 

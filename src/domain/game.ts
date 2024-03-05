@@ -11,6 +11,7 @@ export class Game {
         public name: string,
         public contract: Contract,
         public choiceDescriptions: string[],
-        public type: GameType
+        public type: GameType,
+        public img: string,
         ) {}
 }

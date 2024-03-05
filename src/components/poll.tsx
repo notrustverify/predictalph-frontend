@@ -1,4 +1,4 @@
-import {Round} from "../domain/round";
+import {Round, RoundPrice} from "../domain/round";
 import {useContext, useEffect, useState} from "react";
 import {ServiceContext} from "../App";
 import {Box, Grid, LinearProgress} from "@mui/material";
@@ -9,9 +9,6 @@ type PollComponentType = {
 }
 
 export function PollComponent({round}: PollComponentType) {
-    const svc = useContext(ServiceContext);
-    const pct = 50;
-
     const itemStyle = {
         padding: '10px',
     }
@@ -35,10 +32,8 @@ export function PollComponent({round}: PollComponentType) {
         }
     }
 
-    const computePct = (prev: Round): number | null => {
-        if (prev === null)
-            return null;
-        return 10;
+    function computePct(curr: RoundPrice): number {
+        return (curr.priceEnd - curr.priceStart) / curr.priceStart * 100;
     }
 
     return (
@@ -65,9 +60,21 @@ export function PollComponent({round}: PollComponentType) {
                         direction="row"
                         justifyContent="space-around"
                         alignItems="center">
-                                <Grid item md={12} sx={{textAlign: "center"}}>
-                                    <Typography style={{color: round.result === 0 ? 'primary' : 'warning'}}>{round.game.choiceDescriptions[round.result]}</Typography>
+                        { round instanceof RoundPrice
+                            ? <>
+                                <Grid item md={6} sx={{textAlign: "center"}}>{round.priceEnd} $</Grid>
+                                <Grid item md={6} sx={{textAlign: "center"}}>
+                                    <Typography color={computePct(round) > 0 ? 'secondary.main': 'warning.main'}>
+                                        {computePct(round).toFixed(2)} %
+                                    </Typography>
+
                                 </Grid>
+                            </>
+                            : <Grid item md={12} sx={{textAlign: "center"}}>
+                                <Typography style={{color: round.result === 0 ? 'secondary.main' : 'warning.main'}}>{round.game.choiceDescriptions[round.result]}</Typography>
+                            </Grid>
+                        }
+
                         <Grid item md={12} sx={{textAlign: "center"}}>{displayDate(round)}</Grid>
                     </Grid>
                 </Grid>

@@ -1,7 +1,8 @@
 import {Game, GameType} from "../domain/game";
-import {Round, RoundStatus} from "../domain/round";
-import {PredictChoice, PredictPrice, Round as RoundPrice, RoundChoice} from "../artifacts/ts";
+import {Round, RoundPrice, RoundStatus} from "../domain/round";
+import {PredictChoice, PredictPrice, Round as RoundPriceContract, RoundChoice} from "../artifacts/ts";
 import {addressFromContractId, subContractId, web3} from "@alephium/web3";
+import {CoinGeckoClient} from "./coinGeckoClient";
 
 export function getRoundContractId(predictAlphContractId: string, epoch: bigint, groupIndex: number) {
     return subContractId(predictAlphContractId, getEpochPath(epoch), groupIndex)
@@ -12,8 +13,13 @@ function getEpochPath(epoch: bigint) {
 }
 
 export class BlockchainClient {
-    constructor(private network: 'mainnet' | 'testnet', node: string) {
-        web3.setCurrentNodeProvider('https://wallet.testnet.alephium.org')
+    constructor(
+        private readonly network: 'mainnet' | 'testnet',
+        private readonly node: string,
+        private readonly coinGecko: CoinGeckoClient,
+
+    ) {
+        web3.setCurrentNodeProvider(`https://wallet.${network}.alephium.org`)
     }
 
     async getCurrentRound(game: Game): Promise<Round> {
@@ -30,18 +36,22 @@ export class BlockchainClient {
     async getRound(epoch: bigint, game: Game): Promise<Round> {
         const subAddress = addressFromContractId(getRoundContractId(game.contract.id, epoch, game.contract.index))
         if (game.type === GameType.PRICE) {
-            const roundState = await RoundPrice.at(subAddress).fetchState();
+            const roundState = await RoundPriceContract.at(subAddress).fetchState();
 
-            return new Round(
+            console.log(roundState.fields);
+
+            return new RoundPrice(
                 game,
                 RoundStatus.RUNNING,
                 Number(roundState.fields.bidEndTimestamp),
                 [Number(roundState.fields.amountUp / BigInt(10**18)), Number(roundState.fields.amountDown / BigInt(10**18))],
                 epoch,
-                roundState.fields.priceStart > roundState.fields.priceEnd ? 0 : 1,
+                roundState.fields.priceStart < roundState.fields.priceEnd ? 0 : 1,
                 roundState.fields.rewardAmount,
                 roundState.fields.rewardBaseCalAmount,
                 roundState.fields.rewardsComputed,
+                await this.convertPrice(roundState.fields.priceStart),
+                await this.convertPrice(roundState.fields.priceEnd),
             );
         } else {
             const roundState = await RoundChoice.at(subAddress).fetchState();
@@ -58,6 +68,14 @@ export class BlockchainClient {
                 roundState.fields.rewardBaseCalAmount,
                 roundState.fields.rewardsComputed,
             );
+        }
+    }
+
+    private async convertPrice(price: bigint): Promise<number> {
+        if (price === BigInt(0)) {
+            return this.coinGecko.getPriceAlph();
+        } else {
+            return Number(price) / 10_000;
         }
     }
 }

@@ -1,6 +1,6 @@
 import Typography from "@mui/material/Typography";
 import {useParams} from "react-router-dom";
-import {Box} from "@mui/material";
+import {Box, Grid} from "@mui/material";
 import {BetPanel} from "../components/betPanel";
 import {useContext} from "react";
 import {ServiceContext} from "../App";
@@ -13,17 +13,26 @@ type BetPageProps = {
 }
 
 export function BetPage({id}: BetPageProps) {
-    let { idUrl } = useParams();
+    let {idUrl} = useParams();
     const idGame: string = id ?? idUrl ?? "";
     const services = useContext(ServiceContext);
 
     const game: Game = services.bet.getGame(idGame);
 
     return (
-        <Box key={idGame} sx={{alignItems: "center", maxWidth: '1000px', margin: '20px'}}>
-            <BetPanel game={game}/>
-            <Box sx={{width: '100%', marginTop: '50px'}}/>
-            <Historic game={game}/>
-        </Box>
+        <Grid
+            key={idGame}
+            container
+            alignItems="flex-start"
+            justifyContent="center"
+        >
+            <Grid item md={12} sx={{maxWidth: '1000px', margin: '20px'}}>
+                <BetPanel game={game}/>
+                <Box sx={{width: '100%', marginTop: '50px'}}/>
+                <Historic game={game}/>
+            </Grid>
+
+        </Grid>
+
     )
 }

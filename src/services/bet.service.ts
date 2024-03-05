@@ -3,9 +3,9 @@ import {BetClient, BetDTO} from "./bet.client";
 import {Game, GameType} from "../domain/game";
 import {Bet, BetStatus} from "../domain/bet";
 import {Contract} from "../domain/contract";
-import {RoundService} from "./round.service";
 import {BlockchainClient} from "./blockchain.client";
 import {Round} from "../domain/round";
+import {CoinGeckoClient} from "./coinGeckoClient";
 
 export class BetService {
 
@@ -14,11 +14,12 @@ export class BetService {
             "ALPHCHOICE",
             "ALPH Choice",
             new Contract(
-                "8e4501267810166ab78f55b2cd87dac57fa2b7ab01b804e519bd7a0011c85301",
-                "24GK2udXSwkjkD78xpBgZZNJpLbEaDEKrgsEeRNqwjVDi",
+                "538ee843b57883346a621a96e8861418d673b2a045db98c48a81b644229d7801",
+                "zK8LeTS97caH7oYk8LUeTRPuzzgyCeVY6x6FHzb5dJYx",
                 1),
             ["BULL", "BEAR"],
-            GameType.CHOICE
+            GameType.CHOICE,
+            '/images/alephium-choice.png'
         ),
         new Game(
             "ALPHPRICE",
@@ -28,7 +29,8 @@ export class BetService {
                 "21vgKMVTjSMp6ZU3zxjF5nPb4c1MEndkQtqcRD7MfVPYc",
                 1),
             ["BULL", "BEAR"],
-            GameType.PRICE
+            GameType.PRICE,
+            '/images/alephium-price.png'
         ),
     ];
 
@@ -39,7 +41,7 @@ export class BetService {
         private readonly wallet: WalletConnector,
         private readonly client: BetClient,
         private readonly blockchain: BlockchainClient,
-        private readonly roundService: RoundService) {
+    ) {
     }
 
     getGames(): Game[] {
@@ -64,9 +66,8 @@ export class BetService {
     }
 
     async getCurrentRound(game: Game): Promise<Round> {
-        const round = await this.blockchain.getCurrentRound(game);
-        console.log('CURRENT ROUND', round);
-        return round;
+        const r = await this.blockchain.getCurrentRound(game);
+        return r;
     }
 
     async getCurrentBet(game: Game): Promise<Bet | null> {
