@@ -13,6 +13,7 @@ export class BetService {
         new Game(
             "ALPHCHOICE",
             "ALPH Choice",
+            "Bet if ALPH will go up or down",
             new Contract(
                 "538ee843b57883346a621a96e8861418d673b2a045db98c48a81b644229d7801",
                 "zK8LeTS97caH7oYk8LUeTRPuzzgyCeVY6x6FHzb5dJYx",
@@ -24,6 +25,7 @@ export class BetService {
         new Game(
             "ALPHPRICE",
             "ALPH Price",
+            "Bet if ALPH will go up or down",
             new Contract(
                 "6b861470be487607d789714fe91bcc94d974fe76662dca38cf430dd61fe19701",
                 "21vgKMVTjSMp6ZU3zxjF5nPb4c1MEndkQtqcRD7MfVPYc",

@@ -31,7 +31,7 @@ export const ServiceContext = createContext(services);
 
 export default function App() {
   const theme = useTheme() as Theme;
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   const darkTheme = createTheme({
     palette: {
@@ -61,11 +61,6 @@ export default function App() {
             <Box sx={{display: "flex"}}>
               <CssBaseline/>
               <AlphBetNavbar open={open} handleDrawerOpen={handleDrawerOpen}/>
-              <AlphBetSidebar
-                  open={open}
-                  handleDrawerClose={handleDrawerClose}
-                  theme={theme}
-              />
               <Box component="main" sx={{flexGrow: 1, p: 3}}>
                 <DrawerHeader/>
                 <MainContent></MainContent>

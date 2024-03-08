@@ -9,6 +9,7 @@ export class Game {
     constructor(
         public id: string,
         public name: string,
+        public description: string,
         public contract: Contract,
         public choiceDescriptions: string[],
         public type: GameType,
