@@ -31,7 +31,6 @@ export const ServiceContext = createContext(services);
 
 export default function App() {
   const theme = useTheme() as Theme;
-  const [open, setOpen] = useState(false);
 
   const darkTheme = createTheme({
     palette: {
@@ -41,14 +40,6 @@ export default function App() {
       warning: {main: '#FF0000'}
     }
   })
-
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
 
   return (
       <AlephiumWalletProvider
@@ -60,7 +51,7 @@ export default function App() {
           <ThemeProvider theme={darkTheme}>
             <Box sx={{display: "flex"}}>
               <CssBaseline/>
-              <AlphBetNavbar open={open} handleDrawerOpen={handleDrawerOpen}/>
+              <AlphBetNavbar/>
               <Box component="main" sx={{flexGrow: 1, p: 3}}>
                 <DrawerHeader/>
                 <MainContent></MainContent>

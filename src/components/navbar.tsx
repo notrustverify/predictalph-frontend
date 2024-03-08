@@ -6,6 +6,8 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import {drawerWidth} from "./sidebar";
+import {ArrowBack, PreviewOutlined} from "@mui/icons-material";
+import {useLocation, useNavigate} from "react-router-dom";
 
 
 type AppBarProp = {
@@ -15,7 +17,7 @@ type AppBarProp = {
 
 const AppBar = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme, open }: AppBarProp) => ({
+})(({theme, open}: AppBarProp) => ({
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
         easing: theme.transitions.easing.sharp,
@@ -31,28 +33,23 @@ const AppBar = styled(MuiAppBar, {
     }),
 }));
 
-type AlphBetNavbarProp = {
-    open: boolean,
-    handleDrawerOpen: () => void,
-}
-
-export function AlphBetNavbar({open, handleDrawerOpen}: AlphBetNavbarProp) {
+export function AlphBetNavbar() {
+    const navigate = useNavigate();
+    const location = useLocation();
     return (
         // @ts-ignore
-        <AppBar position="fixed" open={open}>
+        <AppBar position="fixed">
             <Toolbar>
-                <IconButton
-                    color="inherit"
-                    aria-label="open drawer"
-                    onClick={handleDrawerOpen}
-                    edge="start"
-                    sx={{
-                        marginRight: 5,
-                        ...(open && { display: 'none' }),
-                    }}
-                >
-                    <MenuIcon />
-                </IconButton>
+                {location.key !== 'default' &&
+                    <IconButton
+                        color="inherit"
+                        aria-label="open drawer"
+                        edge="start"
+                        onClick={() => navigate(-1)}
+                    >
+                        <ArrowBack/>
+                    </IconButton>
+                }
                 <Typography variant="h6" noWrap component="div">
                     ALPH.BET
                 </Typography>
