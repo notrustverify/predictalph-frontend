@@ -63,18 +63,38 @@ export class BetService {
     async bet(amount: number, choice: number, game: Game): Promise<Bet> {
         const round = await this.blockchain.getCurrentRound(game);
         const bet = await this.wallet.bid(amount + 1, choice, round);
-        this.currentBets.set(game.id, bet);
+        this.currentBets.set(BetService.key(game, round.epoch), bet);
         return bet;
     }
 
     async getCurrentRound(game: Game): Promise<Round> {
-        const r = await this.blockchain.getCurrentRound(game);
-        return r;
+        return await this.blockchain.getCurrentRound(game);
+    }
+
+    static key(game: Game,  epoch: bigint): string {
+        return `${game.id}${epoch}`;
     }
 
     async getCurrentBet(game: Game): Promise<Bet | null> {
-        const bet: Bet | undefined = this.currentBets.get(game.id);
-        return bet === undefined ? null : bet;
+        // clean pending bets
+        const bets = await this.getPlayerBets(game);
+        bets.forEach(bet => this.currentBets.delete(BetService.key(game, bet.epoch)))
+
+        // check current bet prensent in historic
+        const currRound = await this.getCurrentRound(game);
+        const currBet: Bet | null = bets.filter(bet => Number(bet.epoch) === Number(currRound.epoch))[0]
+        console.log(bets, currBet, currRound)
+        if (currBet !== undefined) {
+            return currBet;
+        }
+
+        // check current bet not pending
+        const bet: Bet | undefined = this.currentBets.get(BetService.key(game, currRound.epoch));
+        if (bet !== undefined) {
+            return bet;
+        }
+
+        return null
     }
 
     async getPlayerBets(game: Game): Promise<Bet[]> {

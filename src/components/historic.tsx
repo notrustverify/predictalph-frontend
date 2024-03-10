@@ -80,7 +80,7 @@ export function Historic({game}: HistoricProps) {
             </Grid>
             <Box sx={{marginTop: '20px'}}></Box>
             {bets.map((bet) => (
-                <Accordion defaultExpanded>
+                <Accordion>
                     <AccordionSummary
                         expandIcon={<ExpandMore />}
                         aria-controls="panel1-content"
