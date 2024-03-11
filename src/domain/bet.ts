@@ -21,7 +21,6 @@ export class Bet {
 
     win(): boolean {
         const a= (this.winner === this.choice);
-        console.log("WIN", a, this)
         return a;
     }
 }

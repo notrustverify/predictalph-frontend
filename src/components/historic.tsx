@@ -19,7 +19,7 @@ import {useContext, useEffect, useState} from "react";
 import {ServiceContext} from "../App";
 import {Bet, BetStatus} from "../domain/bet";
 import Typography from "@mui/material/Typography";
-import {AttachMoney, Done, ExpandMore, MoneyOff, Timelapse} from "@mui/icons-material";
+import {AttachMoney, Done, ExpandMore, HourglassEmpty, MoneyOff, Timelapse} from "@mui/icons-material";
 
 type HistoricProps = {
     game: Game,
@@ -34,7 +34,7 @@ export function Historic({game}: HistoricProps) {
     const [bets, setBets] = useState<Bet[]>([]);
 
     async function fetch(): Promise<void> {
-        const rawBets = await svc.bet.getPlayerBets(game);
+        const rawBets = await svc.bet.getPlayerBets(game, true);
         setBets(rawBets.filter(notEmpty));
     }
 
@@ -53,9 +53,9 @@ export function Historic({game}: HistoricProps) {
     function displayIcon(status: BetStatus) {
         switch (status) {
             case BetStatus.PENDING:
-                return <Icon><Timelapse/></Icon>;
+                return <Icon><HourglassEmpty/></Icon>;
             case BetStatus.ACCEPTED:
-                return <Icon><Done/></Icon>
+                return <Icon><Timelapse/></Icon>
             case BetStatus.NOTCLAIMED:
                 return <Icon><AttachMoney/></Icon>
             case BetStatus.CLAIMED:

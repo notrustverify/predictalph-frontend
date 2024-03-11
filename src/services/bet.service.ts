@@ -83,7 +83,6 @@ export class BetService {
         // check current bet prensent in historic
         const currRound = await this.getCurrentRound(game);
         const currBet: Bet | null = bets.filter(bet => Number(bet.epoch) === Number(currRound.epoch))[0]
-        console.log(bets, currBet, currRound)
         if (currBet !== undefined) {
             return currBet;
         }
@@ -97,7 +96,7 @@ export class BetService {
         return null
     }
 
-    async getPlayerBets(game: Game): Promise<Bet[]> {
+    async getPlayerBets(game: Game, addPending = false): Promise<Bet[]> {
         const account = await this.wallet.getAccount();
         const dtos: BetDTO[] = await this.client.getAllPlayerBets(game, account);
 
@@ -116,8 +115,20 @@ export class BetService {
                 dto.epoch,
                 )
         });
+        const bets: Bet[] =  await Promise.all(promises)
 
-        return (await Promise.all(promises)).sort((a, b) => Number( b.epoch - a.epoch));
+        // purge previous pending bets
+        bets.forEach(bet => this.currentBets.delete(BetService.key(game, bet.epoch)))
+
+        if (addPending !== null) {
+            const currRound = await this.blockchain.getCurrentRound(game);
+            const pendingBet: Bet | undefined = this.currentBets.get(BetService.key(game, currRound.epoch));
+            if (pendingBet !== undefined) {
+                bets.push(pendingBet)
+            }
+        }
+
+        return bets.sort((a, b) => Number(b.epoch) - Number(a.epoch));
     }
 
     private async getStatus(reward: number, dto: BetDTO): Promise<BetStatus> {

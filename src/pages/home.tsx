@@ -12,16 +12,8 @@ import {OpenInNew, Share} from "@mui/icons-material";
 
 export function Home() {
 
-    const [already, setAlready] = useState(false);
     const services = useContext(ServiceContext);
     const navigate = useNavigate();
-
-    const connect = async (signer: SignerProvider): Promise<void> => {
-        if (already) return;
-
-        setAlready(true);
-        await services.wallet.connect(signer);
-    }
 
     return (
 
@@ -71,9 +63,6 @@ export function Home() {
                 </Typography>
             </Grid>
 
-            <Grid item md={4}>
-                <ConnectButton onConnect={connect}/>
-            </Grid>
 
             <Grid item md={6}>
                 <List sx={{width: '100%'}}>

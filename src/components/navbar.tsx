@@ -8,6 +8,10 @@ import MenuIcon from '@mui/icons-material/Menu';
 import {drawerWidth} from "./sidebar";
 import {ArrowBack, PreviewOutlined} from "@mui/icons-material";
 import {useLocation, useNavigate} from "react-router-dom";
+import {useContext, useState} from "react";
+import {ServiceContext} from "../App";
+import {SignerProvider} from "@alephium/web3";
+import {ConnectButton} from "./connect";
 
 
 type AppBarProp = {
@@ -36,6 +40,15 @@ const AppBar = styled(MuiAppBar, {
 export function AlphBetNavbar() {
     const navigate = useNavigate();
     const location = useLocation();
+    const [already, setAlready] = useState(false);
+    const services = useContext(ServiceContext);
+
+    const connect = async (signer: SignerProvider): Promise<void> => {
+        if (already) return;
+
+        setAlready(true);
+        await services.wallet.connect(signer);
+    }
     return (
         // @ts-ignore
         <AppBar position="fixed">
@@ -50,9 +63,11 @@ export function AlphBetNavbar() {
                         <ArrowBack/>
                     </IconButton>
                 }
-                <Typography variant="h6" noWrap component="div">
+                <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
                     ALPH.BET
                 </Typography>
+
+                <ConnectButton onConnect={connect}/>
             </Toolbar>
         </AppBar>
     )
