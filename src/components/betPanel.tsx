@@ -27,7 +27,8 @@ export function BetPanel({game}: BetPanelProps) {
 
     const setAccountPct = async (pct: number): Promise<void> => {
         const account = await services.wallet.getAccount();
-        setAmount(account.amount * pct);
+        const amnt = parseFloat((account.amount * pct).toFixed(2))
+        setAmount(amnt);
     }
 
     const fetch = async () => {
@@ -69,7 +70,8 @@ export function BetPanel({game}: BetPanelProps) {
                                 fullWidth
                                 sx={{height: '100%'}}
                                 color='secondary'
-                                variant="outlined"
+                                variant="contained"
+                                disabled={true}
                                 size="large">
                                 {bet.choice === 0 ? 'You already bet' : '.'}
                             </Button>}
@@ -92,6 +94,7 @@ export function BetPanel({game}: BetPanelProps) {
                                         startAdornment={<InputAdornment position="start">ALPH</InputAdornment>}
                                         label="Amount"/>
                                 </FormControl>
+                                <Typography variant='caption' color='gray' >+1 ALPH for contract creation. Will be refund when bets claimed</Typography>
                             </Grid>
                             <Grid item sx={{width: '100%'}}>
                                 <Grid
@@ -133,7 +136,8 @@ export function BetPanel({game}: BetPanelProps) {
                                 fullWidth
                                 sx={{height: '100%'}}
                                 color='warning'
-                                variant="outlined"
+                                variant="contained"
+                                disabled={true}
                                 size="large">
                                 {bet.choice === 1 ? 'You already bet' : '.'}
                             </Button>}

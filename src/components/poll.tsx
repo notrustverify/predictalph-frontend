@@ -18,7 +18,10 @@ export function PollComponent({round}: PollComponentType) {
         return 90 * amount / max;
     }
 
-    const displayDate = (round: Round): string => {
+    const displayDate = (round: Round): any => {
+        if (!(round instanceof RoundPrice)) {
+            return `Round end at ${(new Date(round.end)).toLocaleString()}`;
+        }
         const now = Date.now();
         if (round.end > now) {
             const duration = Math.ceil((round.end - now) / 1000);
@@ -26,9 +29,9 @@ export function PollComponent({round}: PollComponentType) {
             const minutes = Math.floor((duration % 3600) / 60);
             const secondsRemaining = duration % 60;
 
-            return `${hours}h ${minutes}m ${secondsRemaining}s`;
+            return <><Typography sx={{display: 'inline'}}>Round end in </Typography><Typography sx={{display: 'inline'}} fontWeight={600}>{hours}h {minutes}m {secondsRemaining}s</Typography></>;
         } else {
-            return (new Date(round.end)).toLocaleString();
+            return `Round end at ${(new Date(round.end)).toLocaleString()}`;
         }
     }
 
@@ -60,22 +63,21 @@ export function PollComponent({round}: PollComponentType) {
                         direction="row"
                         justifyContent="space-around"
                         alignItems="center">
+                        <Grid item md={12} sx={{textAlign: "center"}}>{displayDate(round)}</Grid>
+
                         { round instanceof RoundPrice
                             ? <>
-                                <Grid item md={6} sx={{textAlign: "center"}}>{round.priceEnd} $</Grid>
-                                <Grid item md={6} sx={{textAlign: "center"}}>
+                                <Grid item md={4} sx={{textAlign: "center"}}>Actual: ${round.priceEnd}</Grid>
+                                <Grid item md={4} sx={{textAlign: "center"}}>Locked: ${round.priceStart} </Grid>
+                                <Grid item md={4} sx={{textAlign: "center"}}>
                                     <Typography color={computePct(round) > 0 ? 'secondary.main': 'warning.main'}>
-                                        {computePct(round).toFixed(2)} %
+                                        ({computePct(round).toFixed(2)} %)
                                     </Typography>
 
                                 </Grid>
                             </>
-                            : <Grid item md={12} sx={{textAlign: "center"}}>
-                                <Typography style={{color: round.result === 0 ? 'secondary.main' : 'warning.main'}}>{round.game.choiceDescriptions[round.result]}</Typography>
-                            </Grid>
+                            : <Box></Box>
                         }
-
-                        <Grid item md={12} sx={{textAlign: "center"}}>{displayDate(round)}</Grid>
                     </Grid>
                 </Grid>
                 <Grid item style={itemStyle} md={4} xs={12}>

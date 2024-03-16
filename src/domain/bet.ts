@@ -2,9 +2,15 @@ import {Account} from "./account";
 
 export enum BetStatus {
     PENDING= "PENDING", // poll txId
-    ACCEPTED = "ACCEPTED", // poll txId
+    INPROGRESS = "INPROGRESS", // poll txId
     NOTCLAIMED = 'NOTCLAIMED', // API -> retourne les rounds non claim
     CLAIMED = "CLAIMED" // API comme en haut
+}
+
+export enum  WinStatus {
+    WIN = "WIN",
+    FAILED = "FAILED",
+    INPROGRESS = "INPROGRESS",
 }
 
 export class Bet {
@@ -19,8 +25,12 @@ export class Bet {
         public epoch: bigint,
     ) {}
 
-    win(): boolean {
-        const a= (this.winner === this.choice);
-        return a;
+    win(): WinStatus {
+        if (this.status === BetStatus.INPROGRESS) {
+            return WinStatus.INPROGRESS
+        }
+        console.log('WIN', this.winner, this.choice)
+        const win= (this.winner === this.choice);
+        return win ? WinStatus.WIN : WinStatus.FAILED;
     }
 }

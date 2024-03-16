@@ -11,14 +11,14 @@ export class BetService {
 
     private readonly games = [
         new Game(
-            "ALPHCHOICE",
-            "ALPH Choice",
-            "Bet if ALPH will go up or down",
+            "CHOICERHONE",
+            "ALPH to $4 before end of Q1?",
+            "Bet if Rhone",
             new Contract(
                 "538ee843b57883346a621a96e8861418d673b2a045db98c48a81b644229d7801",
                 "zK8LeTS97caH7oYk8LUeTRPuzzgyCeVY6x6FHzb5dJYx",
                 1),
-            ["BULL", "BEAR"],
+            ["YES", "NO"],
             GameType.CHOICE,
             '/images/alephium-choice.png'
         ),
@@ -96,6 +96,14 @@ export class BetService {
         return null
     }
 
+    getResult(dto: BetDTO) {
+        if (dto.priceStart === 0 && dto.priceEnd === 0) {
+            return dto.sideWon ? 0 : 1; // if contract is a choice type
+        }
+
+        return dto.priceEnd > dto.priceStart ? 0 : 1
+    }
+
     async getPlayerBets(game: Game, addPending = false): Promise<Bet[]> {
         const account = await this.wallet.getAccount();
         const dtos: BetDTO[] = await this.client.getAllPlayerBets(game, account);
@@ -111,7 +119,7 @@ export class BetService {
                 choice,
                 (dto.amountBid - 1) / (10**18),
                 reward,
-                dto.priceEnd > dto.priceStart ? 0 : 1,
+                this.getResult(dto),
                 dto.epoch,
                 )
         });
@@ -133,7 +141,7 @@ export class BetService {
 
     private async getStatus(reward: number, dto: BetDTO): Promise<BetStatus> {
         if (reward === 0) {
-            return BetStatus.ACCEPTED;
+            return BetStatus.INPROGRESS;
         }
 
         return dto.claimed ? BetStatus.CLAIMED : BetStatus.NOTCLAIMED;
@@ -141,12 +149,13 @@ export class BetService {
 
     private async computeRewards(choice: number, dto: BetDTO, game: Game): Promise<number> {
         const round: Round = await this.blockchain.getRound(dto.epoch, game);
+        const result = this.getResult(dto);
 
         if (!round.rewardsComputed) {
             return 0;
         }
 
-        if (choice !== round.result) {
+        if (choice !== result) {
             return 1; // contract close refund
         }
 

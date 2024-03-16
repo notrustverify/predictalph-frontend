@@ -1,7 +1,13 @@
 import {Game, GameType} from "../domain/game";
 import {Round, RoundPrice, RoundStatus} from "../domain/round";
-import {PredictChoice, PredictPrice, Round as RoundPriceContract, RoundChoice} from "../artifacts/ts";
-import {addressFromContractId, subContractId, web3} from "@alephium/web3";
+import {
+    PredictChoice,
+    PredictPrice,
+    PredictPriceInstance, PredictPriceTypes,
+    Round as RoundPriceContract,
+    RoundChoice
+} from "../artifacts/ts";
+import {addressFromContractId, binToHex, hexToBinUnsafe, hexToString, subContractId, web3} from "@alephium/web3";
 import {CoinGeckoClient} from "./coinGeckoClient";
 import AsyncLock from "async-lock";
 
@@ -15,9 +21,12 @@ function getEpochPath(epoch: bigint) {
 }
 
 export class BlockchainClient {
-    private static CACHE_EXPIRATION_MS = 2000;
-    private lastFetchCurrent: number = 0;
+    private static CACHE_EXP_ROUND_MS = 2000;
+    private static  CACHE_EXP_EPOCH_MS = 2000;
+    private lastFetchCurrentRound: number = 0;
+    private lastFetchCurrentEpoch: number = 0
     private cachedRounds: Map<string, Round> = new Map();
+    private cachedCurrentEpoch: Map<string, bigint> = new Map();
     private lock = new AsyncLock()
 
     constructor(
@@ -29,13 +38,27 @@ export class BlockchainClient {
     }
 
     async getCurrentRound(game: Game): Promise<Round> {
-        if (game.type == GameType.PRICE) {
-            const gameState = await PredictPrice.at(game.contract.address).fetchState();
-            return this.getRound(gameState.fields.epoch, game);
-        } else {
-            const gameState = await PredictChoice.at(game.contract.address).fetchState();
-            return this.getRound(gameState.fields.epoch, game);
+        const cached = this.cachedCurrentEpoch.get(game.id);
+        const now = Date.now();
+        let epoch: bigint = BigInt('0');
+
+        if (cached !== undefined && (now - this.lastFetchCurrentEpoch) < BlockchainClient.CACHE_EXP_EPOCH_MS) {
+            epoch = cached;
+            return this.getRound(epoch, game);
         }
+
+        let gameState: PredictPriceTypes.State;
+        if (game.type == GameType.PRICE) {
+            gameState = await PredictPrice.at(game.contract.address).fetchState();
+        } else {
+            gameState = await PredictChoice.at(game.contract.address).fetchState();
+            console.log('TITLE', hexToString(gameState.fields.title));
+        }
+
+        epoch = gameState.fields.epoch;
+        this.cachedCurrentEpoch.set(game.id, epoch);
+        this.lastFetchCurrentEpoch = now;
+        return this.getRound(epoch, game);
     }
 
     private static key(epoch: bigint, game: Game): string {
@@ -53,13 +76,13 @@ export class BlockchainClient {
             }
 
             // if running round but cache not expire return it
-            if (cache !== undefined && (now - this.lastFetchCurrent) < BlockchainClient.CACHE_EXPIRATION_MS) {
+            if (cache !== undefined && (now - this.lastFetchCurrentRound) < BlockchainClient.CACHE_EXP_ROUND_MS) {
                 return cache;
             }
 
             const round = await this.fetchRound(epoch, game);
             if (round.status === RoundStatus.RUNNING) {
-                this.lastFetchCurrent = now;
+                this.lastFetchCurrentRound = now;
             }
             this.cachedRounds.set(BlockchainClient.key(epoch, game), round);
 

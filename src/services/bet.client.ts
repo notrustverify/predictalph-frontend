@@ -22,7 +22,8 @@ export type BetDTO = {
     claimedByAnyoneTimestamp: number
     epoch: bigint,
     priceStart: number,
-    priceEnd: number
+    priceEnd: number,
+    sideWon: number,
 }
 
 export class BetClient {

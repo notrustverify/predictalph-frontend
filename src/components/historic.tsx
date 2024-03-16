@@ -6,20 +6,17 @@ import {
     Button,
     Grid,
     Icon,
-    Paper,
     Table,
     TableBody,
     TableCell,
-    TableContainer,
-    TableHead,
     TableRow
 } from "@mui/material";
 import {Game} from "../domain/game";
 import {useContext, useEffect, useState} from "react";
 import {ServiceContext} from "../App";
-import {Bet, BetStatus} from "../domain/bet";
+import {Bet, BetStatus, WinStatus} from "../domain/bet";
 import Typography from "@mui/material/Typography";
-import {AttachMoney, Done, ExpandMore, HourglassEmpty, MoneyOff, Timelapse} from "@mui/icons-material";
+import {AttachMoney, ExpandMore, HourglassEmpty, MoneyOff, Timelapse} from "@mui/icons-material";
 
 type HistoricProps = {
     game: Game,
@@ -54,12 +51,45 @@ export function Historic({game}: HistoricProps) {
         switch (status) {
             case BetStatus.PENDING:
                 return <Icon><HourglassEmpty/></Icon>;
-            case BetStatus.ACCEPTED:
+            case BetStatus.INPROGRESS:
                 return <Icon><Timelapse/></Icon>
             case BetStatus.NOTCLAIMED:
                 return <Icon><AttachMoney/></Icon>
             case BetStatus.CLAIMED:
                 return <Icon><MoneyOff/></Icon>
+        }
+    }
+
+    function aa(bet: Bet) {
+
+    }
+
+    function displayText(bet: Bet) {
+        switch (bet.status) {
+            case BetStatus.PENDING:
+                return 'Pending';
+            case BetStatus.INPROGRESS:
+                return 'In progress';
+            case BetStatus.NOTCLAIMED:
+                if (bet.win() === WinStatus.WIN) {
+                    return `Won ${bet.reward} ALPH`
+                } else {
+                    return `Lost bet`
+                }
+            case BetStatus.CLAIMED:
+                if (bet.win() === WinStatus.WIN) {
+                    return `Won ${bet.reward} ALPH`
+                } else {
+                    return `Lost bet`
+                }
+        }
+    }
+
+    function selectColor(status: WinStatus): string {
+        switch (status) {
+            case WinStatus.WIN: return 'secondary.main';
+            case WinStatus.FAILED: return 'warning.main';
+            case WinStatus.INPROGRESS: return '';
         }
     }
 
@@ -71,7 +101,7 @@ export function Historic({game}: HistoricProps) {
                 alignItems="center"
                 justifyContent="space-between">
                 <Grid item md={4}>
-                    <Typography variant="h4">Historic</Typography>
+                    <Typography variant="h5">History</Typography>
                 </Grid>
                 <Grid item md={4}>&nbsp;</Grid>
                 <Grid item md={4} sx={{textAlign: "right"}}>
@@ -91,27 +121,33 @@ export function Historic({game}: HistoricProps) {
                             direction="row"
                             justifyContent="flex-start"
                             alignItems="center"
-                            sx={{ width: '33%', flexShrink: 0 }}
                         >
                             <Grid item><Typography># {bet.epoch.toString()}</Typography></Grid>
                             <Grid sx={{marginLeft: 1}}></Grid>
                             <Grid item>{displayIcon(bet.status)}</Grid>
+                            <Grid sx={{marginLeft: 1}}></Grid>
+                            <Grid item>
+                                <Typography variant='body1' fontWeight={600} color={selectColor(bet.win())} >
+                                {displayText(bet)}
+                            </Typography></Grid>
                         </Grid>
 
-                        <Typography variant='body2' color={bet.win() ? 'secondary.main' : 'warning.main'}>
-                            {bet.amount.toFixed(2)} ALPH on {game.choiceDescriptions[bet.choice]}
-                        </Typography>
+
                     </AccordionSummary>
                     <AccordionDetails>
                             <Table>
                                 <TableBody>
                                     <TableRow>
-                                        <TableCell>STATUS</TableCell>
+                                        <TableCell><Typography fontWeight={600}>Status</Typography></TableCell>
                                         <TableCell>{bet.status}</TableCell>
                                     </TableRow>
                                     <TableRow>
-                                        <TableCell>REWARD</TableCell>
-                                        <TableCell>{bet.reward} ALPH</TableCell>
+                                        <TableCell><Typography fontWeight={600}>Initial bet</Typography></TableCell>
+                                        <TableCell>{bet.amount.toFixed(2)} ALPH</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell><Typography fontWeight={600}>Position</Typography></TableCell>
+                                        <TableCell>{game.choiceDescriptions[bet.choice]}</TableCell>
                                     </TableRow>
                                 </TableBody>
                             </Table>

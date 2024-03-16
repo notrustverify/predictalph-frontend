@@ -27,6 +27,9 @@ export function BetPage({id}: BetPageProps) {
             justifyContent="center"
         >
             <Grid item md={12} sx={{maxWidth: '1000px', margin: '20px'}}>
+                <Box sx={{textAlign: 'center', marginBottom: '20px'}} >
+                    <Typography variant='h4'>{game.name}</Typography>
+                </Box>
                 <BetPanel game={game}/>
                 <Box sx={{width: '100%', marginTop: '50px'}}/>
                 <Historic game={game}/>
