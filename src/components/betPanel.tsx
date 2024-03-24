@@ -105,8 +105,7 @@ export function BetPanel({game, selection }: BetPanelProps) {
                                         startAdornment={<InputAdornment position="start">ALPH</InputAdornment>}
                                         label="Amount"/>
                                 </FormControl>
-                                <Typography variant='caption' color='gray'>+1 ALPH for contract creation. Will be refund
-                                    when bets claimed</Typography>
+                                <Typography variant='caption' color='gray'>Note: 1 ALPH will be locked until you claim</Typography>
                             </Grid>
                             <Grid item sx={{width: '100%'}}>
                                 <Grid
