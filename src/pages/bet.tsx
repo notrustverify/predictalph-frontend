@@ -1,23 +1,26 @@
 import Typography from "@mui/material/Typography";
-import {useParams} from "react-router-dom";
+import {useLocation, useParams} from "react-router-dom";
 import {Box, Grid} from "@mui/material";
 import {BetPanel} from "../components/betPanel";
 import {useContext} from "react";
 import {ServiceContext} from "../App";
-import {Game} from "../domain/game";
-import {PollComponent} from "../components/poll";
+import {Game, GameType} from "../domain/game";
 import {Historic} from "../components/historic";
+import TradingViewWidget from "../components/tradingview";
 
 type BetPageProps = {
     id?: string;
 }
 
 export function BetPage({id}: BetPageProps) {
+    const { state } = useLocation();
     let {idUrl} = useParams();
     const idGame: string = id ?? idUrl ?? "";
     const services = useContext(ServiceContext);
 
     const game: Game = services.bet.getGame(idGame);
+
+    console.log(state);
 
     return (
         <Grid
@@ -30,7 +33,7 @@ export function BetPage({id}: BetPageProps) {
                 <Box sx={{textAlign: 'center', marginBottom: '20px'}} >
                     <Typography variant='h4'>{game.name}</Typography>
                 </Box>
-                <BetPanel game={game}/>
+                <BetPanel game={game} selection={state}/>
                 <Box sx={{width: '100%', marginTop: '50px'}}/>
                 <Historic game={game}/>
             </Grid>

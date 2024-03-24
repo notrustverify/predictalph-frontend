@@ -3,7 +3,7 @@ import {Round, RoundPrice, RoundStatus} from "../domain/round";
 import {
     PredictChoice,
     PredictPrice,
-    PredictPriceInstance, PredictPriceTypes,
+    PredictPriceTypes,
     Round as RoundPriceContract,
     RoundChoice
 } from "../artifacts/ts";
@@ -48,7 +48,7 @@ export class BlockchainClient {
         }
 
         let gameState: PredictPriceTypes.State;
-        if (game.type == GameType.PRICE) {
+        if (game.type === GameType.PRICE) {
             gameState = await PredictPrice.at(game.contract.address).fetchState();
         } else {
             gameState = await PredictChoice.at(game.contract.address).fetchState();

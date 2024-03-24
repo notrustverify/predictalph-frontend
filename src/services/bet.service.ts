@@ -20,7 +20,8 @@ export class BetService {
                 1),
             ["YES", "NO"],
             GameType.CHOICE,
-            '/images/alephium-choice.png'
+            '/images/alephium-choice.png',
+            ''
         ),
         new Game(
             "ALPHPRICE",
@@ -32,7 +33,8 @@ export class BetService {
                 1),
             ["BULL", "BEAR"],
             GameType.PRICE,
-            '/images/alephium-price.png'
+            '/images/alephium-price.png',
+            'GATEIO:ALPHUSDT'
         ),
     ];
 

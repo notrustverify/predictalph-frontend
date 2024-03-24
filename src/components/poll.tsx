@@ -3,20 +3,15 @@ import {useContext, useEffect, useState} from "react";
 import {ServiceContext} from "../App";
 import {Box, Grid, LinearProgress} from "@mui/material";
 import Typography from "@mui/material/Typography";
+import {HorizontalBar} from "./horizontalBar";
 
 type PollComponentType = {
     round: Round;
 }
 
 export function PollComponent({round}: PollComponentType) {
-    const itemStyle = {
-        padding: '10px',
-    }
 
-    const getPctBar = (amount: number): number => {
-        const max = round.pollAmounts.reduce((a, b) => Math.max(a, b));
-        return 90 * amount / max;
-    }
+
 
     const displayDate = (round: Round): any => {
         if (!(round instanceof RoundPrice)) {
@@ -44,51 +39,48 @@ export function PollComponent({round}: PollComponentType) {
             <Grid
                 container
                 direction="row"
-                justifyContent="center"
-                alignItems="flex-start"
+                justifyContent="space-between"
+                alignItems="center"
             >
-                <Grid item style={itemStyle} sx={{height: '100%'}} md={4} xs={12}>
-                    <Typography>ALPH {round.pollAmounts[0]}</Typography>
-                    <LinearProgress
-                        sx={{transform: "rotate(180deg)"}}
-                        color="secondary"
-                        variant="determinate"
-                        value={getPctBar(round.pollAmounts[0])}
-                        valueBuffer={20}
-                    />
+                <Grid
+                    item md={12} xs={12}
+                    container
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    sx={{margin: '0px 10px 0 10px'}}
+                >
+                    <Grid item><Typography>ALPH {round.pollAmounts[0]}</Typography></Grid>
+                    <Grid item><Typography>ALPH {round.pollAmounts[1]}</Typography></Grid>
+
                 </Grid>
-                <Grid item style={itemStyle} md={4} xs={12}>
-                    <Grid
-                        container
-                        direction="row"
-                        justifyContent="space-around"
-                        alignItems="center">
-                        <Grid item md={12} sx={{textAlign: "center"}}>{displayDate(round)}</Grid>
+                <Grid item sx={{height: '100%', padding: '10px'}} md={12} xs={12}>
+                    <HorizontalBar polls={round.pollAmounts} height='20px'/>
+                </Grid>
+                <Grid
+                    item md={12} xs={12}
+                    container
+                    direction="row"
+                    justifyContent="space-around"
+                    alignItems="center"
+                    sx={{margin: '0px 10px 0 10px'}}
+                >
+                        <Grid item md={6} xs={12} sx={{textAlign: "center"}}>{displayDate(round)}</Grid>
 
                         { round instanceof RoundPrice
                             ? <>
-                                <Grid item md={4} sx={{textAlign: "center"}}>Actual: ${round.priceEnd}</Grid>
-                                <Grid item md={4} sx={{textAlign: "center"}}>Locked: ${round.priceStart} </Grid>
-                                <Grid item md={4} sx={{textAlign: "center"}}>
+                                <Grid item xs={4} md={2} sx={{textAlign: "center"}}>Actual: ${round.priceEnd}</Grid>
+                                <Grid item xs={4} md={2} sx={{textAlign: "center"}}>Locked: ${round.priceStart} </Grid>
+                                <Grid item xs={4} md={2} sx={{textAlign: "center"}}>
                                     <Typography color={computePct(round) > 0 ? 'secondary.main': 'warning.main'}>
                                         ({computePct(round).toFixed(2)} %)
                                     </Typography>
 
                                 </Grid>
                             </>
-                            : <Box></Box>
+                            : <></>
                         }
                     </Grid>
-                </Grid>
-                <Grid item style={itemStyle} md={4} xs={12}>
-                    <Typography>ALPH {round.pollAmounts[1]}</Typography>
-                    <LinearProgress
-                        color="warning"
-                        variant="determinate"
-                        value={getPctBar(round.pollAmounts[1])}
-                        valueBuffer={20}
-                    />
-                </Grid>
             </Grid>
         </Box>
     );

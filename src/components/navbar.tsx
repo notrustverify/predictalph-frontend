@@ -6,12 +6,13 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import {drawerWidth} from "./sidebar";
-import {ArrowBack, PreviewOutlined} from "@mui/icons-material";
+import {ArrowBack, Help, PreviewOutlined} from "@mui/icons-material";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useContext, useState} from "react";
 import {ServiceContext} from "../App";
 import {SignerProvider} from "@alephium/web3";
 import {ConnectButton} from "./connect";
+import {ModalHelp} from "./modalHelp";
 
 
 type AppBarProp = {
@@ -41,6 +42,7 @@ export function AlphBetNavbar() {
     const navigate = useNavigate();
     const location = useLocation();
     const [already, setAlready] = useState(false);
+    const [open, setOpen] = useState<boolean>(false);
     const services = useContext(ServiceContext);
 
     const connect = async (signer: SignerProvider): Promise<void> => {
@@ -67,6 +69,8 @@ export function AlphBetNavbar() {
                     ALPH.BET
                 </Typography>
 
+                <IconButton onClick={() => setOpen(true)} ><Help sx={{fill: 'white'}}/></IconButton>
+                <ModalHelp open={open} handleClose={() => setOpen(false)}/>
                 <ConnectButton onConnect={connect}/>
             </Toolbar>
         </AppBar>

@@ -122,7 +122,7 @@ export function Historic({game}: HistoricProps) {
                             justifyContent="flex-start"
                             alignItems="center"
                         >
-                            <Grid item><Typography># {bet.epoch.toString()}</Typography></Grid>
+                            <Grid item><Typography># {bet.epoch.toString().padStart(3, '0')}</Typography></Grid>
                             <Grid sx={{marginLeft: 1}}></Grid>
                             <Grid item>{displayIcon(bet.status)}</Grid>
                             <Grid sx={{marginLeft: 1}}></Grid>

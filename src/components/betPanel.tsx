@@ -1,37 +1,39 @@
 import {useContext, useEffect, useState} from "react";
 import {ServiceContext} from "../App";
 import {Box, Button, FormControl, Grid, InputAdornment, InputLabel, OutlinedInput} from "@mui/material";
-import {Game} from "../domain/game";
+import {Game, GameType} from "../domain/game";
 import {Bet, BetStatus} from "../domain/bet";
 import {Round} from "../domain/round";
 import Typography from "@mui/material/Typography";
 import {Account} from "../domain/account";
 import {PollComponent} from "./poll";
+import TradingViewWidget from "./tradingview";
 
 type BetPanelProps = {
     game: Game,
+    selection: { choice: number | null, amount: number | null }
 }
 
-export function BetPanel({game}: BetPanelProps) {
+export function BetPanel({game, selection }: BetPanelProps) {
     const services = useContext(ServiceContext);
     const [bet, setBet] = useState<Bet | null>(null);
     const [round, setRound] = useState<Round | null>(null);
     const [amount, setAmount] = useState(0);
     const [seed, setSeed] = useState(0);
 
-    const goBet = async (choice: number): Promise<Bet | undefined> => {
+    async function placeBet(choice: number): Promise<Bet | undefined>  {
         if (round === null || amount === 0) return;
 
         return services.bet.bet(amount, choice, game);
     }
 
-    const setAccountPct = async (pct: number): Promise<void> => {
+    async function setAccountPct(pct: number): Promise<void> {
         const account = await services.wallet.getAccount();
         const amnt = parseFloat((account.amount * pct).toFixed(2))
         setAmount(amnt);
     }
 
-    const fetch = async () => {
+    async function fetch() {
         setSeed(Math.random);
         const currRound: Round = await services.bet.getCurrentRound(game);
         setRound(currRound);
@@ -41,7 +43,16 @@ export function BetPanel({game}: BetPanelProps) {
         setBet(currBet);
     }
 
+    async function init() {
+        if (selection !== null && selection.choice !== null && selection.amount !== null) {
+            setAmount(selection.amount);
+            await services.bet.bet(selection.amount, selection.choice, game);
+        }
+    }
+
     useEffect(() => {
+        init().then();
+
         const interval = setInterval(fetch, 1000);
         return () => clearInterval(interval);
     }, []);
@@ -59,7 +70,7 @@ export function BetPanel({game}: BetPanelProps) {
                         {bet === null
                             ? <Button
                                 fullWidth
-                                onClick={() => goBet(0)}
+                                onClick={() => placeBet(0)}
                                 sx={{height: '100%'}}
                                 color="secondary"
                                 variant="contained"
@@ -94,7 +105,8 @@ export function BetPanel({game}: BetPanelProps) {
                                         startAdornment={<InputAdornment position="start">ALPH</InputAdornment>}
                                         label="Amount"/>
                                 </FormControl>
-                                <Typography variant='caption' color='gray' >+1 ALPH for contract creation. Will be refund when bets claimed</Typography>
+                                <Typography variant='caption' color='gray'>+1 ALPH for contract creation. Will be refund
+                                    when bets claimed</Typography>
                             </Grid>
                             <Grid item sx={{width: '100%'}}>
                                 <Grid
@@ -125,7 +137,7 @@ export function BetPanel({game}: BetPanelProps) {
                     <Grid item style={item} md={4} xs={12}>
                         {bet === null
                             ? <Button
-                                onClick={() => goBet(1).then()}
+                                onClick={() => placeBet(1).then()}
                                 size="large"
                                 fullWidth
                                 color="warning"
@@ -145,6 +157,12 @@ export function BetPanel({game}: BetPanelProps) {
                     </Grid>
                 </Grid>
             </Box>
+            {/*            {game.type === GameType.CHOICE ? <></> :
+
+                <Box sx={{margin: '20px 10px 30px 10px', height: '500px'}}>
+                    <TradingViewWidget symbol={game.symbol}></TradingViewWidget>
+                </Box>
+            }*/}
             {round === null ? <div/> : <PollComponent round={round} key={seed}/>}
         </>
     );

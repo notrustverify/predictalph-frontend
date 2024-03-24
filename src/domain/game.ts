@@ -14,5 +14,6 @@ export class Game {
         public choiceDescriptions: string[],
         public type: GameType,
         public img: string,
+        public symbol: string,
         ) {}
 }

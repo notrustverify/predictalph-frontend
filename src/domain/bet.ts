@@ -29,7 +29,6 @@ export class Bet {
         if (this.status === BetStatus.INPROGRESS) {
             return WinStatus.INPROGRESS
         }
-        console.log('WIN', this.winner, this.choice)
         const win= (this.winner === this.choice);
         return win ? WinStatus.WIN : WinStatus.FAILED;
     }
