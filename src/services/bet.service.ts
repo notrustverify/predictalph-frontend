@@ -5,7 +5,6 @@ import {Bet, BetStatus} from "../domain/bet";
 import {Contract} from "../domain/contract";
 import {BlockchainClient} from "./blockchain.client";
 import {Round} from "../domain/round";
-import {CoinGeckoClient} from "./coinGeckoClient";
 
 export class BetService {
 
@@ -54,8 +53,10 @@ export class BetService {
 
     async claimMyRound(game: Game) {
         const curr = await this.getCurrentRound(game);
-        const bets = await this.getPlayerBets(game)
-        return this.wallet.claim(bets.filter(b => b.epoch < curr.epoch), game);
+        const bets = (await this.getPlayerBets(game))
+            .filter(b => b.epoch < curr.epoch)
+            .filter(b => b.status === BetStatus.NOTCLAIMED)
+        return this.wallet.claim(bets, game);
     }
 
     async claimExpiredRound(): Promise<boolean> {
