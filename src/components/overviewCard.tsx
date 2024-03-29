@@ -5,7 +5,7 @@ import {Game} from "../domain/game";
 import {Button, FormControl, Grid, InputAdornment, InputLabel, OutlinedInput, Paper} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import {HorizontalBar} from "./horizontalBar";
-import {Done, OpenInNew} from "@mui/icons-material";
+import {Done, OpenInNew, Start} from "@mui/icons-material";
 import {useNavigate} from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 
@@ -72,7 +72,7 @@ export function OverviewCard({game}: OverviewCardType) {
                 alignItems="center"
                 sx={{marginTop: '10px'}}
             >
-                <Grid item md={11}>
+                <Grid item md={9}>
                 <FormControl fullWidth size="small">
                     <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
                     <OutlinedInput
@@ -84,8 +84,8 @@ export function OverviewCard({game}: OverviewCardType) {
                         label="Amount"/>
                 </FormControl>
                 </Grid>
-                <Grid item md={1}>
-                    <IconButton onClick={goToBet} ><Done/></IconButton>
+                <Grid item md={3} sx={{textAlign: 'center',}}>
+                    <Button sx={{height: '40px'}} onClick={goToBet} variant='outlined' startIcon={<Start/>}>Bet</Button>
                 </Grid>
             </Grid>
         )
