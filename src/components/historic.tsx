@@ -143,7 +143,7 @@ export function Historic({game}: HistoricProps) {
                                     </TableRow>
                                     <TableRow>
                                         <TableCell><Typography fontWeight={600}>Initial bet</Typography></TableCell>
-                                        <TableCell>{bet.amount.toFixed(2)} ALPH</TableCell>
+                                        <TableCell>{(bet.amount-1).toFixed(2)} ALPH (+1 locked)</TableCell>
                                     </TableRow>
                                     <TableRow>
                                         <TableCell><Typography fontWeight={600}>Position</Typography></TableCell>
