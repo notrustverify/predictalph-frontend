@@ -51,7 +51,7 @@ export function BetPanel({game, selection }: BetPanelProps) {
     }
 
     useEffect(() => {
-        init().then();
+        init().catch(console.log).then();
 
         const interval = setInterval(fetch, 1000);
         return () => clearInterval(interval);
@@ -70,7 +70,7 @@ export function BetPanel({game, selection }: BetPanelProps) {
                         {bet === null
                             ? <Button
                                 fullWidth
-                                onClick={() => placeBet(0)}
+                                onClick={() => placeBet(0).catch(console.log).then()}
                                 sx={{height: '100%'}}
                                 color="secondary"
                                 variant="contained"
@@ -136,7 +136,7 @@ export function BetPanel({game, selection }: BetPanelProps) {
                     <Grid item style={item} md={4} xs={12}>
                         {bet === null
                             ? <Button
-                                onClick={() => placeBet(1).then()}
+                                onClick={() => placeBet(1).catch(console.log).then()}
                                 size="large"
                                 fullWidth
                                 color="warning"

@@ -6,7 +6,6 @@ import {BetClient} from "./services/bet.client";
 import {Box, createTheme, CssBaseline, ThemeProvider, useTheme} from "@mui/material";
 import {DrawerHeader} from "./components/drawerHeader";
 import {AlphBetNavbar} from "./components/navbar";
-import {AlphBetSidebar} from "./components/sidebar";
 import {Theme} from "@mui/material/styles";
 import MainContent from "./components/main";
 import {BrowserRouter} from "react-router-dom";

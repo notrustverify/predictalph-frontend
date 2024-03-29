@@ -12,7 +12,6 @@ export function HorizontalBar({polls, height}: HorizontalBarType) {
     ? polls.map(_ => 100 / polls.length)
             : polls.map(p => 100 * p / max);
 
-        console.log('POLL', polls, max, pct);
     return (
         <Box
             sx={{

@@ -87,9 +87,12 @@ export function Historic({game}: HistoricProps) {
 
     function selectColor(status: WinStatus): string {
         switch (status) {
-            case WinStatus.WIN: return 'secondary.main';
-            case WinStatus.FAILED: return 'warning.main';
-            case WinStatus.INPROGRESS: return '';
+            case WinStatus.WIN:
+                return 'secondary.main';
+            case WinStatus.FAILED:
+                return 'warning.main';
+            case WinStatus.INPROGRESS:
+                return '';
         }
     }
 
@@ -105,14 +108,20 @@ export function Historic({game}: HistoricProps) {
                 </Grid>
                 <Grid item md={4}>&nbsp;</Grid>
                 <Grid item md={4} sx={{textAlign: "right"}}>
-                    <Button color="primary" variant="contained" onClick={() => svc.bet.claimMyRound(game).then()}>CLAIM {computeReward(bets).toFixed(2)} ALPH</Button>
+                    <Button
+                        color="primary"
+                        variant="contained"
+                        onClick={() => svc.bet.claimMyRound(game).catch(console.log).then()}
+                    >
+                        CLAIM {computeReward(bets).toFixed(2)} ALPH
+                    </Button>
                 </Grid>
             </Grid>
             <Box sx={{marginTop: '20px'}}></Box>
             {bets.map((bet) => (
                 <Accordion>
                     <AccordionSummary
-                        expandIcon={<ExpandMore />}
+                        expandIcon={<ExpandMore/>}
                         aria-controls="panel1-content"
                         id="panel1-header"
                     >
@@ -127,30 +136,30 @@ export function Historic({game}: HistoricProps) {
                             <Grid item>{displayIcon(bet.status)}</Grid>
                             <Grid sx={{marginLeft: 1}}></Grid>
                             <Grid item>
-                                <Typography variant='body1' fontWeight={600} color={selectColor(bet.win())} >
-                                {displayText(bet)}
-                            </Typography></Grid>
+                                <Typography variant='body1' fontWeight={600} color={selectColor(bet.win())}>
+                                    {displayText(bet)}
+                                </Typography></Grid>
                         </Grid>
 
 
                     </AccordionSummary>
                     <AccordionDetails>
-                            <Table>
-                                <TableBody>
-                                    <TableRow>
-                                        <TableCell><Typography fontWeight={600}>Status</Typography></TableCell>
-                                        <TableCell>{bet.status}</TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell><Typography fontWeight={600}>Initial bet</Typography></TableCell>
-                                        <TableCell>{(bet.amount-1).toFixed(2)} ALPH (+1 locked)</TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell><Typography fontWeight={600}>Position</Typography></TableCell>
-                                        <TableCell>{game.choiceDescriptions[bet.choice]}</TableCell>
-                                    </TableRow>
-                                </TableBody>
-                            </Table>
+                        <Table>
+                            <TableBody>
+                                <TableRow>
+                                    <TableCell><Typography fontWeight={600}>Status</Typography></TableCell>
+                                    <TableCell>{bet.status}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell><Typography fontWeight={600}>Initial bet</Typography></TableCell>
+                                    <TableCell>{(bet.amount - 1).toFixed(2)} ALPH (+1 locked)</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell><Typography fontWeight={600}>Position</Typography></TableCell>
+                                    <TableCell>{game.choiceDescriptions[bet.choice]}</TableCell>
+                                </TableRow>
+                            </TableBody>
+                        </Table>
                     </AccordionDetails>
                 </Accordion>
             ))}
