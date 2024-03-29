@@ -7,11 +7,12 @@ type  HorizontalBarType = {
 }
 
 export function HorizontalBar({polls, height}: HorizontalBarType) {
-        const max = polls.reduce((a, b) => Math.max(a, b));
+        const max = polls.reduce((a, b) => a + b);
         const pct = max === 0
     ? polls.map(_ => 100 / polls.length)
             : polls.map(p => 100 * p / max);
 
+        console.log('POLL', polls, max, pct);
     return (
         <Box
             sx={{
