@@ -96,7 +96,7 @@ export function Historic({game}: HistoricProps) {
         }
     }
 
-    return (
+    return bets.length === 0 ? <></> : (
         <>
             <Grid
                 container
