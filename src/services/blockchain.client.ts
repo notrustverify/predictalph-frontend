@@ -7,7 +7,7 @@ import {
     Round as RoundPriceContract,
     RoundChoice
 } from "../artifacts/ts";
-import {addressFromContractId, binToHex, hexToBinUnsafe, hexToString, subContractId, web3} from "@alephium/web3";
+import {addressFromContractId, subContractId, web3} from "@alephium/web3";
 import {CoinGeckoClient} from "./coinGeckoClient";
 import AsyncLock from "async-lock";
 
@@ -22,7 +22,7 @@ function getEpochPath(epoch: bigint) {
 
 export class BlockchainClient {
     private static CACHE_EXP_ROUND_MS = 2000;
-    private static  CACHE_EXP_EPOCH_MS = 2000;
+    private static  CACHE_EXP_CURRENT_EPOCH_MS = 2000;
     private lastFetchCurrentRound: number = 0;
     private lastFetchCurrentEpoch: number = 0
     private cachedRounds: Map<string, Round> = new Map();
@@ -42,19 +42,21 @@ export class BlockchainClient {
         const now = Date.now();
         let epoch: bigint = BigInt('0');
 
-        if (cached !== undefined && (now - this.lastFetchCurrentEpoch) < BlockchainClient.CACHE_EXP_EPOCH_MS) {
+        // Used cached current epoch from main contract state
+        if (cached !== undefined && (now - this.lastFetchCurrentEpoch) < BlockchainClient.CACHE_EXP_CURRENT_EPOCH_MS) {
             epoch = cached;
             return this.getRound(epoch, game);
         }
 
+        // Get epoch if cache expired
         let gameState: PredictPriceTypes.State;
         if (game.type === GameType.PRICE) {
             gameState = await PredictPrice.at(game.contract.address).fetchState();
         } else {
             gameState = await PredictChoice.at(game.contract.address).fetchState();
-            console.log('TITLE', hexToString(gameState.fields.title));
         }
 
+        // Fetch current round
         epoch = gameState.fields.epoch;
         this.cachedCurrentEpoch.set(game.id, epoch);
         this.lastFetchCurrentEpoch = now;
@@ -95,10 +97,12 @@ export class BlockchainClient {
         if (game.type === GameType.PRICE) {
             const roundState = await RoundPriceContract.at(subAddress).fetchState();
 
+            const end = Number(roundState.fields.bidEndTimestamp)
+            const status = Date.now() > end ? RoundStatus.FINISHED : RoundStatus.RUNNING;
             return new RoundPrice(
                 game,
-                RoundStatus.RUNNING,
-                Number(roundState.fields.bidEndTimestamp),
+                status,
+                end,
                 [Number(roundState.fields.amountUp / BigInt(10 ** 18)), Number(roundState.fields.amountDown / BigInt(10 ** 18))],
                 epoch,
                 roundState.fields.priceStart < roundState.fields.priceEnd ? 0 : 1,
@@ -110,11 +114,13 @@ export class BlockchainClient {
             );
         } else {
             const roundState = await RoundChoice.at(subAddress).fetchState();
+            const end = Number(roundState.fields.bidEndTimestamp)
+            const status = Date.now() > end ? RoundStatus.FINISHED : RoundStatus.RUNNING;
 
             return new Round(
                 game,
-                RoundStatus.RUNNING,
-                Number(roundState.fields.bidEndTimestamp),
+                status,
+                end,
                 [Number(roundState.fields.amountTrue / BigInt(10 ** 18)), Number(roundState.fields.amountFalse / BigInt(10 ** 18))],
                 epoch,
                 roundState.fields.sideWon ? 0 : 1,

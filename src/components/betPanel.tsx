@@ -1,13 +1,11 @@
 import {useContext, useEffect, useState} from "react";
 import {ServiceContext} from "../App";
 import {Box, Button, FormControl, Grid, InputAdornment, InputLabel, OutlinedInput} from "@mui/material";
-import {Game, GameType} from "../domain/game";
-import {Bet, BetStatus} from "../domain/bet";
-import {Round} from "../domain/round";
+import {Game} from "../domain/game";
+import {Bet} from "../domain/bet";
+import {Round, RoundStatus} from "../domain/round";
 import Typography from "@mui/material/Typography";
-import {Account} from "../domain/account";
 import {PollComponent} from "./poll";
-import TradingViewWidget from "./tradingview";
 
 type BetPanelProps = {
     game: Game,
@@ -67,7 +65,7 @@ export function BetPanel({game, selection }: BetPanelProps) {
                     alignItems="flex-start"
                 >
                     <Grid item style={item} sx={{height: '100%'}} md={4} xs={12}>
-                        {bet === null
+                        {bet === null && round?.status === RoundStatus.RUNNING
                             ? <Button
                                 fullWidth
                                 onClick={() => placeBet(0).catch(console.log).then()}
@@ -84,7 +82,7 @@ export function BetPanel({game, selection }: BetPanelProps) {
                                 variant="contained"
                                 disabled={true}
                                 size="large">
-                                {bet.choice === 0 ? 'You already bet' : '.'}
+                                {bet?.choice === 0 ? 'You already bet' : '.'}
                             </Button>}
 
                     </Grid>
@@ -134,7 +132,7 @@ export function BetPanel({game, selection }: BetPanelProps) {
                         </Grid>
                     </Grid>
                     <Grid item style={item} md={4} xs={12}>
-                        {bet === null
+                        {bet === null && round?.status === RoundStatus.RUNNING
                             ? <Button
                                 onClick={() => placeBet(1).catch(console.log).then()}
                                 size="large"
@@ -150,7 +148,7 @@ export function BetPanel({game, selection }: BetPanelProps) {
                                 variant="contained"
                                 disabled={true}
                                 size="large">
-                                {bet.choice === 1 ? 'You already bet' : '.'}
+                                {bet?.choice === 1 ? 'You already bet' : '.'}
                             </Button>}
 
                     </Grid>
