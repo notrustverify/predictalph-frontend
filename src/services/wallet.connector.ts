@@ -107,6 +107,20 @@ export class WalletConnector implements WalletConnector {
         }
     }
 
+    async waitTx(id: string): Promise<boolean> {
+        while (true) {
+            try {
+                const tx = await this.window?.explorerProvider?.transactions.getTransactionsTransactionHash(id);
+                if (tx?.type === "Accepted") {
+                    return true;
+                }
+            } catch (e) {
+                // catch 404 not found
+            }
+            await new Promise(f => setTimeout(f, 1000));
+        }
+    }
+
     async getAccount(): Promise<Account> {
         const balance = await this.window?.explorerProvider?.addresses.getAddressesAddressBalance(this.account?.address ?? '')
         return new Account(this.account?.address ?? '', parseInt(balance?.balance ?? '0') / Math.pow(10, 18), ALEPHIUM);

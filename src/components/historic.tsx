@@ -1,11 +1,11 @@
 import {
     Accordion,
     AccordionDetails,
-    AccordionSummary,
+    AccordionSummary, Alert,
     Box,
     Button,
     Grid,
-    Icon,
+    Icon, Snackbar,
     Table,
     TableBody,
     TableCell,
@@ -22,6 +22,10 @@ type HistoricProps = {
     game: Game,
 }
 
+enum ClaimRequest {
+    PENDING,SUCCESS,FAILED,NONE
+}
+
 function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
     return value !== null && value !== undefined;
 }
@@ -29,6 +33,7 @@ function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
 export function Historic({game}: HistoricProps) {
     const svc = useContext(ServiceContext);
     const [bets, setBets] = useState<Bet[]>([]);
+    const [claiming, setClaiming] = useState<ClaimRequest>(ClaimRequest.NONE);
 
     async function fetch(): Promise<void> {
         const rawBets = await svc.bet.getPlayerBets(game, true);
@@ -47,6 +52,25 @@ export function Historic({game}: HistoricProps) {
         return filtered.length === 0 ? 0 : filtered.reduce((a, b) => a + b);
     }
 
+    async function claim(): Promise<void>{
+        setClaiming(ClaimRequest.PENDING);
+        try {
+            const res: boolean = await svc.bet.claimMyRound(game);
+            setClaiming(res ? ClaimRequest.SUCCESS : ClaimRequest.FAILED);
+        } catch (e) {
+            console.log(e);
+            setClaiming(ClaimRequest.FAILED);
+        }
+    }
+
+    const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setClaiming(ClaimRequest.NONE);
+    };
+
     function displayIcon(status: BetStatus) {
         switch (status) {
             case BetStatus.PENDING:
@@ -58,10 +82,6 @@ export function Historic({game}: HistoricProps) {
             case BetStatus.CLAIMED:
                 return <Icon><MoneyOff/></Icon>
         }
-    }
-
-    function aa(bet: Bet) {
-
     }
 
     function displayText(bet: Bet) {
@@ -98,6 +118,26 @@ export function Historic({game}: HistoricProps) {
 
     return bets.length === 0 ? <></> : (
         <>
+            <Snackbar open={claiming === ClaimRequest.SUCCESS} autoHideDuration={6000} onClose={handleClose}>
+                <Alert
+                    onClose={handleClose}
+                    severity="success"
+                    variant="filled"
+                    sx={{ width: '100%' }}
+                >
+                    Claim success !
+                </Alert>
+            </Snackbar>
+            <Snackbar open={claiming === ClaimRequest.FAILED} autoHideDuration={6000} onClose={handleClose}>
+                <Alert
+                    onClose={handleClose}
+                    severity="error"
+                    variant="filled"
+                    sx={{ width: '100%' }}
+                >
+                    Claim failed !
+                </Alert>
+            </Snackbar>
             <Grid
                 container
                 direction='row'
@@ -111,7 +151,8 @@ export function Historic({game}: HistoricProps) {
                     <Button
                         color="primary"
                         variant="contained"
-                        onClick={() => svc.bet.claimMyRound(game).catch(console.log).then()}
+                        disabled={claiming === ClaimRequest.PENDING || computeReward(bets) === 0}
+                        onClick={claim}
                     >
                         CLAIM {computeReward(bets).toFixed(2)} ALPH
                     </Button>

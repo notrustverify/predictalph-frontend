@@ -51,12 +51,14 @@ export class BetService {
         return this.games;
     }
 
-    async claimMyRound(game: Game) {
+    async claimMyRound(game: Game): Promise<boolean> {
         const curr = await this.getCurrentRound(game);
         const bets = (await this.getPlayerBets(game))
             .filter(b => b.epoch < curr.epoch)
             .filter(b => b.status === BetStatus.NOTCLAIMED)
-        return this.wallet.claim(bets, game);
+        const tx = await this.wallet.claim(bets, game);
+        return this.wallet.waitTx(tx);
+
     }
 
     async claimExpiredRound(): Promise<boolean> {
@@ -83,7 +85,7 @@ export class BetService {
         const bets = await this.getPlayerBets(game);
         bets.forEach(bet => this.currentBets.delete(BetService.key(game, bet.epoch)))
 
-        // check current bet prensent in historic
+        // check current bet present in historic
         const currRound = await this.getCurrentRound(game);
         const currBet: Bet | null = bets.filter(bet => Number(bet.epoch) === Number(currRound.epoch))[0]
         if (currBet !== undefined) {
@@ -131,7 +133,7 @@ export class BetService {
         // purge previous pending bets
         bets.forEach(bet => this.currentBets.delete(BetService.key(game, bet.epoch)))
 
-        if (addPending !== null) {
+        if (addPending) {
             const currRound = await this.blockchain.getCurrentRound(game);
             const pendingBet: Bet | undefined = this.currentBets.get(BetService.key(game, currRound.epoch));
             if (pendingBet !== undefined) {
