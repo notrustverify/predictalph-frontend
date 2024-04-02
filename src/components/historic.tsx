@@ -1,11 +1,13 @@
 import {
     Accordion,
     AccordionDetails,
-    AccordionSummary, Alert,
+    AccordionSummary,
+    Alert,
     Box,
     Button,
     Grid,
-    Icon, Snackbar,
+    Icon,
+    Snackbar,
     Table,
     TableBody,
     TableCell,
@@ -85,23 +87,17 @@ export function Historic({game}: HistoricProps) {
     }
 
     function displayText(bet: Bet) {
-        switch (bet.status) {
-            case BetStatus.PENDING:
-                return 'Pending';
-            case BetStatus.INPROGRESS:
-                return 'In progress';
-            case BetStatus.NOTCLAIMED:
-                if (bet.win() === WinStatus.WIN) {
-                    return `Won ${bet.reward} ALPH`
-                } else {
-                    return `Lost bet`
-                }
-            case BetStatus.CLAIMED:
-                if (bet.win() === WinStatus.WIN) {
-                    return `Won ${bet.reward} ALPH`
-                } else {
-                    return `Lost bet`
-                }
+        if (bet.status === BetStatus.PENDING) {
+            return 'Pending';
+        }
+        if (bet.status === BetStatus.INPROGRESS) {
+            return 'In progress';
+        }
+
+        if (bet.win() === WinStatus.WIN) {
+            return `Won ${bet.reward} ALPH`
+        } else {
+            return `Lost bet`
         }
     }
 

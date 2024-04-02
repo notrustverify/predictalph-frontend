@@ -164,7 +164,7 @@ export class BetService {
             return 1; // contract close refund
         }
 
-        return (dto.amountBid - 1) * Number(round.rewardAmount ) / Number(round.rewardBaseCalAmount) / (10**18);
+        return dto.amountBid * Number(round.rewardAmount ) / Number(round.rewardBaseCalAmount) / (10**18);
 
     }
 
