@@ -10,7 +10,6 @@ export class BetService {
 
     private readonly games = [
         new Game(
-            "CHOICERHONE",
             "ALPH to $4 before end of Q1?",
             "Bet if Rhone",
             new Contract(
@@ -23,7 +22,6 @@ export class BetService {
             ''
         ),
         new Game(
-            "ALPHPRICE",
             "ALPH Price",
             "Bet if ALPH will go up or down",
             new Contract(
@@ -122,7 +120,7 @@ export class BetService {
                 status,
                 account,
                 choice,
-                dto.amountBid - 1, // remove 1 from lock contract
+                dto.amountBid-1, // remove 1 from lock contract
                 reward,
                 this.getResult(dto),
                 dto.epoch,
@@ -165,12 +163,12 @@ export class BetService {
             return 1; // contract close refund
         }
 
-        return (dto.amountBid-1) * round.rewardAmount / round.rewardBaseCalAmount;
+        return (dto.amountBid-1) * round.rewardAmount / round.rewardBaseCalAmount + 1;
 
     }
 
-    getGame(id: string) {
-        return this.games.filter(g => g.id === id)[0];
+    getGame(id: string): Game | null {
+        return this.games.filter(g => g.id === id)[0] ?? null;
     }
 
 

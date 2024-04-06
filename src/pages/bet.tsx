@@ -17,27 +17,25 @@ export function BetPage({id}: BetPageProps) {
     const idGame: string = id ?? idUrl ?? "";
     const services = useContext(ServiceContext);
 
-    const game: Game = services.bet.getGame(idGame);
+    const game: Game | null = services.bet.getGame(idGame);
 
-    console.log(state);
 
-    return (
-        <Grid
-            key={idGame}
-            container
-            alignItems="flex-start"
-            justifyContent="center"
-        >
-            <Grid item md={12} sx={{maxWidth: '1000px', margin: '20px'}}>
-                <Box sx={{textAlign: 'center', marginBottom: '20px'}} >
-                    <Typography variant='h4'>{game.name}</Typography>
-                </Box>
-                <BetPanel game={game} selection={state}/>
-                <Box sx={{width: '100%', marginTop: '50px'}}/>
-                <Historic game={game}/>
-            </Grid>
-
+    return game === null ? <Typography>Game not found</Typography> : (
+    <Grid
+        key={idGame}
+        container
+        alignItems="flex-start"
+        justifyContent="center"
+    >
+        <Grid item md={12} sx={{maxWidth: '1000px', margin: '20px'}}>
+            <Box sx={{textAlign: 'center', marginBottom: '20px'}}>
+                <Typography variant='h4'>{game.name}</Typography>
+            </Box>
+            <BetPanel game={game} selection={state}/>
+            <Box sx={{width: '100%', marginTop: '50px'}}/>
+            <Historic game={game}/>
         </Grid>
 
-    )
+    </Grid>
+    );
 }

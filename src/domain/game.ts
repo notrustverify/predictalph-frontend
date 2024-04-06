@@ -7,7 +7,6 @@ export enum GameType {
 
 export class Game {
     constructor(
-        public id: string,
         public name: string,
         public description: string,
         public contract: Contract,
@@ -16,4 +15,9 @@ export class Game {
         public img: string,
         public symbol: string,
         ) {}
+
+
+    get id(): string {
+        return this.contract.address;
+    }
 }
