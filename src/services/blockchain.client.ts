@@ -31,8 +31,7 @@ export class BlockchainClient {
     private lock = new AsyncLock()
 
     constructor(
-        private readonly network: 'mainnet' | 'testnet',
-        private readonly node: string,
+        network: 'mainnet' | 'testnet' | 'devnet',
         private readonly coinGecko: CoinGeckoClient,
     ) {
         web3.setCurrentNodeProvider(`https://wallet.${network}.alephium.org`)

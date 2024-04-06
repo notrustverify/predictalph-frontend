@@ -20,4 +20,16 @@ export class Game {
     get id(): string {
         return this.contract.address;
     }
+
+    static fromDict(data: any): Game {
+        return new Game(
+            data.name,
+            data.description,
+            Contract.fromDict(data.contract),
+            data.choiceDescriptions,
+            data.type,
+            data.img,
+            data.symbol,
+        )
+    }
 }

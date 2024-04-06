@@ -1,47 +1,18 @@
 import {WalletConnector} from "./wallet.connector";
 import {BetClient, BetDTO} from "./bet.client";
-import {Game, GameType} from "../domain/game";
+import {Game} from "../domain/game";
 import {Bet, BetStatus} from "../domain/bet";
-import {Contract} from "../domain/contract";
 import {BlockchainClient} from "./blockchain.client";
 import {Round} from "../domain/round";
 
 export class BetService {
-
-    private readonly games = [
-        new Game(
-            "ALPH to $4 before end of Q1?",
-            "Bet if Rhone",
-            new Contract(
-                "538ee843b57883346a621a96e8861418d673b2a045db98c48a81b644229d7801",
-                "zK8LeTS97caH7oYk8LUeTRPuzzgyCeVY6x6FHzb5dJYx",
-                1),
-            ["YES", "NO"],
-            GameType.CHOICE,
-            '/images/alephium-choice.png',
-            ''
-        ),
-        new Game(
-            "ALPH Price",
-            "Bet if ALPH will go up or down",
-            new Contract(
-                "6b861470be487607d789714fe91bcc94d974fe76662dca38cf430dd61fe19701",
-                "21vgKMVTjSMp6ZU3zxjF5nPb4c1MEndkQtqcRD7MfVPYc",
-                1),
-            ["BULL", "BEAR"],
-            GameType.PRICE,
-            '/images/alephium-price.png',
-            'GATEIO:ALPHUSDT'
-        ),
-    ];
-
     private readonly currentBets = new Map<string, Bet>();
-
 
     constructor(
         private readonly wallet: WalletConnector,
         private readonly client: BetClient,
         private readonly blockchain: BlockchainClient,
+        private readonly games: Game[]
     ) {
     }
 
@@ -57,10 +28,6 @@ export class BetService {
         const tx = await this.wallet.claim(bets, game);
         return this.wallet.waitTx(tx);
 
-    }
-
-    async claimExpiredRound(): Promise<boolean> {
-        return false;
     }
 
     async bet(amount: number, choice: number, game: Game): Promise<Bet> {

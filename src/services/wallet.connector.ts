@@ -1,5 +1,4 @@
 import {Account as AlephiumAccount, DUST_AMOUNT, SignerProvider} from "@alephium/web3";
-import {ALEPHIUM} from "../config/blockchain";
 import {Round} from "../domain/round";
 import {Bet, BetStatus} from "../domain/bet";
 import {Account} from "../domain/account";
@@ -7,6 +6,7 @@ import {BidChoice, BidPrice, WithdrawChoice, WithdrawPrice} from "../artifacts/t
 import {Game, GameType} from "../domain/game";
 import {WalletConnectionError} from "../errors/WalletConnectionError";
 import {WalletNotConnectedError} from "../errors/WalletNotConnected";
+import {toDecimal} from "./utils";
 
 
 function arrayEpochToBytes(arrayEpoch: number[]) {
@@ -53,7 +53,7 @@ export class WalletConnector implements WalletConnector {
         const amnt = BigInt(amount * (10 ** 18));
 
             if (round.game.type === GameType.PRICE) {
-                 const res = await BidPrice.execute(this.window, {
+                 await BidPrice.execute(this.window, {
                     initialFields: {
                         predict: round.game.contract.id,
                         amount: amnt,
@@ -64,7 +64,7 @@ export class WalletConnector implements WalletConnector {
 
                  return new Bet(BetStatus.PENDING, await this.getAccount(), choice, amount, 0, 0, round.epoch);
             } else  {
-                const res = await BidChoice.execute(this.window, {
+                await BidChoice.execute(this.window, {
                     initialFields: {
                         predict: round.game.contract.id,
                         amount: amnt,
@@ -123,6 +123,6 @@ export class WalletConnector implements WalletConnector {
 
     async getAccount(): Promise<Account> {
         const balance = await this.window?.explorerProvider?.addresses.getAddressesAddressBalance(this.account?.address ?? '')
-        return new Account(this.account?.address ?? '', parseInt(balance?.balance ?? '0') / Math.pow(10, 18), ALEPHIUM);
+        return new Account(this.account?.address ?? '', toDecimal(BigInt(balance?.balance ?? '0')));
     }
 }
