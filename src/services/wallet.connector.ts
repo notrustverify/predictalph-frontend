@@ -6,7 +6,7 @@ import {BidChoice, BidPrice, WithdrawChoice, WithdrawPrice} from "../artifacts/t
 import {Game, GameType} from "../domain/game";
 import {WalletConnectionError} from "../errors/WalletConnectionError";
 import {WalletNotConnectedError} from "../errors/WalletNotConnected";
-import {toDecimal} from "./utils";
+import {toBigInt, toDecimal} from "./utils";
 
 
 function arrayEpochToBytes(arrayEpoch: number[]) {
@@ -50,7 +50,7 @@ export class WalletConnector implements WalletConnector {
             return Promise.reject("not connected")
         }
 
-        const amnt = BigInt(amount * (10 ** 18));
+        const amnt = toBigInt(amount);
 
             if (round.game.type === GameType.PRICE) {
                  await BidPrice.execute(this.window, {

@@ -7,8 +7,12 @@ const DECIMAL = BigInt(10) ** BigInt(18);
 const PRECISION = 10000;
 const PRECISION_N = BigInt(PRECISION);
 
-export function toDecimal(n: bigint) {
+export function toDecimal(n: bigint): number {
   return Number(n * PRECISION_N / DECIMAL) / PRECISION;
+}
+
+export function toBigInt(n: number): bigint {
+  return BigInt(n) * DECIMAL;
 }
 
 export interface PredictAlphConfig {
