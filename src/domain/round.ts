@@ -1,5 +1,4 @@
 import {Game} from "./game";
-import {Contract} from "./contract";
 
 export enum RoundStatus {
     CLOSE,
@@ -16,8 +15,8 @@ export class Round {
         public pollAmounts: number[],// artifact value
         public epoch: bigint, // artifacts value,
         public result: number,
-        public rewardAmount: bigint,
-        public rewardBaseCalAmount: bigint,
+        public rewardAmount: number,
+        public rewardBaseCalAmount: number,
         public rewardsComputed: boolean,
 ) {}
 }
@@ -31,8 +30,8 @@ export class RoundPrice extends Round {
         public pollAmounts: number[],// artifact value
         public epoch: bigint, // artifacts value,
         public result: number,
-        public rewardAmount: bigint,
-        public rewardBaseCalAmount: bigint,
+        public rewardAmount: number,
+        public rewardBaseCalAmount: number,
         public rewardsComputed: boolean,
         public priceStart: number,
         public priceEnd: number,

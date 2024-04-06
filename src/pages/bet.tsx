@@ -4,9 +4,8 @@ import {Box, Grid} from "@mui/material";
 import {BetPanel} from "../components/betPanel";
 import {useContext} from "react";
 import {ServiceContext} from "../App";
-import {Game, GameType} from "../domain/game";
+import {Game} from "../domain/game";
 import {Historic} from "../components/historic";
-import TradingViewWidget from "../components/tradingview";
 
 type BetPageProps = {
     id?: string;

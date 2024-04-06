@@ -1,7 +1,6 @@
 import * as React from "react";
 import {useContext} from "react";
 import {ServiceContext} from "../App";
-import {useNavigate} from "react-router-dom";
 import {Box, Grid} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import {OverviewCard} from "../components/overviewCard";

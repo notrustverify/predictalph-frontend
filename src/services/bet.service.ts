@@ -122,13 +122,14 @@ export class BetService {
                 status,
                 account,
                 choice,
-                (dto.amountBid - 1) / (10**18),
+                dto.amountBid - 1, // remove 1 from lock contract
                 reward,
                 this.getResult(dto),
                 dto.epoch,
                 )
         });
         const bets: Bet[] =  await Promise.all(promises)
+
 
         // purge previous pending bets
         bets.forEach(bet => this.currentBets.delete(BetService.key(game, bet.epoch)))
@@ -164,7 +165,7 @@ export class BetService {
             return 1; // contract close refund
         }
 
-        return dto.amountBid * Number(round.rewardAmount ) / Number(round.rewardBaseCalAmount) / (10**18);
+        return (dto.amountBid-1) * round.rewardAmount / round.rewardBaseCalAmount;
 
     }
 

@@ -1,16 +1,15 @@
-import {
-  Fields,
-  NetworkId,
-  addressFromContractId,
-  encodeContractField,
-  groupOfAddress,
-  sleep,
-  subContractId,
-  web3
-} from '@alephium/web3'
+import {addressFromContractId, Fields, NetworkId, sleep, subContractId, web3} from '@alephium/web3'
 import * as base58 from 'bs58'
-import {loadDeployments} from "../artifacts/ts/deployments";
 import {Punter, Round, RoundTypes} from "../artifacts/ts";
+
+
+const DECIMAL = BigInt(10) ** BigInt(18);
+const PRECISION = 10000;
+const PRECISION_N = BigInt(PRECISION);
+
+export function toDecimal(n: bigint) {
+  return Number(n * PRECISION_N / DECIMAL) / PRECISION;
+}
 
 export interface PredictAlphConfig {
   network: NetworkId

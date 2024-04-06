@@ -1,39 +1,32 @@
 import {Game} from "../domain/game";
 import {Account} from "../domain/account";
-import {Round} from "../domain/round";
-import {Bet} from "../domain/bet";
 import axios from "axios";
 import AsyncLock from "async-lock";
+import {toDecimal} from "./utils";
 
-/*
-[{"address":"1JDi2dx4gYVde7K9YFsvSva8Md2tt4BeRBHvpueJ5FsjX",
-"side":true,
-"amountBid":3000000000000000000,
-"claimed":false,
-"claimedByAnyoneTimestamp":1708706933376,
-"epoch":1,
-"priceStart":0,
-"priceEnd":0}]
- */
-
-export type BetDTO = {
-    side: boolean,
-    amountBid: number,
-    claimed: boolean,
-    claimedByAnyoneTimestamp: number
-    epoch: bigint,
-    priceStart: number,
-    priceEnd: number,
-    sideWon: number,
+export class BetDTO {
+    constructor(
+        public side: boolean,
+        public amountBid: number,
+        public claimed: boolean,
+        public claimedByAnyoneTimestamp: number,
+        public epoch: bigint,
+        public priceStart: number,
+        public priceEnd: number,
+        public sideWon: number,
+    ) {
+    }
 }
 
 export class BetClient {
+
     private static CACHE_MS = 1000;
     private lastFetch = new Map<string, number>;
     private caches = new Map<string, BetDTO[]>();
     private lock = new AsyncLock();
 
-    constructor(private readonly host: string) {}
+    constructor(private readonly host: string) {
+    }
 
     async getAllPlayerBets(game: Game, account: Account): Promise<BetDTO[]> {
         return this.lock.acquire('GETBETS', async () => {
@@ -45,7 +38,11 @@ export class BetClient {
             }
 
             // fetch
-            const bets: BetDTO[] = await this.fetch(game, account).catch(() => []);
+            const bets: BetDTO[] = await this.fetch(game, account)
+                .catch((e) => {
+                    console.log(e);
+                    return[]
+                });
 
             this.lastFetch.set(game.id, now);
             this.caches.set(game.id, bets);
@@ -54,7 +51,18 @@ export class BetClient {
     }
 
     private async fetch(game: Game, account: Account): Promise<BetDTO[]> {
-        return  axios.get<BetDTO[]>(`${this.host}/allround/${game.contract.id}/${account.address}`)
+        const res = await axios.get(`${this.host}/allround/${game.contract.id}/${account.address}`)
             .then(res => res.status == 200 ? res.data : []);
+
+        return res.map((bet: any) => new BetDTO(
+            bet.side,
+            toDecimal(BigInt(bet.amountBid)),
+            bet.claimed,
+            bet.claimedByAnyoneTimestamp,
+            bet.epoch,
+            bet.priceStart,
+            bet.priceEnd,
+            bet.sideWon,
+        ));
     }
 }

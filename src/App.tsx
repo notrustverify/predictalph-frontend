@@ -1,5 +1,5 @@
-import React, {createContext, useState} from 'react'
-import { AlephiumWalletProvider } from '@alephium/web3-react'
+import React, {createContext} from 'react'
+import {AlephiumWalletProvider} from '@alephium/web3-react'
 import {WalletConnector} from "./services/wallet.connector";
 import {BetService} from "./services/bet.service";
 import {BetClient} from "./services/bet.client";

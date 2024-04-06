@@ -10,6 +10,7 @@ import {
 import {addressFromContractId, subContractId, web3} from "@alephium/web3";
 import {CoinGeckoClient} from "./coinGeckoClient";
 import AsyncLock from "async-lock";
+import {toDecimal} from "./utils";
 
 
 export function getRoundContractId(predictAlphContractId: string, epoch: bigint, groupIndex: number) {
@@ -103,11 +104,11 @@ export class BlockchainClient {
                 game,
                 status,
                 end,
-                [Number(roundState.fields.amountUp / BigInt(10 ** 18)), Number(roundState.fields.amountDown / BigInt(10 ** 18))],
+                [toDecimal(roundState.fields.amountUp), toDecimal(roundState.fields.amountDown)],
                 epoch,
                 roundState.fields.priceStart < roundState.fields.priceEnd ? 0 : 1,
-                roundState.fields.rewardAmount,
-                roundState.fields.rewardBaseCalAmount,
+                toDecimal(roundState.fields.rewardAmount),
+                toDecimal(roundState.fields.rewardBaseCalAmount),
                 roundState.fields.rewardsComputed,
                 await this.convertPrice(roundState.fields.priceStart),
                 await this.convertPrice(roundState.fields.priceEnd),
@@ -121,11 +122,11 @@ export class BlockchainClient {
                 game,
                 status,
                 end,
-                [Number(roundState.fields.amountTrue / BigInt(10 ** 18)), Number(roundState.fields.amountFalse / BigInt(10 ** 18))],
+                [toDecimal(roundState.fields.amountTrue), toDecimal(roundState.fields.amountFalse)],
                 epoch,
                 roundState.fields.sideWon ? 0 : 1,
-                roundState.fields.rewardAmount,
-                roundState.fields.rewardBaseCalAmount,
+                toDecimal(roundState.fields.rewardAmount),
+                toDecimal(roundState.fields.rewardBaseCalAmount),
                 roundState.fields.rewardsComputed,
             );
         }

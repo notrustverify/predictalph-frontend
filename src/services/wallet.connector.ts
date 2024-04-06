@@ -1,4 +1,4 @@
-import {Account as AlephiumAccount, DUST_AMOUNT, SignerProvider, subContractId} from "@alephium/web3";
+import {Account as AlephiumAccount, DUST_AMOUNT, SignerProvider} from "@alephium/web3";
 import {ALEPHIUM} from "../config/blockchain";
 import {Round} from "../domain/round";
 import {Bet, BetStatus} from "../domain/bet";
