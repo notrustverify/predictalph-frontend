@@ -11,8 +11,8 @@
         "index": 1
       },
       "choiceDescriptions": [
-        "BULL",
-        "BEAR"
+        "UP",
+        "DOWN"
       ],
       "type": "PRICE",
       "img": "/images/alephium-price.png",
@@ -27,8 +27,8 @@
         "index": 1
       },
       "choiceDescriptions": [
-        "BULL",
-        "BEAR"
+        "UP",
+        "DOWN"
       ],
       "type": "PRICE",
       "img": "/images/alephium-price.png",
