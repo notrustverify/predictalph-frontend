@@ -8,14 +8,14 @@ export class CoinGeckoClient {
     constructor() {
     }
 
-    async getPriceAlph(): Promise<number> {
+    async getPriceAlph(symbol: string): Promise<number> {
         if ((Date.now() - this.lastDate) > CoinGeckoClient.ONE_MINUTE) {
             try {
                 const res = await axios.get(
-                    'https://api.coingecko.com/api/v3/simple/price?ids=alephium&vs_currencies=usd&precision=3',
+                    `https://api.coingecko.com/api/v3/simple/price?ids=${symbol}&vs_currencies=usd`,
                     {validateStatus: (status) => true},
                 );
-                this.lastValue = res.status === 200 ? res.data.alephium.usd : this.lastValue;
+                this.lastValue = res.status === 200 ? res.data[symbol].usd : this.lastValue;
             } catch (e) {} finally {
                 this.lastDate = Date.now();
             }

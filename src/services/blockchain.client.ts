@@ -109,8 +109,8 @@ export class BlockchainClient {
                 toDecimal(roundState.fields.rewardAmount),
                 toDecimal(roundState.fields.rewardBaseCalAmount),
                 roundState.fields.rewardsComputed,
-                await this.convertPrice(roundState.fields.priceStart),
-                await this.convertPrice(roundState.fields.priceEnd),
+                await this.convertPrice(roundState.fields.priceStart, game.symbol),
+                await this.convertPrice(roundState.fields.priceEnd, game.symbol),
             );
         } else {
             const roundState = await RoundChoice.at(subAddress).fetchState();
@@ -131,9 +131,9 @@ export class BlockchainClient {
         }
     }
 
-    private async convertPrice(price: bigint): Promise<number> {
+    private async convertPrice(price: bigint, symbol: string): Promise<number> {
         if (price === BigInt(0)) {
-            return this.coinGecko.getPriceAlph();
+            return this.coinGecko.getPriceAlph(symbol);
         } else {
             return Number(price) / 10_000;
         }
