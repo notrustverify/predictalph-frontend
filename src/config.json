@@ -32,7 +32,7 @@
     ],
     "type": "PRICE",
     "img": "/images/alephium-price.png",
-    "symbol": "GATEIO:ALPHUSDT"
+    "symbol": "GATEIO:BTCUSDT"
   },
   {
     "name": "Rhone upgrade deployed in Q2 on mainnet",
