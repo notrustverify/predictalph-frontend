@@ -4,10 +4,15 @@ on:
   push:
     branches:
       - main
-  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-20.04
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
@@ -17,21 +22,31 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v2
         with:
-          node-version: "16"
-          cache: "npm"
+          node-version: "18"
+          cache: "yarn"
 
-      - run: npm ci
-      - run: |
-          echo 'module.exports.basePath = "/nextjs-template"' >> next.config.js
-      - run: npm run testnet:build
+      - run: yarn install
+      #- run: |
+       #   echo 'module.exports.basePath = "/nextjs-template"' >> next.config.js
+      - run: yarn run build
         env:
           UPLOAD_SENTRY_SOURCEMAPS: false
+          CI: false
 
-      - run: npm run export
-
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        if: ${{ github.ref == 'refs/heads/main' }}
+      #- run: npm run export
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: out
+          path: ./build
+
+     # Deployment job
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1

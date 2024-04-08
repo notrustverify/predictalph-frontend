@@ -1,6 +1,6 @@
 {
 "network": "mainnet",
-  "ntvApi": "https://predictalph-api.testnet.notrustverify.ch",
+  "ntvApi": "https://predictalph-api.notrustverify.ch",
 "games": [
   {
     "name": "ALPH Price",
@@ -38,8 +38,8 @@
     "name": "Rhone upgrade deployed in Q2 on mainnet",
     "description": "Bet if Rhone upgrade will be deployed in Q2 2024",
     "contract": {
-      "id": "59b929c99c54145b2e63b3576b6aaf9c7b533e865657d57c0a637b1a81deab01",
-      "address": "zjCA4jgP7NYMfuuVB9d4VoBgjw6TGBRHqz3Lmg1aAqzY",
+      "id": "5f639036a0ce7adb7aff1d85288c8f66ba3a9fbe806a309a9d541c8892f0e701",
+      "address": "217Ju4955BLYGzgFwuLgQB3eapSLnbYdChZ1XcceeohoN",
       "index": 1
     },
     "choiceDescriptions": [
