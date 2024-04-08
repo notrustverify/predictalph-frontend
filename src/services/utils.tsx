@@ -1,16 +1,19 @@
-import {
-  Fields,
-  NetworkId,
-  addressFromContractId,
-  encodeContractField,
-  groupOfAddress,
-  sleep,
-  subContractId,
-  web3
-} from '@alephium/web3'
-import { loadDeployments } from '../../artifacts/ts/deployments'
-import { Punter, PunterTypes, Round, RoundTypes } from 'artifacts/ts'
+import {addressFromContractId, Fields, NetworkId, sleep, subContractId, web3} from '@alephium/web3'
 import * as base58 from 'bs58'
+import {Punter, Round, RoundTypes} from "../artifacts/ts";
+
+
+const DECIMAL = BigInt(10) ** BigInt(18);
+const PRECISION = 10000;
+const PRECISION_N = BigInt(PRECISION);
+
+export function toDecimal(n: bigint): number {
+  return Number(n * PRECISION_N / DECIMAL) / PRECISION;
+}
+
+export function toBigInt(n: number): bigint {
+  return BigInt(n) * DECIMAL;
+}
 
 export interface PredictAlphConfig {
   network: NetworkId
@@ -20,20 +23,9 @@ export interface PredictAlphConfig {
 }
 
 function getNetwork(): NetworkId {
-  const network = (process.env.NEXT_PUBLIC_NETWORK ?? 'devnet') as NetworkId
+  const network = (process.env.NEXT_PUBLIC_NETWORK ?? 'mainnet') as NetworkId
   return network
 }
-
-function getPredictAlphConfig(): PredictAlphConfig {
-  const network = getNetwork()
-  const predictAlph = loadDeployments(network).contracts.Predictalph.contractInstance
-  const groupIndex = predictAlph.groupIndex
-  const predictAlphAddress = predictAlph.address
-  const predictAlphId = predictAlph.contractId
-  return { network, groupIndex, predictAlphAddress, predictAlphId }
-}
-
-export const tokenFaucetConfig = getPredictAlphConfig()
 
 export async function getRoundContractState(predictAlphContractId: string, epoch: bigint, groupIndex: number) {
   const roundContractId = getRoundContractId(predictAlphContractId, epoch, groupIndex)
@@ -60,9 +52,7 @@ export function arrayEpochToBytes(arrayEpoch: number[]) {
 export async function contractExists(address: string): Promise<boolean> {
   try {
     const nodeProvider = web3.getCurrentNodeProvider()
-    await nodeProvider.contracts.getContractsAddressState(address, {
-      group: groupOfAddress(address)
-    })
+    await nodeProvider.contracts.getContractsAddressState(address)
     return true
   } catch (error: any) {
     if (error instanceof Error && error.message.includes('KeyNotFound')) {
@@ -96,17 +86,17 @@ export async function getRoundBetInfoStateFromArray(
 
   // old school but works
 
-  for (let i = 0, len = arrayEpoch.length; i < len; i++) { 
+  for (let i = 0, len = arrayEpoch.length; i < len; i++) {
     const castElement = BigInt(arrayEpoch[i])
 
     const betInfoExists = await contractExists(
       addressFromContractId(getBetInfoContractId(predictAlphContractId, address, castElement, groupIndex))
     )
- 
+
     if (betInfoExists) {
       process.env.NEXT_PUBLIC_NETWORK == 'testnet' && (await sleep(4 * 1000))
       const stateBetInfo = await getBetInfoContractState(predictAlphContractId, address, castElement, groupIndex)
-      
+
 
       process.env.NEXT_PUBLIC_NETWORK == 'testnet' && (await sleep(4 * 1000))
       const roundState = await getRoundContractState(predictAlphContractId, castElement, groupIndex)
