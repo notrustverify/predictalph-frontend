@@ -1,13 +1,45 @@
 {
-"network": "testnet",
+"network": "mainnet",
   "ntvApi": "https://predictalph-api.testnet.notrustverify.ch",
 "games": [
   {
-    "name": "ALPH to $4 before end of Q1?",
-    "description": "Bet if Rhone",
+    "name": "ALPH Price",
+    "description": "Bet if ALPH will go up or down",
     "contract": {
-      "id": "538ee843b57883346a621a96e8861418d673b2a045db98c48a81b644229d7801",
-      "address": "zK8LeTS97caH7oYk8LUeTRPuzzgyCeVY6x6FHzb5dJYx",
+      "id": "69d8501031ba43a2793b84d6112ebd10ad0c89ea79608b195f9984423b3c2c01",
+      "address": "21p8EEnXAcLqJHtVuiewDDhPcuM6BeJpsd2LUE91ixSSk",
+      "index": 1
+    },
+    "choiceDescriptions": [
+      "BULL",
+      "BEAR"
+    ],
+    "type": "PRICE",
+    "img": "/images/alephium-price.png",
+    "symbol": "GATEIO:ALPHUSDT"
+  },
+  {
+    "name": "BTC Price",
+    "description": "Bet if BTC will go up or down",
+    "contract": {
+      "id": "16224842724da1e2103b5c8e3eae3cca58b243b19581ac3e3e4e0fd57d060001",
+      "address": "vBMQEkYkQmHgRevkn5nshShUHZf4xvKbCrJC8uYfj2mN",
+      "index": 1
+    },
+    "choiceDescriptions": [
+      "BULL",
+      "BEAR"
+    ],
+    "type": "PRICE",
+    "img": "/images/alephium-price.png",
+    "symbol": "GATEIO:ALPHUSDT"
+  },
+  {
+    "name": "Rhone upgrade deployed in Q2 on mainnet",
+    "description": "Bet if Rhone upgrade will be deployed in Q2 2024",
+    "contract": {
+      "id": "59b929c99c54145b2e63b3576b6aaf9c7b533e865657d57c0a637b1a81deab01",
+      "address": "zjCA4jgP7NYMfuuVB9d4VoBgjw6TGBRHqz3Lmg1aAqzY",
       "index": 1
     },
     "choiceDescriptions": [
@@ -19,20 +51,20 @@
     "symbol": ""
   },
   {
-    "name": "ALPH Price",
-    "description": "Bet if ALPH will go up or down",
+    "name": "ALPH in top 100 by market cap on CoinGecko before end of 2024",
+    "description": "Bet if ALPH will be in top 100 on CoinGecko befire end of year",
     "contract": {
-      "id": "6b861470be487607d789714fe91bcc94d974fe76662dca38cf430dd61fe19701",
-      "address": "21vgKMVTjSMp6ZU3zxjF5nPb4c1MEndkQtqcRD7MfVPYc",
+      "id": "65a5581202b8793831afa82c0db7b29a767274126e17b4fcd5f4990fcd4d4101",
+      "address": "21XjXBnhjn9H2nA2EXG2dGn8c8piHaGTjcgVk4mdfXjJp",
       "index": 1
     },
     "choiceDescriptions": [
-      "BULL",
-      "BEAR"
+      "YES",
+      "NO"
     ],
-    "type": "PRICE",
-    "img": "/images/alephium-price.png",
-    "symbol": "GATEIO:ALPHUSDT"
+    "type": "CHOICE",
+    "img": "/images/alephium-choice.png",
+    "symbol": ""
   }
 ]
 }
