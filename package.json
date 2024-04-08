@@ -15,6 +15,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@types/async-lock": "^1.4.2",
+    "@walletconnect/types": "^2.12.1",
     "async-lock": "^1.4.1",
     "axios": "^1.6.7",
     "bs58": "^5.0.0",
@@ -29,7 +30,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-app-rewired start",
+    "start": "GENERATE_SOURCEMAP=false react-app-rewired start",
     "build": "react-app-rewired build && cp ./build/index.html ./build/404.html",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
