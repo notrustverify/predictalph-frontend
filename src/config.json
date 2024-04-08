@@ -3,7 +3,7 @@
     "ntvApi": "https://predictalph-api.notrustverify.ch",
   "games": [
     {
-      "name": "ALPH Price",
+      "name": "Will ALPH price be higher than the locked price?",
       "description": "Bet if ALPH will go up or down",
       "contract": {
         "id": "69d8501031ba43a2793b84d6112ebd10ad0c89ea79608b195f9984423b3c2c01",
@@ -19,7 +19,7 @@
       "symbol": "alephium"
     },
     {
-      "name": "BTC Price",
+      "name": "Will BTC price be higher than the locked price?",
       "description": "Bet if BTC will go up or down",
       "contract": {
         "id": "16224842724da1e2103b5c8e3eae3cca58b243b19581ac3e3e4e0fd57d060001",
