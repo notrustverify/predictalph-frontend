@@ -1,16 +1,16 @@
 import {Account} from "./account";
 
 export enum BetStatus {
-    PENDING= "PENDING", // poll txId
-    INPROGRESS = "INPROGRESS", // poll txId
-    NOTCLAIMED = 'NOTCLAIMED', // API -> retourne les rounds non claim
-    CLAIMED = "CLAIMED" // API comme en haut
+    PENDING= "Pending", // poll txId
+    INPROGRESS = "In progress", // poll txId
+    NOTCLAIMED = 'Not claimed', // API -> retourne les rounds non claim
+    CLAIMED = "Claimed" // API comme en haut
 }
 
 export enum  WinStatus {
-    WIN = "WIN",
-    FAILED = "FAILED",
-    INPROGRESS = "INPROGRESS",
+    WIN = "Win",
+    FAILED = "Failed",
+    INPROGRESS = "In progress",
 }
 
 export class Bet {
