@@ -15,7 +15,8 @@ export function PollComponent({round}: PollComponentType) {
 
     const displayDate = (round: Round): any => {
         if (!(round instanceof RoundPrice)) {
-            return `Round end at ${(new Date(round.end)).toLocaleString()}`;
+            //return `Bet end at ${(new Date(round.end)).toLocaleString()}`;
+            return <><Typography sx={{display: 'inline'}}>Bet end on </Typography><Typography sx={{display: 'inline'}} fontWeight={600}>{(new Date(round.end)).toLocaleString(undefined,{dateStyle: "medium", timeStyle: "short"})}</Typography></>;
         }
         const now = Date.now();
         if (round.end > now) {
@@ -26,7 +27,7 @@ export function PollComponent({round}: PollComponentType) {
 
             return <><Typography sx={{display: 'inline'}}>Round end in </Typography><Typography sx={{display: 'inline'}} fontWeight={600}>{hours}h {minutes}m {secondsRemaining}s</Typography></>;
         } else {
-            return `Round end at ${(new Date(round.end)).toLocaleString()}`;
+            return <><Typography sx={{display: 'inline'}}>Bet end on </Typography><Typography sx={{display: 'inline'}} fontWeight={600}>{(new Date(round.end)).toLocaleString(undefined,{dateStyle: "medium", timeStyle: "short"})}</Typography></>;
         }
     }
 
@@ -69,8 +70,8 @@ export function PollComponent({round}: PollComponentType) {
 
                         { round instanceof RoundPrice
                             ? <>
-                                <Grid item xs={4} md={2} sx={{textAlign: "center"}}>Actual: ${round.priceEnd}</Grid>
-                                <Grid item xs={4} md={2} sx={{textAlign: "center"}}>Locked: ${round.priceStart} </Grid>
+                                <Grid item xs={4} md={2} sx={{textAlign: "center"}}>Actual: <b>${round.priceEnd}</b></Grid>
+                                <Grid item xs={4} md={2} sx={{textAlign: "center"}}>Locked: <b>${round.priceStart}</b></Grid>
                                 <Grid item xs={4} md={2} sx={{textAlign: "center"}}>
                                     <Typography color={computePct(round) > 0 ? 'secondary.main': 'warning.main'}>
                                         ({computePct(round).toFixed(2)} %)
