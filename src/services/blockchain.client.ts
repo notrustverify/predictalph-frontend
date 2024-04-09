@@ -34,7 +34,10 @@ export class BlockchainClient {
         network: 'mainnet' | 'testnet' | 'devnet',
         private readonly coinGecko: CoinGeckoClient,
     ) {
-        web3.setCurrentNodeProvider(`https://wallet.${network}.alephium.org`)
+        if(network !== "mainnet")
+           web3.setCurrentNodeProvider(`https://wallet.${network}.alephium.org`)
+        else
+           web3.setCurrentNodeProvider(`https://lb-fullnode-alephium.notrustverify.ch/`)
     }
 
     async getCurrentRound(game: Game): Promise<Round> {
