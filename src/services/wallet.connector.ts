@@ -121,8 +121,13 @@ export class WalletConnector implements WalletConnector {
         }
     }
 
-    async getAccount(): Promise<Account> {
+    async getBalance(): Promise<number> {
         const balance = await this.window?.explorerProvider?.addresses.getAddressesAddressBalance(this.account?.address ?? '')
-        return new Account(this.account?.address ?? '', toDecimal(BigInt(balance?.balance ?? '0')));
+
+        return toDecimal(BigInt(balance?.balance ?? '0'))
+    }
+
+    async getAccount(): Promise<Account> {
+        return new Account(this.account?.address ?? '');
     }
 }

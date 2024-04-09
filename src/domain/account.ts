@@ -1,9 +1,7 @@
 export class Account {
     address: string;
-    amount: number
 
-    constructor(address: string, amount: number) {
+    constructor(address: string) {
         this.address = address;
-        this.amount = amount;
     }
 }

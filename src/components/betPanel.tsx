@@ -26,8 +26,8 @@ export function BetPanel({game, selection }: BetPanelProps) {
     }
 
     async function setAccountPct(pct: number): Promise<void> {
-        const account = await services.wallet.getAccount();
-        const amnt = parseFloat((account.amount * pct).toFixed(2))
+        const amount = await services.wallet.getBalance();
+        const amnt = parseFloat((amount * pct).toFixed(2))
         setAmount(amnt);
     }
 
