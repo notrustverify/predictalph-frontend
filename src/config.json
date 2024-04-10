@@ -44,7 +44,7 @@
      },
      "choiceDescriptions": [
        "$TOP",
-       "$NUG"
+       "$NGU"
      ],
      "type": "CHOICE",
      "img": "/images/alephium-choice.png",
