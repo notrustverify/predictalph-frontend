@@ -95,7 +95,7 @@ export function Historic({game}: HistoricProps) {
         }
 
         if (bet.win() === WinStatus.WIN) {
-            return `Won ${bet.reward} ALPH`
+            return `Won ${bet.reward.toFixed(2)} ALPH`
         } else {
             return `Lost bet`
         }
