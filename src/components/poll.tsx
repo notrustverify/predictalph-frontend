@@ -37,12 +37,15 @@ export function PollComponent({round}: PollComponentType) {
 
     return (
         <Box sx={{width: '100%'}}>
+                   { round?.rewardBoost > 0 && 
+                    <Grid item sx={{margin: '0px 10px 0 10px'}}><Typography>Winning side: <b>+{round?.rewardBoost} ALPH</b></Typography></Grid>}
             <Grid
                 container
                 direction="row"
                 justifyContent="space-between"
                 alignItems="center"
             >
+                     
                 <Grid
                     item md={12} xs={12}
                     container
@@ -55,6 +58,7 @@ export function PollComponent({round}: PollComponentType) {
                     <Grid item><Typography>ALPH {round.pollAmounts[1]}</Typography></Grid>
 
                 </Grid>
+       
                 <Grid item sx={{height: '100%', padding: '10px'}} md={12} xs={12}>
                     <HorizontalBar polls={round.pollAmounts} height='20px'/>
                 </Grid>

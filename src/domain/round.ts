@@ -18,6 +18,7 @@ export class Round {
         public rewardAmount: number,
         public rewardBaseCalAmount: number,
         public rewardsComputed: boolean,
+        public rewardBoost: number,
 ) {}
 }
 
@@ -35,7 +36,8 @@ export class RoundPrice extends Round {
         public rewardsComputed: boolean,
         public priceStart: number,
         public priceEnd: number,
+        public rewardBoost: number,
     ) {
-        super(game, status, end, pollAmounts, epoch, result, rewardAmount, rewardBaseCalAmount, rewardsComputed);
+        super(game, status, end, pollAmounts, epoch, result, rewardAmount, rewardBaseCalAmount, rewardsComputed, rewardBoost);
     }
 }

@@ -58,12 +58,14 @@ export function BetPanel({game, selection }: BetPanelProps) {
     return (
         <>
             <Box sx={{width: '100%'}}>
+
                 <Grid
                     container
                     direction="row"
                     justifyContent="center"
                     alignItems="flex-start"
                 >
+                               
                     <Grid item style={item} sx={{height: '100%'}} md={4} xs={12}>
                         {bet === null && round?.status === RoundStatus.RUNNING
                             ? <Button
@@ -91,6 +93,7 @@ export function BetPanel({game, selection }: BetPanelProps) {
                             container
                             direction="column"
                             alignItems="stretch">
+                                
                             <Grid item>
                                 <FormControl fullWidth size="small">
                                     <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
@@ -105,6 +108,7 @@ export function BetPanel({game, selection }: BetPanelProps) {
                                 </FormControl>
                                 <Typography variant='caption' color='gray'>Note: 1 ALPH will be locked until you claim</Typography>
                             </Grid>
+
                             <Grid item sx={{width: '100%'}}>
                                 <Grid
                                     container

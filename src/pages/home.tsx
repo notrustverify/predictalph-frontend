@@ -12,7 +12,7 @@ export function Home() {
     return (
         <Box>
             <Box sx={{textAlign: 'center', width: '100%'}}>
-                <Typography variant="h3">ALPH.BET, decentralized betting system</Typography>
+                <Typography variant="h4">ALPH.BET, decentralized betting system</Typography>
 
             </Box>
             <Box sx={{margin: '20px'}}/>

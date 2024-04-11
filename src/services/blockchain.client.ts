@@ -114,6 +114,7 @@ export class BlockchainClient {
                 roundState.fields.rewardsComputed,
                 await this.convertPrice(roundState.fields.priceStart, game.symbol),
                 await this.convertPrice(roundState.fields.priceEnd, game.symbol),
+                toDecimal(roundState.fields.totalAmountBoost)
             );
         } else {
             const roundState = await RoundChoice.at(subAddress).fetchState();
@@ -130,6 +131,7 @@ export class BlockchainClient {
                 toDecimal(roundState.fields.rewardAmount),
                 toDecimal(roundState.fields.rewardBaseCalAmount),
                 roundState.fields.rewardsComputed,
+                toDecimal(roundState.fields.totalAmountBoost)
             );
         }
     }
