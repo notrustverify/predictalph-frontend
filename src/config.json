@@ -33,22 +33,6 @@
       "type": "PRICE",
       "img": "/images/alephium-price.png",
       "symbol": "bitcoin"
-    },
-    {
-     "name": "Which project will have a higher mcap on April 24, 2024",
-     "description": "Bet if Rhone upgrade will be deployed in Q2 2024",
-     "contract": {
-       "id": "b0ba39b36ee621b734581308e3d38bb660622838e16849a3eec7b9c77e279201",
-       "address": "26apZnuLDE8pNmfEbKrLsSWZanFWQPgVaXFNw5ucu4GFa",
-       "index": 1
-     },
-     "choiceDescriptions": [
-       "$TOP",
-       "$NGU"
-     ],
-     "type": "CHOICE",
-     "img": "/images/alephium-choice.png",
-     "symbol": ""
     }
   ]
   }
