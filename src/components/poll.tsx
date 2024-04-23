@@ -4,6 +4,7 @@ import {ServiceContext} from "../App";
 import {Box, Grid, LinearProgress} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import {HorizontalBar} from "./horizontalBar";
+import { Game, GameType } from "../domain/game";
 
 type PollComponentType = {
     round: Round;
@@ -14,6 +15,7 @@ export function PollComponent({round}: PollComponentType) {
 
 
     const displayDate = (round: Round): any => {
+
         if (!(round instanceof RoundPrice)) {
             //return `Bet end at ${(new Date(round.end)).toLocaleString()}`;
             return <><Typography sx={{display: 'inline'}}>Bet end on </Typography><Typography sx={{display: 'inline'}} fontWeight={600}>{(new Date(round.end)).toLocaleString(undefined,{dateStyle: "medium", timeStyle: "short"})}</Typography></>;
@@ -54,14 +56,21 @@ export function PollComponent({round}: PollComponentType) {
                     alignItems="center"
                     sx={{margin: '0px 10px 0 10px'}}
                 >
-                    <Grid item><Typography>ALPH {round.pollAmounts[0]}</Typography></Grid>
-                    <Grid item><Typography>ALPH {round.pollAmounts[1]}</Typography></Grid>
+                
+                <Grid item><Typography>ALPH {round.pollAmounts[0]}</Typography></Grid>
+                <Grid item><Typography>ALPH {round.pollAmounts[1]}</Typography></Grid>
+                {
+                    round.game.type === GameType.MULTIPLE_CHOICE ?
+                <Grid item><Typography>ALPH {round.pollAmounts[2]}</Typography></Grid> :<></>
+                }
+
+             
 
                 </Grid>
-       
+               { round.game.type === GameType.MULTIPLE_CHOICE ? <></> :
                 <Grid item sx={{height: '100%', padding: '10px'}} md={12} xs={12}>
                     <HorizontalBar polls={round.pollAmounts} height='20px'/>
-                </Grid>
+                </Grid> }
                 <Grid
                     item md={12} xs={12}
                     container

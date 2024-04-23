@@ -3,6 +3,7 @@ import {Contract} from "./contract";
 export enum GameType {
     CHOICE = 'CHOICE',
     PRICE = 'PRICE',
+    MULTIPLE_CHOICE = 'MULTIPLE_CHOICE'
 }
 
 export class Game {
