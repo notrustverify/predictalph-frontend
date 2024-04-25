@@ -1,7 +1,13 @@
 import {useContext, useEffect, useState} from "react";
+<<<<<<< HEAD:src/components/OldFiles/overviewCard.tsx
 import {ServiceContext} from "../../App";
 import {Round} from "../../domain/round";
 import {Game} from "../../domain/game";
+=======
+import {ServiceContext} from "../App";
+import {Round} from "../domain/round";
+import {Game, GameType} from "../domain/game";
+>>>>>>> PierreM33-UIV2_PierreM:src/components/overviewCard.tsx
 import {Button, FormControl, Grid, InputAdornment, InputLabel, OutlinedInput, Paper} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import {Done, OpenInNew, Start} from "@mui/icons-material";
@@ -57,7 +63,11 @@ export function OverviewCard({game}: OverviewCardType) {
                         {game.choiceDescriptions[1]}
                     </Button>
                 </Grid>
+<<<<<<< HEAD:src/components/OldFiles/overviewCard.tsx
                 { game.type === GameType.MULTIPLE_CHOICE ? 
+=======
+                { game.type === GameType.MULTIPLE_CHOICE && game.choiceDescriptions[2] !== undefined ? 
+>>>>>>> PierreM33-UIV2_PierreM:src/components/overviewCard.tsx
                 <Grid item md={6} sx={{marginTop: '10px'}}>
                     <Button
                         fullWidth

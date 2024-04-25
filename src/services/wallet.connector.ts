@@ -52,6 +52,7 @@ export class WalletConnector implements WalletConnector {
 
         const amnt = toBigInt(amount);
 
+<<<<<<< HEAD
         if (round.game.type === GameType.PRICE) {
             const res = await BidPrice.execute(this.window, {
                 initialFields: {
@@ -74,6 +75,42 @@ export class WalletConnector implements WalletConnector {
             });
 
             return new Bet(BetStatus.PENDING, await this.getAccount(), choice, amount, 0, 0, round.epoch, res.txId);
+=======
+            if (round.game.type === GameType.PRICE) {
+                 const res = await BidPrice.execute(this.window, {
+                    initialFields: {
+                        predict: round.game.contract.id,
+                        amount: amnt,
+                        side: choice === 0,
+                    },
+                    attoAlphAmount: amnt+ BigInt(2) * DUST_AMOUNT,
+                });
+
+                 return new Bet(BetStatus.PENDING, await this.getAccount(), choice, amount, 0, 0, round.epoch, res.txId);
+            }else if(round.game.type === GameType.MULTIPLE_CHOICE){
+                const res = await BidMultipleChoice.execute(this.window, {
+                    initialFields: {
+                        predict: round.game.contract.id,
+                        amount: amnt,
+                        side: BigInt(choice),
+                    },
+                    attoAlphAmount: amnt+ BigInt(2) * DUST_AMOUNT,
+                });
+
+                 return new Bet(BetStatus.PENDING, await this.getAccount(), choice, amount, 0, 0, round.epoch, res.txId);
+
+            } else  {
+                const res = await BidChoice.execute(this.window, {
+                    initialFields: {
+                        predict: round.game.contract.id,
+                        amount: amnt,
+                        side: choice === 0,
+                    },
+                    attoAlphAmount: amnt + BigInt(2) * DUST_AMOUNT,
+                });
+
+                return new Bet(BetStatus.PENDING, await this.getAccount(), choice, amount, 0, 0, round.epoch, res.txId);
+>>>>>>> PierreM33-UIV2_PierreM
 
         } else  {
             const res = await BidChoice.execute(this.window, {
@@ -107,6 +144,7 @@ export class WalletConnector implements WalletConnector {
             });
             return res.txId;
         } else if (game.type === GameType.MULTIPLE_CHOICE) {
+<<<<<<< HEAD
             // console.log(bets.map(b => Number(b.epoch)))
             const res = await WithdrawMultipleChoice.execute(this.window, {
                 initialFields: {
@@ -117,6 +155,18 @@ export class WalletConnector implements WalletConnector {
                 attoAlphAmount:  BigInt(2) * DUST_AMOUNT,
             });
             return res.txId;
+=======
+            console.log(bets.map(b => Number(b.epoch)))
+                const res = await WithdrawMultipleChoice.execute(this.window, {
+                    initialFields: {
+                        predict: game.contract.id,
+                        epochParticipation: arrayEpochToBytes(bets.map(b => Number(b.epoch))),
+                        addressToClaim: (await this.getAccount()).address
+                    },
+                    attoAlphAmount:  BigInt(2) * DUST_AMOUNT,
+                });
+                return res.txId;
+>>>>>>> PierreM33-UIV2_PierreM
         } else {
             const res = await WithdrawChoice.execute(this.window, {
                 initialFields: {

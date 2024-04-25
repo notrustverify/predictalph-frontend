@@ -3,6 +3,11 @@ import {useContext, useEffect, useState} from "react";
 import {ServiceContext} from "../../App";
 import {Box, Grid, LinearProgress} from "@mui/material";
 import Typography from "@mui/material/Typography";
+<<<<<<< HEAD:src/components/OldFiles/poll.tsx
+=======
+import {HorizontalBar} from "./horizontalBar";
+import { Game, GameType } from "../domain/game";
+>>>>>>> PierreM33-UIV2_PierreM:src/components/poll.tsx
 
 type PollComponentType = {
     round: Round;
@@ -58,13 +63,18 @@ export function PollComponent({round}: PollComponentType) {
                 <Grid item><Typography>ALPH {round.pollAmounts[0]}</Typography></Grid>
                 <Grid item><Typography>ALPH {round.pollAmounts[1]}</Typography></Grid>
                 {
+<<<<<<< HEAD:src/components/OldFiles/poll.tsx
                     round.game.type === GameType.MULTIPLE_CHOICE ?
+=======
+                    round.game.type === GameType.MULTIPLE_CHOICE  && round.pollAmounts[2] > 0 ?
+>>>>>>> PierreM33-UIV2_PierreM:src/components/poll.tsx
                 <Grid item><Typography>ALPH {round.pollAmounts[2]}</Typography></Grid> :<></>
                 }
 
              
 
                 </Grid>
+<<<<<<< HEAD:src/components/OldFiles/poll.tsx
 <<<<<<< HEAD:src/components/OldFiles/poll.tsx
 
                 <Grid item sx={{height: '100%', padding: '10px'}} md={12} xs={12}>
@@ -76,6 +86,12 @@ export function PollComponent({round}: PollComponentType) {
                     <HorizontalBar polls={round.pollAmounts} height='20px'/>
                 </Grid> }
 >>>>>>> c927f2b (Feature/multiplechoice (#22)):src/components/poll.tsx
+=======
+               { round.game.type === GameType.MULTIPLE_CHOICE && round.pollAmounts[2] > 0  ? <></> :
+                <Grid item sx={{height: '100%', padding: '10px'}} md={12} xs={12}>
+                    <HorizontalBar polls={round.pollAmounts} height='20px'/>
+                </Grid> }
+>>>>>>> PierreM33-UIV2_PierreM:src/components/poll.tsx
                 <Grid
                     item md={12} xs={12}
                     container

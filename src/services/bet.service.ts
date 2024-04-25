@@ -22,7 +22,11 @@ export class BetService {
 
     async claimMyRound(game: Game): Promise<boolean> {
         const curr = await this.getCurrentRound(game);
+<<<<<<< HEAD
         // console.log(curr)
+=======
+        console.log(curr)
+>>>>>>> PierreM33-UIV2_PierreM
         const bets = (await this.getPlayerBets(game))
             .filter(b => b.epoch < curr.epoch || curr.rewardsComputed)
             .filter(b => b.status === BetStatus.NOTCLAIMED)
@@ -88,8 +92,11 @@ export class BetService {
                 choice = dto.side ? 0 : 1;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             // const reward: number = await this.computeRewards(choice, dto, game);
             // const status: BetStatus = await this.getStatus(reward, dto)
+=======
+>>>>>>> PierreM33-UIV2_PierreM
             let reward: number;
             let status: BetStatus;
             if (dto.claimed) {
@@ -99,10 +106,13 @@ export class BetService {
                 reward = await this.computeRewards(choice, dto, game);
                 status = await this.getStatus(reward, dto)
             }
+<<<<<<< HEAD
 =======
             const reward: number = await this.computeRewards(choice, dto, game);
             const status: BetStatus = await this.getStatus(reward, dto)
 >>>>>>> c927f2b (Feature/multiplechoice (#22))
+=======
+>>>>>>> PierreM33-UIV2_PierreM
 
             return new Bet(
                 status,
@@ -113,7 +123,11 @@ export class BetService {
                 this.getResult(dto),
                 dto.epoch,
                 "" // TODO can we get tx id from API ?
+<<<<<<< HEAD
             )
+=======
+                )
+>>>>>>> PierreM33-UIV2_PierreM
         });
         const bets: Bet[] =  await Promise.all(promises)
 

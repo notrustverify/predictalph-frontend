@@ -17,7 +17,11 @@ export class BetDTO {
         public sideWon: number,
         public sideWonMultipleChoice: number,
         public typeBet: string
+<<<<<<< HEAD
     ) {
+=======
+        ) {
+>>>>>>> PierreM33-UIV2_PierreM
     }
 }
 

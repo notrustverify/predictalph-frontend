@@ -47,6 +47,7 @@
       "symbol": "bitcoin"
     },
     {
+<<<<<<< HEAD
       "name": [
         {"en": "Multiple choice example"},
         {"fr": "Exemple de multi choix"}
@@ -78,6 +79,10 @@
             {"en": "Bet if BTC will go up or down"},
             {"fr": "Parier sur la hausse ou la baisse de l'ALPH"}
       ],
+=======
+      "name": "BTC will hit $100K before end of year 2024",
+      "description": "Bet if BTC will go up or down",
+>>>>>>> PierreM33-UIV2_PierreM
       "contract": {
         "id": "8b044dfc4f0ddf6efc388956c4d991e7ae6e55231a33628261203e2cf3be5701",
         "address": "243cbA5qh7iNfFTtmMe434KZ69q1KnfjPe4HMXmhu2azC",
@@ -89,7 +94,27 @@
       ],
       "type": "CHOICE",
       "img": "/images/alephium-price.png",
+<<<<<<< HEAD
       "symbol": "bitcoin"
+=======
+      "symbol": ""
+    },
+    {
+      "name": "Who will go to the finals of the UEFA Champions league?",
+      "description": "",
+      "contract": {
+        "id": "55c8cf1048b7cd24fde6a8b95f901dd5fdc0ded3a4a4128d81e70e930e60c001",
+        "address": "zTpN2cYM68g1YoUDoTMTA748mZqHYNDRVtRjmi4fknVW",
+        "index": 1
+      },
+      "choiceDescriptions": [
+        "Real Madrid",
+        "Bayern Munich"
+      ],
+      "type": "MULTIPLE_CHOICE",
+      "img": "/images/alephium-price.png",
+      "symbol": ""
+>>>>>>> PierreM33-UIV2_PierreM
     }
   ]
 }
