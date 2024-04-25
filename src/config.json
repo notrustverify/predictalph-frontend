@@ -1,103 +1,38 @@
 {
-  "network": "devnet",
-  "ntvApi": "http://0.0.0:8080",
+  "network": "mainnet",
+  "ntvApi": "https://predictalph-api.testnet.notrustverify.ch/",
   "games": [
     {
-     "name": "Will ALPH price be higher than the locked price?",
-     "description": "Bet if Rhone upgrade will be deployed in Q2 2024",
-     "contract": {
-       "id": "1d0e9a6a1ed8336126798b32a33eb14ae60c97ee830467d06ee4752c02e71000",
-       "address": "2Ab6B9Ayi3m1DD8djWYXPN5zHb3hi4sZJY3tNuBeJfhyH",
-       "index": 0
-     },
-     "choiceDescriptions": [
-       "UP",
-       "DOWN"
-     ],
-     "type": "PRICE",
-     "img": "/images/alephium-choice.png",
-     "symbol": "alephium"
-    },
-    {
-      "name": "Will BTC price be higher than the locked price?",
-      "description": "Bet if Rhone upgrade will be deployed in Q2 2024",
+      "name": "Will ALPH price be higher than the locked price?",
+      "description": "Bet if ALPH will go up or down",
       "contract": {
-        "id": "eb983aaf1f8ac67aca6551cc335b856e878e93d21bed5c6cade4ca115cfedb00",
-        "address": "2AYcZ5qRYktp5p5spM1jCoao4evfdTG2BY6zyn7XrgMFV",
-        "index": 0
+        "id": "69d8501031ba43a2793b84d6112ebd10ad0c89ea79608b195f9984423b3c2c01",
+        "address": "21p8EEnXAcLqJHtVuiewDDhPcuM6BeJpsd2LUE91ixSSk",
+        "index": 1
       },
       "choiceDescriptions": [
         "UP",
         "DOWN"
       ],
       "type": "PRICE",
-      "img": "/images/alephium-choice.png",
+      "img": "/images/alephium-price.png",
+      "symbol": "alephium"
+    },
+    {
+      "name": "Will BTC price be higher than the locked price?",
+      "description": "Bet if BTC will go up or down",
+      "contract": {
+        "id": "16224842724da1e2103b5c8e3eae3cca58b243b19581ac3e3e4e0fd57d060001",
+        "address": "vBMQEkYkQmHgRevkn5nshShUHZf4xvKbCrJC8uYfj2mN",
+        "index": 1
+      },
+      "choiceDescriptions": [
+        "UP",
+        "DOWN"
+      ],
+      "type": "PRICE",
+      "img": "/images/alephium-price.png",
       "symbol": "bitcoin"
-     },
-     {
-      "name": "Rhone upgrade deployed in Q2 on mainnet",
-      "description": "Bet if Rhone upgrade will be deployed in Q2 2024",
-      "contract": {
-        "id": "8150cce3ef6b461e88afe9e69cc4ca53ddf498cdff984abf79a9071409743f00",
-        "address": "23PkAaWZLf62725562o6NyfENxzcP6V9vJPQc3URrYyVZ",
-        "index": 0
-      },
-      "choiceDescriptions": [
-        "YES",
-        "NO"
-      ],
-      "type": "CHOICE",
-      "img": "/images/alephium-choice.png",
-      "symbol": ""
-    },
-    {
-      "name": "ALPH in top 100 by market cap on CoinGecko before end of 2024",
-      "description": "Bet if ALPH will be in top 100 on CoinGecko befire end of year",
-      "contract": {
-        "id": "c888d6311b1cce5b274b62d27d1df9599442355b34d5a9499a9b1bcc84b44a00",
-        "address": "28BkftY7Cv3MmtTBVTZwRXVdFjGce7ARHK8q8guGBVpsq",
-        "index": 0
-      },
-      "choiceDescriptions": [
-        "YES",
-        "NO"
-      ],
-      "type": "CHOICE",
-      "img": "/images/alephium-choice.png",
-      "symbol": ""
-    },
-    {
-      "name": "Multiple Choioce",
-      "description": "",
-      "contract": {
-        "id": "d2240abc73917619b2e473e76818ffa702fe7f9bc44dd58692303493a4050b00",
-        "address": "28qFc38tH8YdFcb9v8p5DZpnAuCkFyfeTA6zXBear5gJT",
-        "index": 0
-      },
-      "choiceDescriptions": [
-        "YES",
-        "NO"
-      ],
-      "type": "MULTIPLE_CHOICE",
-      "img": "/images/alephium-choice.png",
-      "symbol": ""
-    },
-    {
-      "name": "France - Suisse",
-      "description": "France Suisse",
-      "contract": {
-        "id": "c46426eb31020b91c1786ada281fba54beeebc19955ceb3e443e00f385c99200",
-        "address": "27uabYc1d26vSRw8YVhNEG4QjZy4xPNadTtdtkan7Kcqd",
-        "index": 0
-      },
-      "choiceDescriptions": [
-        "Suisse",
-        "France",
-        "Egalite"
-      ],
-      "type": "MULTIPLE_CHOICE",
-      "img": "/images/alephium-choice.png",
-      "symbol": ""
     }
   ]
   }
