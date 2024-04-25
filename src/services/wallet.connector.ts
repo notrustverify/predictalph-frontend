@@ -2,7 +2,7 @@ import {Account as AlephiumAccount, DUST_AMOUNT, SignerProvider} from "@alephium
 import {Round} from "../domain/round";
 import {Bet, BetStatus} from "../domain/bet";
 import {Account} from "../domain/account";
-import {BidChoice, BidPrice, WithdrawChoice, WithdrawPrice} from "../artifacts/ts";
+import {BidChoice, BidMultipleChoice, BidPrice, WithdrawChoice, WithdrawPrice} from "../artifacts/ts";
 import {Game, GameType} from "../domain/game";
 import {WalletConnectionError} from "../errors/WalletConnectionError";
 import {WalletNotConnectedError} from "../errors/WalletNotConnected";
@@ -63,6 +63,18 @@ export class WalletConnector implements WalletConnector {
                 });
 
                  return new Bet(BetStatus.PENDING, await this.getAccount(), choice, amount, 0, 0, round.epoch);
+            }else if(round.game.type === GameType.MULTIPLE_CHOICE){
+                await BidMultipleChoice.execute(this.window, {
+                    initialFields: {
+                        predict: round.game.contract.id,
+                        amount: amnt,
+                        side: BigInt(choice),
+                    },
+                    attoAlphAmount: amnt+ BigInt(2) * DUST_AMOUNT,
+                });
+
+                 return new Bet(BetStatus.PENDING, await this.getAccount(), choice, amount, 0, 0, round.epoch);
+            
             } else  {
                 await BidChoice.execute(this.window, {
                     initialFields: {

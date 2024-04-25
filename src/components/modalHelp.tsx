@@ -67,6 +67,13 @@ export function ModalHelp({open, handleClose}: ModalHelpType) {
                     can claim them
                     <br/><br/>
                 </Typography>
+
+                <Typography variant='h5'>Responsible Gambling</Typography>
+                <Typography>
+                While we strive to promote responsible gambling, ALPH.bet does not accept liability for any adverse consequences resulting from users' failure to gamble responsibly. Users participate in gambling activities at their own risk and discretion.
+                <br/><br/>
+                </Typography>
+
             </Box>
         </Modal>
     );

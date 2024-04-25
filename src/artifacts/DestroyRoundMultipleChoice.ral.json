@@ -1,20 +1,17 @@
 {
   "version": "v2.12.0",
-  "name": "WithdrawPrice",
-  "bytecodeTemplate": "01010300010009b417001600{1}{2}0f0c{0}0108",
+  "name": "DestroyRoundMultipleChoice",
+  "bytecodeTemplate": "01010300000005{1}0d0c{0}0109",
   "fieldsSig": {
     "names": [
       "predict",
-      "epochParticipation",
-      "addressToClaim"
+      "arrayEpoch"
     ],
     "types": [
-      "PredictPrice",
-      "ByteVec",
-      "Address"
+      "PredictMultipleChoice",
+      "ByteVec"
     ],
     "isMutable": [
-      false,
       false,
       false
     ]

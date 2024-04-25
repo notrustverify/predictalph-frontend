@@ -1,6 +1,6 @@
 {
   "network": "mainnet",
-    "ntvApi": "https://predictalph-api.notrustverify.ch",
+  "ntvApi": "https://predictalph-api.notrustverify.ch",
   "games": [
     {
       "name": "Will ALPH price be higher than the locked price?",
