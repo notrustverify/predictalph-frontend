@@ -1,0 +1,20 @@
+{
+  "Message de test": "Test message",
+  "modal": {
+    "content0": "ALPH.bet, bet on ALPH price",
+    "content1": "The goal is very simple, connect your wallet and choose a side, Up or Down.",
+    "content2": "If you choose Up it means at the end of the round, the price of ALPH will be higher than the locked price.",
+    "content3": "And if you choose Down, you will be considered as a bear and think the price at the end of the counter will be lower than it was.",
+    "content4": "Why 1 ALPH is needed",
+    "content5": "1 ALPH is needed in addition of the bet to create your bet. You will be able to get this ALPH back by clicking on Claiming rewards which will get you all the rewards on the round you bet correctly.",
+    "content6": "How many times I can participate ?",
+    "content7": "You can only bet once per round. You have to wait the new round to be able to play again.",
+    "content8": "What is Price locked",
+    "content9": "It's price set at the beginning of the round. It will be used to compute if it's Up or down side who won at the end of the epoch.",
+    "content10": "What is happening is if I don't claim my rewards ?",
+    "content11": "You have 1 week to claim your rewards, if you wait to long to do, after this period of time anybody can claim them."
+  },
+  "Connecter le portefeuille": "Connect Wallet",
+  "Déconnecter le portefeuille": "Disconnect Wallet",
+  "Bienvenue sur ALPH.BET, les paris décentralisé": "Welcome to ALPH.BET, the decentralized betting"
+}

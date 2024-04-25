@@ -1,7 +1,7 @@
 import {useContext, useEffect, useState} from "react";
 import {ServiceContext} from "../App";
 import {Round} from "../domain/round";
-import {Game, GameType} from "../domain/game";
+import {Game} from "../domain/game";
 import {Button, FormControl, Grid, InputAdornment, InputLabel, OutlinedInput, Paper} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import {HorizontalBar} from "./horizontalBar";
@@ -53,21 +53,11 @@ export function OverviewCard({game}: OverviewCardType) {
                     <Button
                         fullWidth
                         onClick={() => setChoice(1)}
-                        color={ game.type === GameType.MULTIPLE_CHOICE ? "secondary": "warning"}
+                        color="warning"
                         variant="outlined">
                         {game.choiceDescriptions[1]}
                     </Button>
                 </Grid>
-                { game.type === GameType.MULTIPLE_CHOICE ? 
-                <Grid item md={6} sx={{marginTop: '10px'}}>
-                    <Button
-                        fullWidth
-                        onClick={() => setChoice(2)}
-                        color={ game.type === GameType.MULTIPLE_CHOICE ? "secondary": "warning"}
-                        variant="outlined">
-                        {game.choiceDescriptions[2]}
-                    </Button>
-                </Grid> : ''}
             </Grid>
         );
     }

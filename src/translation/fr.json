@@ -1,0 +1,20 @@
+{
+  "Message de test": "Message de test",
+  "modal": {
+    "content0": "ALPH.bet, pariez sur le prix d'ALPH",
+    "content1": "Le but est très simple, connectez votre portefeuille et choisissez un côté, Haut ou Bas.",
+    "content2": "Si vous choisissez Haut, cela signifie qu'à la fin du tour, le prix d'ALPH sera supérieur au prix verrouillé.",
+    "content3": "Et si vous choisissez Bas, vous serez considéré comme un ours et penserez que le prix à la fin du compte sera inférieur à ce qu'il était.",
+    "content4": "Pourquoi 1 ALPH est-il nécessaire",
+    "content5": "1 ALPH est nécessaire en plus du pari pour créer votre pari. Vous pourrez récupérer cet ALPH en cliquant sur Réclamer les récompenses, ce qui vous donnera toutes les récompenses sur le tour pour lequel vous avez correctement parié.",
+    "content6": "Combien de fois puis-je participer ?",
+    "content7": "Vous ne pouvez parier qu'une seule fois par tour. Vous devez attendre le nouveau tour pour pouvoir rejouer.",
+    "content8": "Qu'est-ce que le Prix verrouillé",
+    "content9": "C'est le prix fixé au début du tour. Il sera utilisé pour calculer si le côté Haut ou Bas a gagné à la fin de l'époque.",
+    "content10": "Que se passe-t-il si je ne réclame pas mes récompenses ?",
+    "content11": "Vous avez 1 semaine pour réclamer vos récompenses, si vous attendez trop longtemps pour le faire, après cette période de temps, n'importe qui peut les réclamer."
+  },
+  "Connecter le portefeuille": "Connecter",
+  "Déconnecter le portefeuille": "Déconnecter",
+  "Bienvenue sur ALPH.BET, les paris décentralisé": "Bienvenue sur ALPH.BET, les paris décentralisé"
+}

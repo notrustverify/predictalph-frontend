@@ -4,18 +4,19 @@ import {ServiceContext} from "../App";
 import {Box, Grid} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import {OverviewCard} from "../components/overviewCard";
+import {useTranslation} from "react-i18next";
 
 export function Home() {
 
+    const { t } = useTranslation();
     const services = useContext(ServiceContext);
 
     return (
         <Box>
-            <Box sx={{textAlign: 'center', width: '100%'}}>
-                <Typography variant="h4">ALPH.BET, decentralized betting system</Typography>
-
-            </Box>
-            <Box sx={{margin: '20px'}}/>
+            <div style={{display: "flex", justifyContent: "center", alignItems: "center", fontSize: "30px"}} >
+                {t("Bienvenue sur ALPH.BET, les paris décentralisé")}
+            </div>
+            <Box sx={{margin: '20px', backgroundColor: "orange"}}/>
             <Grid
                 container
                 direction="row"

@@ -12,6 +12,10 @@ import {BlockchainClient} from "./services/blockchain.client";
 import {CoinGeckoClient} from "./services/coinGeckoClient";
 import config from "./config.json"
 import {Game} from "./domain/game";
+import Menu from "./components/Navigation/menu";
+import i18n from './translation';
+import {I18nextProvider} from "react-i18next";
+
 
 class Services {
   constructor(
@@ -43,12 +47,28 @@ export default function App() {
   })
 
   return (
-      <AlephiumWalletProvider
-          network={network}
-          addressGroup={config.games[0].contract.index}
-      >
-        <ServiceContext.Provider value={services}>
+    <AlephiumWalletProvider
+        network={network}
+        addressGroup={config.games[0].contract.index}
+    >
+      <ServiceContext.Provider value={services}>
+        <I18nextProvider i18n={i18n}>
           <BrowserRouter>
+            <Menu/>
+            <Box component="main" sx={{flexGrow: 1, p: 3}}>
+              <DrawerHeader/>
+              <MainContent/>
+            </Box>
+          </BrowserRouter>
+        </I18nextProvider>
+      </ServiceContext.Provider>
+    </AlephiumWalletProvider>
+  )
+}
+
+
+/*
+//SOUS MENU
           <ThemeProvider theme={darkTheme}>
             <Box sx={{display: "flex"}}>
               <CssBaseline/>
@@ -59,8 +79,6 @@ export default function App() {
               </Box>
             </Box>
           </ThemeProvider>
-          </BrowserRouter>
-        </ServiceContext.Provider>
-      </AlephiumWalletProvider>
-  )
-}
+
+
+ */

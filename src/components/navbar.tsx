@@ -9,7 +9,7 @@ import {useContext, useState} from "react";
 import {ServiceContext} from "../App";
 import {SignerProvider} from "@alephium/web3";
 import {ConnectButton} from "./connect";
-import {ModalHelp} from "./modalHelp";
+import {ModalHelp} from "./Modal/modalHelp";
 import AppBar from "@mui/material/AppBar";
 
 
@@ -48,7 +48,6 @@ export function AlphBetNavbar() {
                 <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
                     ALPH.BET
                 </Typography>
-
                 <IconButton onClick={() => setOpen(true)} ><Help sx={{fill: 'white'}}/></IconButton>
                 <ModalHelp open={open} handleClose={() => setOpen(false)}/>
                 <ConnectButton onConnect={connect}/>

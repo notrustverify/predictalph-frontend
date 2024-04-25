@@ -19,18 +19,21 @@
     "async-lock": "^1.4.1",
     "axios": "^1.6.7",
     "bs58": "^5.0.0",
+    "i18next": "^23.11.2",
     "process": "^0.11.10",
     "react": "^18.2.0",
     "react-app-rewired": "^2.2.1",
     "react-countdown": "^2.3.5",
     "react-dom": "^18.2.0",
+    "react-i18next": "^14.1.1",
     "react-router-dom": "^6.21.3",
     "react-scripts": "5.0.1",
+    "tslib": "^2.6.2",
     "typescript": "^5.2.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "GENERATE_SOURCEMAP=false react-app-rewired start",
+    "start": "cross-env GENERATE_SOURCEMAP=false react-app-rewired start",
     "build": "react-app-rewired build && cp ./build/index.html ./build/404.html",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
@@ -53,5 +56,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
   }
 }
