@@ -1,6 +1,6 @@
 import {WalletConnector} from "./wallet.connector";
 import {BetClient, BetDTO} from "./bet.client";
-import {Game} from "../domain/game";
+import {Game, GameType} from "../domain/game";
 import {Bet, BetStatus} from "../domain/bet";
 import {BlockchainClient} from "./blockchain.client";
 import {Round} from "../domain/round";
@@ -67,9 +67,10 @@ export class BetService {
     }
 
     getResult(dto: BetDTO) {
-        if (dto.priceStart === 0 && dto.priceEnd === 0) {
+        if (dto.typeBet === "choice") 
             return dto.sideWon ? 0 : 1; // if contract is a choice type
-        }
+        else if(dto.typeBet === "multiplechoice")
+            return dto.sideWonMultipleChoice
 
         return dto.priceEnd > dto.priceStart ? 0 : 1
     }
@@ -79,7 +80,12 @@ export class BetService {
         const dtos: BetDTO[] = await this.client.getAllPlayerBets(game, account);
 
         const promises: Promise<Bet>[] = dtos.map(async dto =>{
-            const choice = dto.side ? 0 : 1;
+            let choice
+            if(game.type === GameType.MULTIPLE_CHOICE)
+                choice = dto.sideMultipleChoice
+            else
+                choice = dto.side ? 0 : 1;
+
             const reward: number = await this.computeRewards(choice, dto, game);
             const status: BetStatus = await this.getStatus(reward, dto)
 
@@ -121,7 +127,6 @@ export class BetService {
     private async computeRewards(choice: number, dto: BetDTO, game: Game): Promise<number> {
         const round: Round = await this.blockchain.getRound(dto.epoch, game);
         const result = this.getResult(dto);
-
         if (!round.rewardsComputed) {
             return 0;
         }
@@ -129,7 +134,6 @@ export class BetService {
         if (choice !== result) {
             return 1; // contract close refund
         }
-
         return (dto.amountBid-1) * round.rewardAmount / round.rewardBaseCalAmount + 1;
 
     }
