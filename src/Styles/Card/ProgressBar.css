@@ -1,0 +1,19 @@
+
+.progressBar {
+    display: flex;
+    flex: 1;
+    padding: 12px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    position: relative;
+    border-radius: 0 20px 20px 0
+}
+
+.progressBarText {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+}

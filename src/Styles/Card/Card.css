@@ -1,0 +1,42 @@
+
+.containerCard {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--PrimaryColor);
+    border: 2px solid var(--BorderColor);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.containerCardTitle {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--white);
+}
+
+.containerProgressBar {
+    display: flex;
+    justify-content: flex-start;
+    flex: 1;
+    flex-direction: row;
+    margin-top: 2%;
+}
+
+.containerProgressBarFill {
+    display: flex;
+    flex-direction: column;
+    flex: 2;
+    /*background-color: #9a1b3b;*/
+}
+
+.containerProgressBarButton {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    /*background-color: #1b529a;*/
+}
+
+.containerCheck {
+
+}

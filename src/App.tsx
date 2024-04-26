@@ -18,6 +18,7 @@ import {I18nextProvider} from "react-i18next";
 import Leaderboard from "./components/Leaderboard/Leaderboard";
 import ButtonClassic from "./components/Button/ButtonClassic";
 import LayoutBet from "./components/Layout/LayoutBet";
+import LayoutCard from "./components/Layout/LayoutCard";
 
 
 class Services {
@@ -60,10 +61,11 @@ export default function App() {
             <Menu/>
             <Leaderboard/>
             <LayoutBet/>
-            <Box component="main" sx={{flexGrow: 1, p: 3}}>
-              <DrawerHeader/>
-              {/*<MainContent/>*/}
-            </Box>
+            <LayoutCard/>
+            {/*<Box component="main" sx={{flexGrow: 1, p: 3}}>*/}
+            {/*  <DrawerHeader/>*/}
+            {/*  <MainContent/>*/}
+            {/*</Box>*/}
           </BrowserRouter>
         </I18nextProvider>
       </ServiceContext.Provider>
