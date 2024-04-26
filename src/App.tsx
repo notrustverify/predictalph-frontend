@@ -15,6 +15,9 @@ import {Game} from "./domain/game";
 import Menu from "./components/Navigation/menu";
 import i18n from './translation';
 import {I18nextProvider} from "react-i18next";
+import Leaderboard from "./components/Leaderboard/Leaderboard";
+import ButtonClassic from "./components/Button/ButtonClassic";
+import LayoutBet from "./components/Layout/LayoutBet";
 
 
 class Services {
@@ -55,9 +58,11 @@ export default function App() {
         <I18nextProvider i18n={i18n}>
           <BrowserRouter>
             <Menu/>
+            <Leaderboard/>
+            <LayoutBet/>
             <Box component="main" sx={{flexGrow: 1, p: 3}}>
               <DrawerHeader/>
-              <MainContent/>
+              {/*<MainContent/>*/}
             </Box>
           </BrowserRouter>
         </I18nextProvider>

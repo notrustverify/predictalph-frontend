@@ -1,0 +1,29 @@
+
+.containerMenu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+}
+
+.containerLogo {
+    font-size: 24px;
+    font-weight: bold;
+    margin-left: 2%;
+}
+
+.containerRight {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    justify-content: flex-end;
+    align-items: center;
+}
+.containerButton {
+    margin-right: 3%;
+}

@@ -1,3 +1,5 @@
+@import "./Styles/settings.css";
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,8 +7,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-    background-color: var(--PrimaryColor);
-    color: var(--TextColor);
+  background-color: var(--PrimaryColor);
+  color: var(--TextColor);
 }
 
 code {
@@ -17,10 +19,12 @@ code {
 :root {
   --black: #000;
   --white: #fff;
-  --PrimaryColor: #424242;
-  --TextColor: #e5e5e5;
+  --PrimaryColor: #11102F;
+  --SecondaryColor: #131134;
+  --BorderColor: #2E2C51;
+  --TextColor: #ACA5FF;
   --pink: #ff2e63;
-  --PrimaryGrey: #9f9f9f;
-  --ModalText: #333;
+  --PrimaryGrey: #9a1b3b;
+  --ModalText: red;
 }
 
