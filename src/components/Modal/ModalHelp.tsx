@@ -1,6 +1,6 @@
 import { Box, Modal } from "@mui/material";
 import React from "react";
-import ModalText from "./modalText";
+import ModalText from "./ModalText";
 
 
 export const ModalHelp = ({ open, handleClose }: { open: boolean, handleClose: () => void }) => {

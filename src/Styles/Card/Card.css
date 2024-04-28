@@ -34,9 +34,36 @@
     display: flex;
     flex: 1;
     flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
     /*background-color: #1b529a;*/
 }
 
 .containerCheck {
+    display: flex;
+    flex: 1;
+    /*background-color: #9a1b3b;*/
+    margin-top: 10px;
+}
 
+.containerCheckLeft {
+    display: flex;
+    flex: 2;
+    align-items: flex-end;
+    /*background-color: #1b529a;*/
+}
+
+.containerCheckRight {
+    display: flex;
+    flex: 1;
+    align-items: flex-start;
+    justify-content: center;
+    /*background-color: #2c9a1b;*/
+}
+
+.containerCheckText {
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--white);
+    margin-left: 5px;
 }

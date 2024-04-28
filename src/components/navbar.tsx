@@ -9,7 +9,7 @@ import {useContext, useState} from "react";
 import {ServiceContext} from "../App";
 import {SignerProvider} from "@alephium/web3";
 import {ConnectButton} from "./connect";
-import {ModalHelp} from "./Modal/modalHelp";
+import {ModalHelp} from "./Modal/ModalHelp";
 import AppBar from "@mui/material/AppBar";
 
 

@@ -17,7 +17,7 @@ code {
 }
 
 :root {
-  --black: #000;
+  --black: rgba(0, 0, 0, 0.85);
   --white: #fff;
   --PrimaryColor: #11102F;
   --SecondaryColor: #131134;

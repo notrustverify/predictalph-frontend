@@ -5,7 +5,7 @@ import { ServiceContext } from '../../App';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Help } from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
-import ModalHelp from "../Modal/modalHelp";
+import ModalHelp from "../Modal/ModalHelp";
 
 const Menu = () => {
     const navigate = useNavigate();

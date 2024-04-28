@@ -10,12 +10,10 @@ import ButtonPink from "../Button/ButtonPink";
 
 type cardType = {
     state: Game,
-    cardModal: boolean,
-    setCardModal: (value: boolean) => void,
     setGame: (value: Game) => void,
 }
 
-const Card = ({ state, cardModal, setCardModal, setGame }: cardType) => {
+const CardZoom = ({ state, setGame }: cardType) => {
 
     const { t } = useTranslation();
     const services = useContext(ServiceContext);
@@ -40,7 +38,7 @@ const Card = ({ state, cardModal, setCardModal, setGame }: cardType) => {
                     <ProgressBar color={'linear-gradient(to right, #005217, #00B833)'} />
                     <ProgressBar color={"linear-gradient(to right, #631212, #C92424)"}/>
                 </div>
-                {cardModal && <div className={"containerProgressBarButton"}>
+                <div className={"containerProgressBarButton"}>
                     <ButtonClassic
                         children={"top"}
                         containerStyle={{
@@ -51,26 +49,10 @@ const Card = ({ state, cardModal, setCardModal, setGame }: cardType) => {
                         }}
                     />
                     <ButtonClassic children={"up"}/>
-                </div>}
-            </div>
-            <div className={"containerCheck"}>
-                <div className={"containerCheckLeft"}>
-                    <div className={"containerCheckText"}>
-                        {"End: 12/12/2021"}
-                    </div>
-                </div>
-                <div className={"containerCheckRight"}>
-                    <ButtonPink
-                        children={"Voir Bet"}
-                        onClick={() => {
-                            setCardModal(true)
-                            setGame(state)
-                        }}
-                    />
                 </div>
             </div>
         </div>
     )
 }
 
-export default Card;
+export default CardZoom;
