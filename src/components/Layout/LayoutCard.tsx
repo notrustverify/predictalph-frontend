@@ -24,7 +24,7 @@ const LayoutCard = () => {
             {services.bet.getGames().map((state, index) => (
                 <Card
                     key={state.id}
-                    state={state}
+                    game={state}
                     cardModal={cardModal}
                     setCardModal={setCardModal}
                     setGame={event => test(event)}

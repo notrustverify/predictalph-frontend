@@ -30,15 +30,6 @@
     /*background-color: #9a1b3b;*/
 }
 
-.containerProgressBarButton {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    /*background-color: #1b529a;*/
-}
-
 .containerCheck {
     display: flex;
     flex: 1;
@@ -66,4 +57,89 @@
     font-weight: bold;
     color: var(--white);
     margin-left: 5px;
+}
+
+/* ZOOM */
+
+.zoomProgressBarFill {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    flex: 4;
+    /*background-color: orange;*/
+}
+
+.containerProgressBarButton {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: flex-end;
+    /*background-color: #1b529a;*/
+}
+
+
+.containerZoomInfo {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    background-color: var(--PrimaryColor);
+    border: 2px solid var(--BorderColor);
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-top: 24px;
+    margin-bottom: 24px;
+}
+
+.ZoomInfoText {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--white);
+}
+
+.zoomNote {
+    display: flex;
+    flex: 1;
+    font-size: 14px;
+    color: var(--white);
+    justify-content: center;
+    margin-top: 8px;
+    margin-bottom: 24px;
+}
+
+.CardEnterAmount {
+    display: flex;
+    flex-direction: column;
+    color: var(--TextColor);
+    background-color: var(--PrimaryColor);
+    border: 1px solid var(--BorderColor);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+
+}
+
+.CardEnterAmount::placeholder {
+    color: var(--TextColor);
+}
+
+/* Supprime les flèches du champ de nombre pour les navigateurs Webkit */
+.CardEnterAmount::-webkit-outer-spin-button,
+.CardEnterAmount::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Affiche un champ de texte pour les navigateurs Firefox */
+.CardEnterAmount[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.containerCardZoomButton {
+    display: flex;
+    flex: 1;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-top: 10px;
 }

@@ -7,27 +7,51 @@ import {useTranslation} from "react-i18next";
 import ProgressBar from "./ProgressBar";
 import ButtonClassic from "../Button/ButtonClassic";
 import ButtonPink from "../Button/ButtonPink";
+import {PollComponent} from "../poll";
+import {Bet} from "../../domain/bet";
 
 type cardType = {
-    state: Game,
+    game: Game,
     cardModal: boolean,
     setCardModal: (value: boolean) => void,
     setGame: (value: Game) => void,
 }
 
-const Card = ({ state, cardModal, setCardModal, setGame }: cardType) => {
+const Card = ({ game, cardModal, setCardModal, setGame }: cardType) => {
 
     const { t } = useTranslation();
     const services = useContext(ServiceContext);
-    const [round, setRound] = useState(null);
     const [choice, setChoice] = useState(null);
     const [amount, setAmount] = useState(0);
+    const [round, setRound] = useState<Round | null>(null);
+    const [seed, setSeed] = useState(0);
     const navigate = useNavigate();
 
 
     useEffect(() => {
-        console.log("GAME", state);
+        console.log("round", round);
     }, [services]);
+
+    async function fetch() {
+        setSeed(Math.random);
+        const currRound: Round = await services.bet.getCurrentRound(game);
+        setRound(currRound);
+        const currBet: Bet | null = await services.bet.getCurrentBet(game);
+
+        if (currBet === null) return;
+        // setBet(currBet);
+    }
+
+
+    const displayProgressBar = (color: string) => {
+        return (
+            <ProgressBar
+                color={color}
+                width={50}
+                number={0}
+            />
+        )
+    }
 
 
     return (
@@ -37,26 +61,15 @@ const Card = ({ state, cardModal, setCardModal, setGame }: cardType) => {
             </div>
             <div className={"containerProgressBar"}>
                 <div className={"containerProgressBarFill"}>
-                    <ProgressBar color={'linear-gradient(to right, #005217, #00B833)'} />
-                    <ProgressBar color={"linear-gradient(to right, #631212, #C92424)"}/>
+                    {displayProgressBar('linear-gradient(to right, #005217, #00B833)')}
+                    {displayProgressBar('linear-gradient(to right, #631212, #C92424)')}
                 </div>
-                {cardModal && <div className={"containerProgressBarButton"}>
-                    <ButtonClassic
-                        children={"top"}
-                        containerStyle={{
-                            minWidth: 0,
-                            borderRadius: 20,
-                            padding: "10px",
-                            border: "1px solid var(--BorderColor)",
-                        }}
-                    />
-                    <ButtonClassic children={"up"}/>
-                </div>}
             </div>
             <div className={"containerCheck"}>
                 <div className={"containerCheckLeft"}>
                     <div className={"containerCheckText"}>
-                        {"End: 12/12/2021"}
+                        {"End: 03h 15min 12s"}
+                        {round === null ? <div/> : <PollComponent round={round} key={seed}/>}
                     </div>
                 </div>
                 <div className={"containerCheckRight"}>
@@ -64,7 +77,7 @@ const Card = ({ state, cardModal, setCardModal, setGame }: cardType) => {
                         children={"Voir Bet"}
                         onClick={() => {
                             setCardModal(true)
-                            setGame(state)
+                            setGame(game)
                         }}
                     />
                 </div>

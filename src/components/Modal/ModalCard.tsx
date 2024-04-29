@@ -1,4 +1,4 @@
-import {Game} from "../../domain/game";
+import { Game } from "../../domain/game";
 import CardZoom from "../Card/CardZoom";
 
 type State = {
@@ -12,10 +12,11 @@ const ModalCard = ({ isVisible, game, setVisible }: State) => {
     if (!isVisible) return null;
 
     return (
-        <div className={"containerModalCard"} onClick={() => {setVisible(false)}} >
+        <div className={"containerModalCard"} >
             <CardZoom
                 state={game}
-                setGame={() => {}}
+                setGame={() => { }}
+                setVisible={() => setVisible(false)}
             />
         </div>
     )
