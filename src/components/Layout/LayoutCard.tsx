@@ -14,7 +14,7 @@ const LayoutCard = () => {
 
 
 
-    const test = (event: Game) => {
+    const onClick = (event: Game) => {
         setGame(event);
     }
 
@@ -27,7 +27,7 @@ const LayoutCard = () => {
                     game={state}
                     cardModal={cardModal}
                     setCardModal={setCardModal}
-                    setGame={event => test(event)}
+                    setGame={event => onClick(event)}
                 />
             ))}
             {game &&

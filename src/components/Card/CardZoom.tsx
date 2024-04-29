@@ -1,34 +1,42 @@
 import {Game} from "../../domain/game";
 import React, {useContext, useEffect, useState} from "react";
 import {ServiceContext} from "../../App";
-import {Round} from "../../domain/round";
-import {useNavigate} from "react-router-dom";
+import {Round, RoundPrice} from "../../domain/round";
+import {useLocation, useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import ProgressBar from "./ProgressBar";
 import ButtonPink from "../Button/ButtonPink";
+import {Bet} from "../../domain/bet";
 
 type cardType = {
-    state: Game,
+    game: Game,
     setGame: (value: Game) => void,
     setVisible: () => void,
 }
 
-const CardZoom = ({ state, setGame, setVisible }: cardType) => {
+const CardZoom = ({ game, setGame, setVisible }: cardType) => {
 
     const { t } = useTranslation();
     const services = useContext(ServiceContext);
-    const [round, setRound] = useState(null);
+    const [round, setRound] = useState<Round | null>(null);
     const [selected, setSelected] = useState(false);
     const [choice, setChoice] = useState(0);
     const [amount, setAmount] = useState(0);
-    const navigate = useNavigate();
+
     const [firstVote, setFirstVote] = useState(50);
     const [secondVote, setSecondVote] = useState(50);
-
+    
 
     useEffect(() => {
-        console.log("GAME", state);
-    }, [services]);
+        const interval = setInterval(fetch, 1000);
+        return () => clearInterval(interval);
+    }, []);
+
+    async function fetch() {
+        const currRound: Round = await services.bet.getCurrentRound(game);
+        setRound(currRound);
+    }
+
 
     const displayButton = (text: string, onClick: () => void, style: any ) => {
         return (
@@ -41,12 +49,14 @@ const CardZoom = ({ state, setGame, setVisible }: cardType) => {
     }
 
     const displayInfo = (text: string, price: number) => {
+        const formattedPrice = price.toLocaleString('en-US');
         return (
             <div className={"ZoomInfoText"}>
-                {text} {price}$
+                {text} {formattedPrice}$
             </div>
-        )
+        );
     }
+
 
     const displayProgressBar = (color: string, width: number) => {
         return (
@@ -58,10 +68,12 @@ const CardZoom = ({ state, setGame, setVisible }: cardType) => {
         )
     }
 
+    if (!game) return null;
+
     return (
         <div className={"containerCard"} style={{ minWidth: "50%"}}>
             <div className={"containerCardTitle"} style={{textAlign: "center"}} >
-                {t("Will ALPH price be higher than the locked price ?")}
+                {game.name}
             </div>
             <div className={"containerProgressBar"}>
                 <div className={"zoomProgressBarFill"}>
@@ -69,20 +81,20 @@ const CardZoom = ({ state, setGame, setVisible }: cardType) => {
                     {displayProgressBar('linear-gradient(to right, #631212, #C92424)', setSecondVote !== null ? secondVote : 0)}
                 </div>
                 <div className={"containerProgressBarButton"}>
-                    {displayButton("top", () => {
-                        setChoice(0)
-                        setSelected(true)
-                    }, {marginTop: 10, marginBottom: 10})}
-                    {displayButton("bot", () => {
-                        setChoice(1)
-                        setSelected(true)
-                    }, {marginTop: 10, marginBottom: 10})}
+                    {game && game.choiceDescriptions.map((choice, index) => (
+                        displayButton(choice, () => {
+                            setChoice(index);
+                            setSelected(true);
+                        }, { marginTop: 10, marginBottom: 10 })
+                    ))}
                 </div>
             </div>
-            <div className={"containerZoomInfo"}>
-                {displayInfo("Locked:", 0)}
-                {displayInfo("Actual:", 0)}
-            </div>
+            { round instanceof RoundPrice ?
+                <div className={"containerZoomInfo"}>
+                    {displayInfo("Locked:", round.priceStart)}
+                    {displayInfo("Actual:", round.priceEnd)}
+                </div>
+                : <div/>}
             {selected &&
                 <input
                     className={"CardEnterAmount"}

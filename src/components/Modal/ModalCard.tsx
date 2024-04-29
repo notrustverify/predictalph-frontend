@@ -1,5 +1,6 @@
 import { Game } from "../../domain/game";
 import CardZoom from "../Card/CardZoom";
+import {useEffect} from "react";
 
 type State = {
     isVisible: boolean,
@@ -9,12 +10,16 @@ type State = {
 
 const ModalCard = ({ isVisible, game, setVisible }: State) => {
 
+    useEffect(() => {
+        // console.log("This game", game);
+    }, []);
+
     if (!isVisible) return null;
 
     return (
         <div className={"containerModalCard"} >
             <CardZoom
-                state={game}
+                game={game}
                 setGame={() => { }}
                 setVisible={() => setVisible(false)}
             />

@@ -29,7 +29,7 @@ const Card = ({ game, cardModal, setCardModal, setGame }: cardType) => {
 
 
     useEffect(() => {
-        console.log("round", round);
+        // console.log("round", round);
     }, [services]);
 
     async function fetch() {
