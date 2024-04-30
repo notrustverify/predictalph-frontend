@@ -34,7 +34,10 @@ const LayoutCard = () => {
                 <ModalCard
                     isVisible={cardModal}
                     game={game}
-                    setVisible={setCardModal}
+                    setVisible={() => {
+                        setCardModal(false)
+                        setGame(null)
+                    }}
                 />}
         </div>
     );

@@ -1,7 +1,7 @@
 import {Game} from "../../domain/game";
 import {useContext, useEffect, useState} from "react";
 import {ServiceContext} from "../../App";
-import {Round} from "../../domain/round";
+import {Round, RoundPrice} from "../../domain/round";
 import {useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import ProgressBar from "./ProgressBar";
@@ -9,6 +9,7 @@ import ButtonClassic from "../Button/ButtonClassic";
 import ButtonPink from "../Button/ButtonPink";
 import {PollComponent} from "../poll";
 import {Bet} from "../../domain/bet";
+import Typography from "@mui/material/Typography";
 
 type cardType = {
     game: Game,
@@ -29,29 +30,55 @@ const Card = ({ game, cardModal, setCardModal, setGame }: cardType) => {
 
 
     useEffect(() => {
-        // console.log("round", round);
+        console.log("round", round);
     }, [services]);
 
+    useEffect(() => {
+        const interval = setInterval(fetch, 1000);
+        return () => clearInterval(interval);
+    }, []);
+
     async function fetch() {
-        setSeed(Math.random);
         const currRound: Round = await services.bet.getCurrentRound(game);
         setRound(currRound);
-        const currBet: Bet | null = await services.bet.getCurrentBet(game);
-
-        if (currBet === null) return;
-        // setBet(currBet);
     }
 
 
-    const displayProgressBar = (color: string) => {
+    const displayProgressBar = (color: string, roundAmount: number) => {
+
+        if (!round) return null;
+        const totalAmount = round.pollAmounts.reduce((acc, amount) => acc + amount, 0);
+        const percentage = totalAmount === 0 ? 0 : (roundAmount / totalAmount) * 100;
+
+
         return (
             <ProgressBar
                 color={color}
-                width={50}
-                number={0}
+                width={percentage === 0 ? 50 : percentage}
+                number={percentage}
             />
         )
     }
+
+    const displayDate = (round: any) => {
+        if (!(round instanceof RoundPrice)) {
+            return <div>{t("Fin du pari dans ")}{(new Date(round.end)).toLocaleString(undefined,{dateStyle: "medium", timeStyle: "short"})}</div>;
+        }
+        const now = Date.now();
+        if (round.end > now) {
+            const duration = Math.ceil((round.end - now) / 1000);
+            const hours = Math.floor(duration / 3600); // Hours are in 24-hour format
+            const minutes = Math.floor((duration % 3600) / 60);
+            const secondsRemaining = duration % 60;
+
+            return <div>{t("Tour terminé dans ")}{hours}h {minutes}m {secondsRemaining}s </div>;
+        } else {
+            return <div>{t("Fin du pari dans ")}{(new Date(round.end)).toLocaleString(undefined,{dateStyle: "medium", timeStyle: "short"})}</div>;
+        }
+    }
+
+    if (!game) return null;
+
 
 
     return (
@@ -60,16 +87,16 @@ const Card = ({ game, cardModal, setCardModal, setGame }: cardType) => {
                 {t("Will ALPH price be higher than the locked price ?")}
             </div>
             <div className={"containerProgressBar"}>
-                <div className={"containerProgressBarFill"}>
-                    {displayProgressBar('linear-gradient(to right, #005217, #00B833)')}
-                    {displayProgressBar('linear-gradient(to right, #631212, #C92424)')}
-                </div>
+                {round &&
+                    <div className={"containerProgressBarFill"}>
+                        {displayProgressBar('linear-gradient(to right, #005217, #00B833)', round.pollAmounts[0])}
+                        {displayProgressBar('linear-gradient(to right, #631212, #C92424)', round.pollAmounts[1])}
+                    </div>}
             </div>
             <div className={"containerCheck"}>
                 <div className={"containerCheckLeft"}>
                     <div className={"containerCheckText"}>
-                        {"End: 03h 15min 12s"}
-                        {round === null ? <div/> : <PollComponent round={round} key={seed}/>}
+                        {round === null ? <div/> : displayDate(round)}
                     </div>
                 </div>
                 <div className={"containerCheckRight"}>

@@ -25,7 +25,7 @@ const ModalText = () => {
                     fontSize: index % 2 === 0 ? '1.5rem' : 'inherit',
                     fontWeight: index % 2 === 0 ? 'bold' : 'normal',
                     marginBottom: index % 2 === 0 ? 5:30,
-                    color: index % 2 === 0 ? 'var(--ModalText)' : 'inherit',
+                    color: index % 2 === 0 ? 'var(--ModalTitle)' : 'var(--ModalText)',
                 }}>
                     {t(key)}
                     <br />

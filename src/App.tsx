@@ -62,10 +62,10 @@ export default function App() {
             <Leaderboard/>
             <LayoutBet/>
             <LayoutCard/>
-            <Box component="main" sx={{flexGrow: 1, p: 3}}>
-              <DrawerHeader/>
-              <MainContent/>
-            </Box>
+            {/*<Box component="main" sx={{flexGrow: 1, p: 3}}>*/}
+            {/*  <DrawerHeader/>*/}
+            {/*  <MainContent/>*/}
+            {/*</Box>*/}
           </BrowserRouter>
         </I18nextProvider>
       </ServiceContext.Provider>
