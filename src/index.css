@@ -26,5 +26,21 @@ code {
   --pink: #ff2e63;
   --ModalTitle: #ACA5FF;
   --ModalText: #9994cc;
+  --DisabledButton: #727272;
+  --OrangePrimary: #ff6a00;
+  --OrangeBlack: #692a00;
+
+
+  --CircleColor1: #ff6a00;
+  --CircleColor2: #60ff75;
+  --CircleColor3: #ffab2e;
+  --CircleColor4: #ff2e63;
+  --CircleColor5: #9abaff;
+  --CircleColor6: #0990ff;
+  --CircleColor7: #ffee2e;
+  --CircleColor8: #b6b6b6;
+  --CircleColor9: #ea2eff;
+  --CircleColor10: #2effee;
+
 }
 

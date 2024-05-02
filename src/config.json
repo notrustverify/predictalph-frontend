@@ -3,8 +3,8 @@
     "ntvApi": "https://predictalph-api.notrustverify.ch",
   "games": [
     {
-      "name": "Will ALPH price be higher than the locked price?",
-      "description": "Bet if ALPH will go up or down",
+      "name": "JEU NUMERO 1",
+      "description": "description 1",
       "contract": {
         "id": "69d8501031ba43a2793b84d6112ebd10ad0c89ea79608b195f9984423b3c2c01",
         "address": "21p8EEnXAcLqJHtVuiewDDhPcuM6BeJpsd2LUE91ixSSk",
@@ -19,8 +19,25 @@
       "symbol": "alephium"
     },
     {
-      "name": "Will BTC price be higher than the locked price?",
-      "description": "Bet if BTC will go up or down",
+      "name": "MULTI NUMERO 2",
+      "description": "description Exemple 2",
+      "contract": {
+        "id": "16224842724da1e2103b5c8e3eae3cca58b243b19581ac3e3e4e0fd57d060001",
+        "address": "vBMQEkYkQmHgRevkn5nshShUHZf4xvKbCrJC8uYfj2mN",
+        "index": 1
+      },
+      "choiceDescriptions": [
+        "Cat",
+        "Dog",
+        "Suricate"
+      ],
+      "type": "MULTIPLE_CHOICE",
+      "img": "/images/alephium-price.png",
+      "symbol": "bitcoin"
+    },
+    {
+      "name": "JEU NUMERO  3",
+      "description": "Description Exemple 3",
       "contract": {
         "id": "16224842724da1e2103b5c8e3eae3cca58b243b19581ac3e3e4e0fd57d060001",
         "address": "vBMQEkYkQmHgRevkn5nshShUHZf4xvKbCrJC8uYfj2mN",
@@ -33,7 +50,42 @@
       "type": "PRICE",
       "img": "/images/alephium-price.png",
       "symbol": "bitcoin"
+    },
+    {
+      "name": "MULTI NUMERO 4",
+      "description": "description Exemple 4",
+      "contract": {
+        "id": "16224842724da1e2103b5c8e3eae3cca58b243b19581ac3e3e4e0fd57d060001",
+        "address": "vBMQEkYkQmHgRevkn5nshShUHZf4xvKbCrJC8uYfj2mN",
+        "index": 1
+      },
+      "choiceDescriptions": [
+        "number One",
+        "number Two",
+        "number Three"
+      ],
+      "type": "MULTIPLE_CHOICE",
+      "img": "/images/alephium-price.png",
+      "symbol": "bitcoin"
+    },
+    {
+      "name": "MULTI NUMERO 5",
+      "description": "description Exemple 5",
+      "contract": {
+        "id": "16224842724da1e2103b5c8e3eae3cca58b243b19581ac3e3e4e0fd57d060001",
+        "address": "vBMQEkYkQmHgRevkn5nshShUHZf4xvKbCrJC8uYfj2mN",
+        "index": 1
+      },
+      "choiceDescriptions": [
+        "test 1",
+        "test 2",
+        "test 3",
+        "test 4"
+      ],
+      "type": "MULTIPLE_CHOICE",
+      "img": "/images/alephium-price.png",
+      "symbol": "bitcoin"
     }
   ]
   }
-  
+

@@ -7,6 +7,8 @@ import {useTranslation} from "react-i18next";
 import ProgressBar from "./ProgressBar";
 import ButtonPink from "../Button/ButtonPink";
 import {Bet} from "../../domain/bet";
+import Chart from 'chart.js/auto';
+import {displayCircle, displayProgressBar} from "../../FunctionGlobal";
 
 type cardType = {
     game: Game,
@@ -24,15 +26,34 @@ const CardZoom = ({ game, setGame, setVisible }: cardType) => {
     const [choice, setChoice] = useState(0);
     const [amount, setAmount] = useState(0);
     const placeholder = t("Entrer le montant à miser")
+    const [displayCheck, setDisplayCheck] = useState(false)
+
+    useEffect( () => {
+        (async () => {
+            if (round && !displayCheck ) {
+                await displayCircle(round.pollAmounts, round, game)
+                setDisplayCheck(true)
+            }
+        })()
+    },[displayCheck, round])
 
     useEffect(() => {
-        const interval = setInterval(fetch, 1000);
-        return () => clearInterval(interval);
+       fetch().catch(console.log).then();
     }, []);
 
     async function fetch() {
-        const currRound: Round = await services.bet.getCurrentRound(game);
-        setRound(currRound);
+        try {
+            const currRound: Round = await services.bet.getCurrentRound(game);
+
+            console.log("ICI ===", currRound)
+            if (currRound) {
+                setRound(currRound);
+            } else {
+                //A voir pour la gestion du cas où aucune donnée de tour n'est disponible
+            }
+        } catch (error) {
+            console.error("Une erreur s'est produite lors de la récupération du tour actuel :", error);
+        }
     }
 
     const myBet = async () => {
@@ -67,22 +88,17 @@ const CardZoom = ({ game, setGame, setVisible }: cardType) => {
         );
     }
 
-
-    const displayProgressBar = (color: string, roundAmount: number) => {
-
-        if (!round) return null;
-        const totalAmount = round.pollAmounts.reduce((acc, amount) => acc + amount, 0);
-        const percentage = totalAmount === 0 ? 0 : (roundAmount / totalAmount) * 100;
-
-
+    const displayButtonChoice = (state: boolean) => {
         return (
-            <ProgressBar
-                color={color}
-                width={percentage === 0 ? 50 : percentage}
-                number={percentage}
-            />
+            game && game.choiceDescriptions.map((choice, index) => (
+                displayButton(choice, () => {
+                    setChoice(index);
+                    setSelected(true);
+                }, { marginTop: 10, marginBottom: 10, marginRight: state ? 10 : 0, marginLeft: state ? 10 : 0 })
+            ))
         )
     }
+
 
     if (!game && !round) return null;
 
@@ -92,41 +108,46 @@ const CardZoom = ({ game, setGame, setVisible }: cardType) => {
                 {game.name}
             </div>
             <div className={"containerProgressBar"}>
-                <div className={"zoomProgressBarFill"}>
-                    {round &&
-                        <div className={"containerProgressBarFill"}>
-                            {displayProgressBar('linear-gradient(to right, #005217, #00B833)', round.pollAmounts[0])}
-                            {displayProgressBar('linear-gradient(to right, #631212, #C92424)', round.pollAmounts[1])}
-                        </div>}
-                </div>
-                <div className={"containerProgressBarButton"}>
-                    {game && game.choiceDescriptions.map((choice, index) => (
-                        displayButton(choice, () => {
-                            setChoice(index);
-                            setSelected(true);
-                        }, { marginTop: 10, marginBottom: 10 })
-                    ))}
-                </div>
+                {game && game.choiceDescriptions.length === 2 &&
+                    <div className={"zoomProgressBarFill"}>
+                        {round && round.pollAmounts.map((item, index) => (
+                            <div key={index} className={"zoomProgressBarFill"}>
+                                {displayProgressBar(index === 0 ? 'linear-gradient(to right, #005217, #00B833)' : 'linear-gradient(to right, #631212, #C92424)', item, round, round.pollAmounts)}
+                            </div>
+                        ))}
+                    </div>}
+                {game && game.choiceDescriptions.length > 2 &&
+                    <div className={"zoomProgressBarFill"} style={{alignItems: "center"}}>
+                        {<div id="chartContainer" style={{ marginBottom: 24}}/>}
+                    </div>}
+                {game && game.choiceDescriptions.length === 2 &&
+                    <div className={"containerProgressBarButton"}>
+                        {displayButtonChoice(false)}
+                    </div>}
             </div>
+            {game && game.choiceDescriptions.length > 2 &&
+                <div className={"containerButtonRow"}>
+                    {displayButtonChoice(true)}
+                </div>}
             { round instanceof RoundPrice ?
                 <div className={"containerZoomInfo"}>
                     {displayInfo("Locked:", round.priceStart)}
                     {displayInfo("Actual:", round.priceEnd)}
                 </div>
                 : <div/>}
-            {selected &&
                 <input
                     className={"CardEnterAmount"}
                     type="number"
                     placeholder={placeholder}
                     onChange={(e) => setAmount(parseInt(e.target.value))}
                     min={0}
-                />}
-            {selected && <div className={"zoomNote"}>
+                />
+            <div className={"zoomNote"}>
                     * {t("1 ALPH sera bloqué jusqu'à ce que vous le réclamiez")}
-                </div>}
+                </div>
             <div className={"containerCardZoomButton"}>
-                {displayButton("Valider", myBet, {})}
+                {!selected && displayButton("Valider", () => {}, {backgroundColor: "var(--DisabledButton)", borderColor: "var(--DisabledButton)"})}
+                {selected && displayButton("Valider", myBet, {})}
                 {displayButton("Fermer", setVisible, {})}
             </div>
         </div>

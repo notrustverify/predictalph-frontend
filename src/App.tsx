@@ -1,4 +1,4 @@
-import React, {createContext} from 'react'
+import React, {createContext, useContext, useEffect, useState} from 'react'
 import {AlephiumWalletProvider} from '@alephium/web3-react'
 import {WalletConnector} from "./services/wallet.connector";
 import {BetService} from "./services/bet.service";
@@ -40,15 +40,9 @@ const services = new Services(wallet, bet);
 export const ServiceContext = createContext(services);
 
 export default function App() {
-  const darkTheme = createTheme({
-    palette: {
-      mode: 'light',
-      primary: {main: '#ec2581'},
-      secondary: {main: '#19a66b'},
-      warning: {main: '#f2495e'},
-      background: {default: '#F4F4F4'}
-    }
-  })
+
+    const [choice, setChoice] = useState(0);
+    const ThisServices = useContext(ServiceContext);
 
   return (
     <AlephiumWalletProvider
@@ -60,12 +54,8 @@ export default function App() {
           <BrowserRouter>
             <Menu/>
             <Leaderboard/>
-            <LayoutBet/>
-            <LayoutCard/>
-            {/*<Box component="main" sx={{flexGrow: 1, p: 3}}>*/}
-            {/*  <DrawerHeader/>*/}
-            {/*  <MainContent/>*/}
-            {/*</Box>*/}
+            <LayoutBet setChoice={setChoice}/>
+            <LayoutCard choice={choice} ThisServices={ThisServices} />
           </BrowserRouter>
         </I18nextProvider>
       </ServiceContext.Provider>

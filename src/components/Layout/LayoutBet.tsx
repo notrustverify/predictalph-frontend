@@ -1,20 +1,20 @@
 import ButtonClassic from "../Button/ButtonClassic";
 import { useState } from "react";
 
-const LayoutBet = () => {
+type typeState = {
+    setChoice: (value: number) => void,
+}
 
-    const [arrayButton, setArrayButton] = useState(["My Bet", "All Bet", "Stats"]);
 
-    const onClick = (index: number) => {
-        console.log("click", index);
-    }
+const LayoutBet = ({ setChoice }: typeState) => {
+
+    const [arrayButton, setArrayButton] = useState(["Double choix", "Multi Choix", "Stats"]);
 
     return (
         <div className="containerLayoutBet">
             {arrayButton.map((buttonText, index) => (
                 <ButtonClassic
                     key={index}
-                    onClick={() => onClick(index)}
                     containerStyle={{
                         borderTopLeftRadius: index === 0 ? "10px" : "0",
                         borderBottomLeftRadius: index === 0 ? "10px" : "0",
@@ -22,6 +22,7 @@ const LayoutBet = () => {
                         borderBottomRightRadius: index === arrayButton.length - 1 ? "10px" : "0",
                         border: "1px solid var(--BorderColor)",
                     }}
+                    onClick={() => setChoice(index)}
                 >
                     {buttonText}
                 </ButtonClassic>
