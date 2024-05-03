@@ -49,7 +49,7 @@ const Card = ({ game, setCardModal, setGame, round }: cardType) => {
                 <div className={"containerProgressBar"} style={{flexDirection: "column"}}>
                     {round && round.pollAmounts.map((item, index) => (
                         <div key={index} className={"containerProgressBarFill"}>
-                            {displayProgressBar(index === 0 ? 'linear-gradient(to right, #005217, #00B833)' : 'linear-gradient(to right, #631212, #C92424)', item, round, round.pollAmounts)}
+                            {displayProgressBar(index === 0 ? 'linear-gradient(to right, #1E1D44, #004D00)' : 'linear-gradient(to right, #1E1D44, #8B0000)', item, round, round.pollAmounts)}
                         </div>
                     ))}
                 </div>}

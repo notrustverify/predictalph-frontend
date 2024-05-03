@@ -7,9 +7,11 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--PrimaryColor);
+  background: radial-gradient(circle, #262562, #11102F);
   color: var(--TextColor);
+  /*background: url('Assets/SVG/backgroundSVG.svg') center/cover no-repeat;*/
 }
+
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
@@ -20,11 +22,11 @@ code {
   --black: rgba(0, 0, 0, 0.85);
   --white: #fff;
   --PrimaryColor: #11102F;
-  --SecondaryColor: #131134;
+  --SecondaryColor: rgba(19, 17, 52, 0.62);
+  --SecondaryColorV1: #131134;
   --BorderColor: #2E2C51;
   --TextColor: #ACA5FF;
   --pink: #ff2e63;
-  --pinkBlack: #651127;
   --ModalTitle: #ACA5FF;
   --ModalText: #9994cc;
   --DisabledButton: #727272;

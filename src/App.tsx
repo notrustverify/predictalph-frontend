@@ -3,10 +3,6 @@ import {AlephiumWalletProvider} from '@alephium/web3-react'
 import {WalletConnector} from "./services/wallet.connector";
 import {BetService} from "./services/bet.service";
 import {BetClient} from "./services/bet.client";
-import {Box, createTheme, CssBaseline, ThemeProvider} from "@mui/material";
-import {DrawerHeader} from "./components/drawerHeader";
-import {AlphBetNavbar} from "./components/navbar";
-import MainContent from "./components/main";
 import {BrowserRouter} from "react-router-dom";
 import {BlockchainClient} from "./services/blockchain.client";
 import {CoinGeckoClient} from "./services/coinGeckoClient";
@@ -16,10 +12,8 @@ import Menu from "./components/Navigation/menu";
 import i18n from './translation';
 import {I18nextProvider} from "react-i18next";
 import Leaderboard from "./components/Leaderboard/Leaderboard";
-import ButtonClassic from "./components/Button/ButtonClassic";
 import LayoutBet from "./components/Layout/LayoutBet";
 import LayoutCard from "./components/Layout/LayoutCard";
-
 
 class Services {
   constructor(

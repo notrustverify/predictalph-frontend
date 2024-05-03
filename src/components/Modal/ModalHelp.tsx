@@ -19,7 +19,7 @@ export const ModalHelp = ({ open, handleClose }: { open: boolean, handleClose: (
                     transform: 'translate(-50%, -50%)',
                     maxWidth: '80%',
                     maxHeight: '80%',
-                    backgroundColor: 'var(--SecondaryColor)',
+                    backgroundColor: 'var(--SecondaryColorV1)',
                     border: '2px solid var(--BorderColor)',
                     boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
                     padding: '20px',
