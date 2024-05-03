@@ -19,8 +19,8 @@
 }
 
 .ButtonPink {
-    background-color: var(--pink);
-    border: 1px solid var(--pink);
+    background-image: linear-gradient(to right, var(--pink), var(--pinkDark));
+    border: 1px solid var(--pinkDark);
     color: var(--white);
     padding: 8px 20px;
     text-align: center;
@@ -36,9 +36,9 @@
 }
 
 .ButtonPink:hover {
-    background-color: var(--SecondaryColor);
-    color: var(--pink);
-    border-color: var(--BorderColor);
+    /*background-color: var(--SecondaryColor);*/
+    color: var(--white);
+    /*border-color: var(--BorderColor);*/
     border: 1px solid;
 }
 

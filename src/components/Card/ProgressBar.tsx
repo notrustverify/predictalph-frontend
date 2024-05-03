@@ -1,17 +1,24 @@
 import React from 'react';
 
 type thisColor = {
-    color: string,
+    index: number,
     width: number,
     number: number
 }
 
-const ProgressBar = ({ color, width , number }: thisColor) => {
+const ProgressBar = ({ index, width , number }: thisColor) => {
+
     return (
         <div className={"containerProgress"}>
             <div
                 className={"progressBar"}
-                style={{ background: color, width: (width * 2) + "%" }}
+                style={{
+                    background: index === 0 ?
+                        'linear-gradient(to right, var(--PGColor1), var(--PGColor2))'
+                        :
+                        'linear-gradient(to right, var(--PGColor1), var(--PGColor3))',
+                    width: (width * 2) + "%"
+                }}
             >
                 <div className="progressBarText">
                     {number}

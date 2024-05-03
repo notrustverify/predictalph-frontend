@@ -2,7 +2,7 @@ import {AlephiumConnectButton, useWallet} from "@alephium/web3-react";
 import * as React from "react";
 import {useContext, useEffect, useState} from "react";
 import {SignerProvider} from "@alephium/web3";
-import {ServiceContext} from "../App";
+import {ServiceContext} from "../../App";
 import {useTranslation} from "react-i18next";
 
 
@@ -25,8 +25,8 @@ export function ConnectButton({onConnect}: ConnectButtonProp) {
             <button
                 className={"ButtonConnect"}
                 style={{
-                    backgroundColor: hovered ? 'var(--PrimaryGrey)' : 'var(--pink)',
-                    border: hovered ? '1px solid var(--pink)' : '1px solid var(--pink)',
+                    background: hovered ? 'var(--PrimaryGrey)' : 'linear-gradient(to right, var(--pink), var(--pinkDark))',
+                    border: hovered ? '1px solid var(--pink)' : '1px solid var(--PrimaryColor)',
                     color: hovered ? 'var(--pink)' : 'var(--white)',
                 }}
                 onClick={state}

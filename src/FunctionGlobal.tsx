@@ -64,16 +64,15 @@ export const displayCircle = (pollAmounts: number[], round: any, game: any) => {
 };
 
 
-export const displayProgressBar = (color: string, roundAmount: number, round: any, pollAmounts: number []) => {
+export const displayProgressBar = (index: number, roundAmount: number, round: any, pollAmounts: number []) => {
 
     if (!round) return null;
     const totalAmount = pollAmounts.reduce((acc, amount) => acc + amount, 0);
     const percentage = totalAmount === 0 ? 0 : (roundAmount / totalAmount) * 100;
 
-
     return (
         <ProgressBar
-            color={color}
+            index={index}
             width={percentage === 0 ? 50 : percentage}
             number={percentage}
         />

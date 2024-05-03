@@ -27,10 +27,16 @@ code {
   --BorderColor: #2E2C51;
   --TextColor: #ACA5FF;
   --pink: #ff2e63;
+  --pinkDark: #600c30;
   --ModalTitle: #ACA5FF;
   --ModalText: #9994cc;
   --DisabledButton: #727272;
 
+  /* PROGRESSBAR */
+
+  --PGColor1: #1E1D44;
+  --PGColor2: #004D00;
+  --PGColor3: #8B0000;
 
   --CircleColor1: #ff6a00;
   --CircleColor2: #60ff75;

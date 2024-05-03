@@ -120,7 +120,7 @@ const CardZoom = ({ game, setVisible }: cardType) => {
                     <div className={"zoomProgressBarFill"}>
                         {round && round.pollAmounts.map((item, index) => (
                             <div key={index} className={"zoomProgressBarFill"}>
-                                {displayProgressBar(index === 0 ? 'linear-gradient(to right, #005217, #00B833)' : 'linear-gradient(to right, #631212, #C92424)', item, round, round.pollAmounts)}
+                                {displayProgressBar(index, item, round, round.pollAmounts)}
                             </div>
                         ))}
                     </div>}

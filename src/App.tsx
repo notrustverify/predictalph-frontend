@@ -14,6 +14,7 @@ import {I18nextProvider} from "react-i18next";
 import Leaderboard from "./components/Leaderboard/Leaderboard";
 import LayoutBet from "./components/Layout/LayoutBet";
 import LayoutCard from "./components/Layout/LayoutCard";
+import TraidingView from "./components/Traiding/TraidingView";
 
 class Services {
   constructor(
@@ -46,6 +47,7 @@ export default function App() {
       <ServiceContext.Provider value={services}>
         <I18nextProvider i18n={i18n}>
           <BrowserRouter>
+            <TraidingView />
             <Menu/>
             <Leaderboard/>
             <LayoutBet setChoice={setChoice}/>
