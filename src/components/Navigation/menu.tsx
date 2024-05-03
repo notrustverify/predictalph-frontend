@@ -8,11 +8,10 @@ import IconButton from "@mui/material/IconButton";
 import ModalHelp from "../Modal/ModalHelp";
 
 const Menu = () => {
-    const navigate = useNavigate();
-    const location = useLocation();
     const [already, setAlready] = useState(false);
     const services = useContext(ServiceContext);
     const [open, setOpen] = useState(false);
+    const [hovered, setHovered] = useState(false);
 
 
     const connect = async (signer: SignerProvider): Promise<void> => {
@@ -28,7 +27,20 @@ const Menu = () => {
                 ALPH.BET
             </div>
             <div className={"containerRight"}>
-                <IconButton onClick={() => setOpen(true)} ><Help sx={{ fill: 'white' }} /></IconButton>
+                <div
+                    className="containerButtonQuestion"
+                    onClick={() => setOpen(true)}
+                    onMouseEnter={() => setHovered(true)}
+                    onMouseLeave={() => setHovered(false)}
+                    style={{
+                        backgroundColor: hovered ? 'var(--pink)' : 'var(--TextColor)',
+                    }}
+                >
+                    <div className="helpIcon">
+                        <span>?</span>
+                    </div>
+                </div>
+
                 <div className={"containerButton"}>
                     <ConnectButton onConnect={connect}/>
                 </div>

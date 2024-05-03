@@ -20,7 +20,6 @@ const ModalCard = ({ isVisible, game, setVisible }: State) => {
         >
             <CardZoom
                 game={game}
-                setGame={() => { }}
                 setVisible={setVisible}
             />
         </Modal>

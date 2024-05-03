@@ -12,17 +12,17 @@ import {displayCircle, displayProgressBar} from "../../FunctionGlobal";
 
 type cardType = {
     game: Game,
-    setGame: (value: Game) => void,
     setVisible: () => void,
 }
 
-const CardZoom = ({ game, setGame, setVisible }: cardType) => {
+const CardZoom = ({ game, setVisible }: cardType) => {
 
     const { t } = useTranslation();
     const services = useContext(ServiceContext);
 
     const [round, setRound] = useState<Round | null>(null);
     const [selected, setSelected] = useState(false);
+    const [selectedChoiceIndex, setSelectedChoiceIndex] = useState<number | null>(null);
     const [choice, setChoice] = useState(0);
     const [amount, setAmount] = useState(0);
     const placeholder = t("Entrer le montant à miser")
@@ -94,7 +94,15 @@ const CardZoom = ({ game, setGame, setVisible }: cardType) => {
                 displayButton(choice, () => {
                     setChoice(index);
                     setSelected(true);
-                }, { marginTop: 10, marginBottom: 10, marginRight: state ? 10 : 0, marginLeft: state ? 10 : 0 })
+                    setSelectedChoiceIndex(index);
+                }, {
+                    marginTop: 10,
+                    marginBottom: 10,
+                    marginRight: state ? 10 : 0,
+                    marginLeft: state ? 10 : 0,
+                    backgroundColor: selectedChoiceIndex === index ? "var(--pinkBlack)" : "",
+                    border: selectedChoiceIndex === index ? "2px solid var(--white)" : "",
+                })
             ))
         )
     }

@@ -7,13 +7,15 @@
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    min-width: 20%;
+    min-width: 400px;
+    margin-bottom: 50px;
 }
 
 .containerCardTitle {
     font-size: 18px;
     font-weight: bold;
     color: var(--white);
+    margin-left: 5px;
 }
 
 .containerProgressBar {
@@ -43,6 +45,7 @@
     display: flex;
     flex: 2;
     align-items: flex-end;
+    margin-right: 5%;
     /*background-color: #1b529a;*/
 }
 
@@ -156,4 +159,38 @@
     justify-content: space-evenly;
     align-items: center;
     margin-top: 10px;
+}
+
+
+/* RESPONSIVE */
+
+@media screen and (max-width: 425px) and (max-height: 840px) {
+    .containerCard {
+        align-self: center;
+        border: 1px solid var(--BorderColor);
+        border-radius: 20px;
+        padding: 10px;
+        min-width: 90%;
+        margin-bottom: 25px;
+    }
+
+    .containerCardTitle {
+        font-size: 14px;
+    }
+    .containerCheckText {
+        font-size: 12px;
+        margin-left: 5px;
+    }
+
+    .ZoomInfoText {
+        font-size: 14px;
+    }
+
+}
+
+@media screen and (max-width: 320px) and (max-height: 768px) {
+    .containerCard {
+        width: 80%;
+    }
+
 }

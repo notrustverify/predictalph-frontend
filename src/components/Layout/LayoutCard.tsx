@@ -1,6 +1,5 @@
 import * as React from "react";
 import { useContext, useState, useEffect } from "react";
-import { ServiceContext } from "../../App";
 import Card from "../Card/Card";
 import ModalCard from "../Modal/ModalCard";
 import { Game } from "../../domain/game";
@@ -25,27 +24,11 @@ const LayoutCard = ({ choice, ThisServices }: typeState) => {
     }, [choice]);
 
     useEffect(() => {
-
         console.log("filteredGames ===", filteredGames)
     }, [filteredGames]);
 
-    useEffect(() => {
-        start()
-    }, []);
-
-    async function start() {
-        try {
-            const currRound: Round = await ThisServices.bet.getCurrentRound(game);
-            if (currRound) {
-                setRound(currRound);
-            }
-        } catch (error) {
-            console.error("Une erreur s'est produite lors de la récupération du tour actuel :", error);
-        }
-    }
-
     const fetchRoundData = async () => {
-
+        console.log("round ===", round)
         try {
             // const roundGames = ThisServices.bet.getGames();
             const roundGames = ThisServices.bet.getGames().filter((state: Game) => {
@@ -62,9 +45,9 @@ const LayoutCard = ({ choice, ThisServices }: typeState) => {
 
             console.log("roundGames:", roundGames)
             for (const state of roundGames) {
-                console.log("JE RENTRE DANS FOR???")
+                console.log("JE RENTRE DANS MA BOUCLE FOR???")
                 console.log("STATE ===", state)
-                // console.log("ThisServices.bet.getCurrentRound ===", ThisServices.bet.getCurrentRound(state))
+                console.log("SEMBLE BLOQUER ICI ===", ThisServices.bet.getCurrentRound(state))
                 const currRound: Round = await ThisServices.bet.getCurrentRound(state);
                 console.log("currRound ===", currRound)
                 roundData.push(currRound);

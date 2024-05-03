@@ -14,30 +14,24 @@ export function ConnectButton({onConnect}: ConnectButtonProp) {
 
     const { t } = useTranslation();
     const { account, signer } = useWallet();
-    const services = useContext(ServiceContext);
     const [hovered, setHovered] = useState(false);
 
     if (signer !== undefined) {
         onConnect(signer as unknown as SignerProvider);
     }
 
-    const ButtonStyle: React.CSSProperties = {
-        backgroundColor: hovered ? 'var(--PrimaryGrey)' : 'var(--pink)',
-        color: '#fff',
-        padding: '10px 20px',
-        border: 'none',
-        borderRadius: '10px',
-        cursor: 'pointer',
-        fontSize: '14px',
-        fontWeight: 'bold',
-    };
-
     const displayButton = (state: () => void, text: string) => {
         return (
             <button
-                style={ButtonStyle}
+                className={"ButtonConnect"}
+                style={{
+                    backgroundColor: hovered ? 'var(--PrimaryGrey)' : 'var(--pink)',
+                    border: hovered ? '1px solid var(--pink)' : '1px solid var(--pink)',
+                    color: hovered ? 'var(--pink)' : 'var(--white)',
+                }}
                 onClick={state}
-                onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
+                onMouseEnter={() => setHovered(true)}
+                onMouseLeave={() => setHovered(false)}
             >
                 {t(text)}
             </button>
