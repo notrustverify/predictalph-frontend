@@ -2,9 +2,6 @@ import React, { useContext, useState } from 'react';
 import { ConnectButton } from '../../Assets/Connect/connect';
 import { SignerProvider } from '@alephium/web3';
 import { ServiceContext } from '../../App';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { Help } from "@mui/icons-material";
-import IconButton from "@mui/material/IconButton";
 import ModalHelp from "../Modal/ModalHelp";
 
 const Menu = () => {
@@ -24,7 +21,12 @@ const Menu = () => {
     return (
         <div className={"containerMenu"}>
             <div className={"containerLogo"} >
-                ALPH.BET
+                {/*ALPH.BET*/}
+                <img
+                    src={require('./../../Assets/logo.png')}
+                    alt="Logo ALPH.BET"
+                    className={"logo"}
+                />
             </div>
             <div className={"containerRight"}>
                 <div

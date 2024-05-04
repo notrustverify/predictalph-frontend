@@ -14,7 +14,8 @@
 }
 
 .ButtonClassic:hover {
-    background-color: var(--pink);
+    /*background-color: var(--pink);*/
+    background-image: linear-gradient(to right, var(--pinkDark), var(--pink), var(--pinkDark));
     color: var(--white);
 }
 

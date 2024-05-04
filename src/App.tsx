@@ -50,7 +50,7 @@ export default function App() {
             <TradingView />
             <Menu/>
             <Leaderboard/>
-            <LayoutBet setChoice={setChoice}/>
+            <LayoutBet setChoice={setChoice} choice={choice}/>
             <LayoutCard choice={choice} ThisServices={ThisServices} />
           </BrowserRouter>
         </I18nextProvider>
