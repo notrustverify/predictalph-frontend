@@ -3,7 +3,7 @@ import ButtonPink from "../Button/ButtonPink";
 
 
 
-const TraidingView = () => {
+const TradingView = () => {
 
     const [hovered, setHovered] = useState(false);
 
@@ -30,4 +30,4 @@ const TraidingView = () => {
     );
 }
 
-export default TraidingView;
+export default TradingView;

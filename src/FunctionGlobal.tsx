@@ -9,21 +9,10 @@ export const displayCircle = (pollAmounts: number[], round: any, game: any) => {
             datasets: [{
                 label: '',
                 data: updatedPollAmounts,
-                backgroundColor: [
-                    '#ffac56',
-                    '#60ff75',
-                    '#ff2e5f',
-                    '#262324',
-                    '#9abaff',
-                    '#0990ff',
-                    '#ffee2e',
-                    '#b6b6b6',
-                    '#ea2eff',
-                    '#2effee'
-                ],
+                backgroundColor: backgroundColorArray,
                 hoverOffset: 4
             }],
-            labels: pollAmounts.map((_, index) => game.choiceDescriptions[index])
+            // labels: pollAmounts.map((_, index) => game.choiceDescriptions[index])
         };
 
 
@@ -43,13 +32,10 @@ export const displayCircle = (pollAmounts: number[], round: any, game: any) => {
             },
         };
 
-
-
         const canvas = document.createElement('canvas');
-
         const chartContainer = document.getElementById('chartContainer');
 
-        if (chartContainer) {
+        if (chartContainer && !chartContainer.querySelector('canvas')) {
             chartContainer.appendChild(canvas);
 
             new Chart(canvas, {
@@ -78,3 +64,16 @@ export const displayProgressBar = (index: number, roundAmount: number, round: an
         />
     )
 }
+
+export const backgroundColorArray = [
+    '#9bce00',
+    '#4b4b4b',
+    '#bd00c4',
+    '#ce0000',
+    '#b9a129',
+    '#16A085',
+    '#D35400',
+    '#0058b0',
+    '#037200',
+    '#6b00be'
+];

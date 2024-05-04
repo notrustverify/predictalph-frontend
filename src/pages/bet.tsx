@@ -1,11 +1,11 @@
 import Typography from "@mui/material/Typography";
 import {useLocation, useParams} from "react-router-dom";
 import {Box, Grid} from "@mui/material";
-import {BetPanel} from "../components/betPanel";
+import {BetPanel} from "../components/OldFiles/betPanel";
 import {useContext} from "react";
 import {ServiceContext} from "../App";
 import {Game} from "../domain/game";
-import {Historic} from "../components/historic";
+import {Historic} from "../components/OldFiles/historic";
 
 type BetPageProps = {
     id?: string;

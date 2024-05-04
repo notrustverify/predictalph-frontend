@@ -8,66 +8,58 @@ import ProgressBar from "./ProgressBar";
 import ButtonPink from "../Button/ButtonPink";
 import {Bet} from "../../domain/bet";
 import Chart from 'chart.js/auto';
-import {displayCircle, displayProgressBar} from "../../FunctionGlobal";
+import {backgroundColorArray, displayCircle, displayProgressBar} from "../../FunctionGlobal";
 
 type cardType = {
     game: Game,
     setVisible: () => void,
+    round: Round,
+    setValidated: (state: boolean) => void
 }
 
-const CardZoom = ({ game, setVisible }: cardType) => {
+const CardZoom = ({ game, setVisible, round, setValidated }: cardType) => {
 
     const { t } = useTranslation();
     const services = useContext(ServiceContext);
 
-    const [round, setRound] = useState<Round | null>(null);
     const [selected, setSelected] = useState(false);
     const [selectedChoiceIndex, setSelectedChoiceIndex] = useState<number | null>(null);
     const [choice, setChoice] = useState(0);
     const [amount, setAmount] = useState(0);
     const placeholder = t("Entrer le montant à miser")
-    const [displayCheck, setDisplayCheck] = useState(false)
 
     useEffect( () => {
-        (async () => {
-            if (round && !displayCheck ) {
-                await displayCircle(round.pollAmounts, round, game)
-                setDisplayCheck(true)
-            }
-        })()
-    },[displayCheck, round])
-
-    useEffect(() => {
-       fetch().catch(console.log).then();
-    }, []);
-
-    async function fetch() {
-        try {
-            const currRound: Round = await services.bet.getCurrentRound(game);
-
-            console.log("ICI ===", currRound)
-            if (currRound) {
-                setRound(currRound);
-            } else {
-                //A voir pour la gestion du cas où aucune donnée de tour n'est disponible
-            }
-        } catch (error) {
-            console.error("Une erreur s'est produite lors de la récupération du tour actuel :", error);
+        if (game && round) {
+            displayCircle(round.pollAmounts, round, game)
         }
-    }
+    },[])
+
 
     const myBet = async () => {
         if (choice === null || amount === 0)
             return;
-
-        placeBet(choice).catch(console.log).then()
+        try {
+            await placeBet(choice);
+            setValidated(true);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
-    async function placeBet(choice: number): Promise<Bet | undefined>  {
+    async function placeBet(choice: number): Promise<Bet | undefined> {
         if (round === null || amount === 0) return;
 
-        return services.bet.bet(amount, choice, game);
+        return new Promise((resolve, reject) => {
+            services.bet.bet(amount, choice, game)
+                .then((result: Bet) => {
+                    resolve(result); // Résout la promesse avec le résultat du pari
+                })
+                .catch((error: any) => {
+                    reject(error); // Rejette la promesse en cas d'erreur
+                });
+        });
     }
+
 
     const displayButton = (text: string, onClick: () => void, style: any ) => {
         return (
@@ -90,8 +82,11 @@ const CardZoom = ({ game, setVisible }: cardType) => {
 
     const displayButtonChoice = (state: boolean) => {
         return (
-            game && game.choiceDescriptions.map((choice, index) => (
-                displayButton(choice, () => {
+            game && game.choiceDescriptions.map((choice, index) => {
+                const buttonColor = state ? backgroundColorArray[index] : "";
+                const borderColor = selectedChoiceIndex === index ? "2px solid var(--white)" : "2px solid linear-gradient(to right, var(--pink), var(--pinkDark))";
+
+                return displayButton(choice, () => {
                     setChoice(index);
                     setSelected(true);
                     setSelectedChoiceIndex(index);
@@ -100,12 +95,14 @@ const CardZoom = ({ game, setVisible }: cardType) => {
                     marginBottom: 10,
                     marginRight: state ? 10 : 0,
                     marginLeft: state ? 10 : 0,
-                    backgroundColor: selectedChoiceIndex === index ? "var(--pinkBlack)" : "",
-                    border: selectedChoiceIndex === index ? "2px solid var(--white)" : "",
-                })
-            ))
-        )
-    }
+                    backgroundColor:  buttonColor,
+                    backgroundImage: state ? "none" : "linear-gradient(to right, var(--pink), var(--pinkDark))",
+                    border: borderColor,
+                });
+            })
+        );
+    };
+
 
 
     if (!game && !round) return null;
@@ -154,7 +151,7 @@ const CardZoom = ({ game, setVisible }: cardType) => {
                     * {t("1 ALPH sera bloqué jusqu'à ce que vous le réclamiez")}
                 </div>
             <div className={"containerCardZoomButton"}>
-                {!selected && displayButton("Valider", () => {}, {backgroundColor: "var(--DisabledButton)", borderColor: "var(--DisabledButton)"})}
+                {!selected && displayButton("Valider", () => {}, {backgroundColor: "var(--DisabledButton)", backgroundImage: "none", borderColor: "var(--DisabledButton)"})}
                 {selected && displayButton("Valider", myBet, {})}
                 {displayButton("Fermer", setVisible, {})}
             </div>

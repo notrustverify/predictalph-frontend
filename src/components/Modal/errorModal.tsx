@@ -1,9 +1,9 @@
 import {useContext, useEffect, useState} from "react";
 import {Box, Modal} from "@mui/material";
-import {ServiceContext} from "../App";
+import {ServiceContext} from "../../App";
 import Typography from "@mui/material/Typography";
-import {WalletNotConnectedError} from "../errors/WalletNotConnected";
-import {ConnectButton} from "../Assets/Connect/connect";
+import {WalletNotConnectedError} from "../../errors/WalletNotConnected";
+import {ConnectButton} from "../../Assets/Connect/connect";
 
 export function ErrorModal() {
     const CALLBACK_ID = 'ERROR_MODAL';

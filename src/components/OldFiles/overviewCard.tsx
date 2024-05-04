@@ -1,10 +1,9 @@
 import {useContext, useEffect, useState} from "react";
-import {ServiceContext} from "../App";
-import {Round} from "../domain/round";
-import {Game} from "../domain/game";
+import {ServiceContext} from "../../App";
+import {Round} from "../../domain/round";
+import {Game} from "../../domain/game";
 import {Button, FormControl, Grid, InputAdornment, InputLabel, OutlinedInput, Paper} from "@mui/material";
 import Typography from "@mui/material/Typography";
-import {HorizontalBar} from "./horizontalBar";
 import {Done, OpenInNew, Start} from "@mui/icons-material";
 import {useNavigate} from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
@@ -138,7 +137,7 @@ export function OverviewCard({game}: OverviewCardType) {
 
                 </Grid>
                 <Grid item sx={{height: '100%'}} md={12} xs={12}>
-                    <HorizontalBar polls={round.pollAmounts} height='20px'/>
+                    {/*<HorizontalBar polls={round.pollAmounts} height='20px'/>*/}
                 </Grid>
 
                 {choice === null ? displayChoice() : displayAmount(amount)}

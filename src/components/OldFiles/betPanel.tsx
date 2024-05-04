@@ -1,9 +1,9 @@
 import {useContext, useEffect, useState} from "react";
-import {ServiceContext} from "../App";
+import {ServiceContext} from "../../App";
 import {Box, Button, FormControl, Grid, InputAdornment, InputLabel, OutlinedInput} from "@mui/material";
-import {Game} from "../domain/game";
-import {Bet} from "../domain/bet";
-import {Round, RoundStatus} from "../domain/round";
+import {Game} from "../../domain/game";
+import {Bet} from "../../domain/bet";
+import {Round, RoundStatus} from "../../domain/round";
 import Typography from "@mui/material/Typography";
 import {PollComponent} from "./poll";
 
@@ -65,7 +65,7 @@ export function BetPanel({game, selection }: BetPanelProps) {
                     justifyContent="center"
                     alignItems="flex-start"
                 >
-                               
+
                     <Grid item style={item} sx={{height: '100%'}} md={4} xs={12}>
                         {bet === null && round?.status === RoundStatus.RUNNING
                             ? <Button
@@ -93,7 +93,7 @@ export function BetPanel({game, selection }: BetPanelProps) {
                             container
                             direction="column"
                             alignItems="stretch">
-                                
+
                             <Grid item>
                                 <FormControl fullWidth size="small">
                                     <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>

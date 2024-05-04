@@ -13,10 +13,10 @@ import {
     TableCell,
     TableRow
 } from "@mui/material";
-import {Game} from "../domain/game";
+import {Game} from "../../domain/game";
 import {useContext, useEffect, useState} from "react";
-import {ServiceContext} from "../App";
-import {Bet, BetStatus, WinStatus} from "../domain/bet";
+import {ServiceContext} from "../../App";
+import {Bet, BetStatus, WinStatus} from "../../domain/bet";
 import Typography from "@mui/material/Typography";
 import {AttachMoney, ExpandMore, HourglassEmpty, MoneyOff, Timelapse} from "@mui/icons-material";
 

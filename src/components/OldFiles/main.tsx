@@ -1,9 +1,9 @@
 import React from "react";
 import {Route, Routes} from "react-router-dom";
-import {BetPage} from "../pages/bet";
-import {Home} from "../pages/home";
+import {BetPage} from "../../pages/bet";
+import {Home} from "../../pages/home";
 import {Stack} from "@mui/material";
-import {ErrorModal} from "./errorModal";
+import {ErrorModal} from "../Modal/errorModal";
 
 const MainContent = () => {
     return (

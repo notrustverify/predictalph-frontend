@@ -10,13 +10,33 @@ import {displayCircle, displayProgressBar} from "../../FunctionGlobal";
 type cardType = {
     game: Game,
     setCardModal: (value: boolean) => void,
-    setGame: (value: Game) => void,
-    round: Round | null
+    setGame: (value: Game) => void
+    setThisRound: (value: Round) => void
 }
 
-const Card = ({ game, setCardModal, setGame, round }: cardType) => {
+const Card = ({ game, setCardModal, setGame, setThisRound }: cardType) => {
 
+    const services = useContext(ServiceContext);
+    const [round, setRound] = useState<Round | null>(null);
     const { t } = useTranslation();
+
+    useEffect( () => {
+        if (game) {
+            fetch().then();
+        }
+    }, [game])
+
+    async function fetch() {
+        try {
+            const currRound: Round = await services.bet.getCurrentRound(game);
+            if (currRound) {
+                setRound(currRound);
+            }
+        } catch (error) {
+            console.error("Une erreur s'est produite lors de la récupération du tour actuel :", error);
+        }
+    }
+
 
 
     const displayDate = (round: any) => {
@@ -36,9 +56,7 @@ const Card = ({ game, setCardModal, setGame, round }: cardType) => {
         }
     }
 
-    if (!game ) return null;
-
-
+    if (!game && !round ) return null;
 
     return (
         <div className={"containerCard"}>
@@ -59,15 +77,17 @@ const Card = ({ game, setCardModal, setGame, round }: cardType) => {
                         {round === null ? <div/> : displayDate(round)}
                     </div>
                 </div>
-                <div className={"containerCheckRight"}>
-                    <ButtonPink
-                        children={"Voir Bet"}
-                        onClick={() => {
-                            setCardModal(true)
-                            setGame(game)
-                        }}
-                    />
-                </div>
+                {round &&
+                    <div className={"containerCheckRight"}>
+                        <ButtonPink
+                            children={"Voir Bet"}
+                            onClick={() => {
+                                setCardModal(true)
+                                setGame(game)
+                                setThisRound(round)
+                            }}
+                        />
+                    </div>}
             </div>
         </div>
     )

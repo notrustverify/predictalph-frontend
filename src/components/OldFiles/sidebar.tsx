@@ -13,8 +13,8 @@ import {
     Box, List, ListItem, ListItemAvatar, ListItemButton, ListItemText,
 } from "@mui/material";
 import {SignerProvider} from "@alephium/web3";
-import {ServiceContext} from "../App";
-import {ConnectButton} from "../Assets/Connect/connect";
+import {ServiceContext} from "../../App";
+import {ConnectButton} from "../../Assets/Connect/connect";
 import Typography from "@mui/material/Typography";
 import {useNavigate} from "react-router-dom";
 

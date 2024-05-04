@@ -3,88 +3,79 @@ import { useContext, useState, useEffect } from "react";
 import Card from "../Card/Card";
 import ModalCard from "../Modal/ModalCard";
 import { Game } from "../../domain/game";
-import { Round } from "../../domain/round";
+import {Round} from "../../domain/round";
+import ModalValidate from "../Modal/ModalValidate";
 
 type typeState = {
     choice: number | null,
-    ThisServices: any
+    ThisServices: any,
 }
 
 const LayoutCard = ({ choice, ThisServices }: typeState) => {
 
 
     const [cardModal, setCardModal] = useState(false);
-    const [game, setGame] = useState<Game | null>(null);
-    const [round, setRound] = useState<Round | null>(null);
-    const [filteredGames, setFilteredGames] = useState<Round[]>([]);
+    const [thisGame, setThisGame] = useState<Game | null>(null);
+    const [thisRound, setThisRound] = useState<Round | null>(null);
+    const [validated, setValidated] = useState(false);
+    const [game, setGame] = useState([]);
 
     useEffect(() => {
-        console.log("CHOICE ===", choice)
         fetchRoundData();
     }, [choice]);
 
-    useEffect(() => {
-        console.log("filteredGames ===", filteredGames)
-    }, [filteredGames]);
 
     const fetchRoundData = async () => {
-        console.log("round ===", round)
         try {
-            // const roundGames = ThisServices.bet.getGames();
             const roundGames = ThisServices.bet.getGames().filter((state: Game) => {
                 if (choice === 0) {
                     return state && state.type.includes("PRICE");
                 }
                 if (choice === 1) {
-                    return state && state.type.includes("MULTIPLE_CHOICE");
+                    return state && state.type.includes("MULTIPLE_CHOICE") || state.type.includes("CHOICE");
                 }
                 return false;
             });
-
-            const roundData = [];
-
-            console.log("roundGames:", roundGames)
-            for (const state of roundGames) {
-                console.log("JE RENTRE DANS MA BOUCLE FOR???")
-                console.log("STATE ===", state)
-                console.log("SEMBLE BLOQUER ICI ===", ThisServices.bet.getCurrentRound(state))
-                const currRound: Round = await ThisServices.bet.getCurrentRound(state);
-                console.log("currRound ===", currRound)
-                roundData.push(currRound);
-            }
-
-            // console.log("ICI ===", roundData);
-            console.log("je lance le setFilteredGames")
-            setFilteredGames(roundData);
+            setGame(roundGames);
         } catch (error) {
             console.error("Une erreur s'est produite lors de la récupération du tour actuel :", error);
         }
     };
 
     const onClick = (event: Game) => {
-        setGame(event);
+        setThisGame(event);
     };
+
+    const onClickThisRound = (event: Round) => {
+        setThisRound(event);
+    }
 
     return (
         <div className={"LayoutCard"}>
-            {filteredGames.map((state, index) => (
-                    <Card
-                        key={state.game.id}
-                        game={state.game}
-                        setCardModal={setCardModal}
-                        setGame={event => onClick(event)}
-                        round={state}
-                    />
-                ))}
-            {game &&
+            {game && game.map((state, index) => (
+                <Card
+                    key={index}
+                    game={state}
+                    setCardModal={setCardModal}
+                    setGame={event => onClick(event)}
+                    setThisRound={event => onClickThisRound(event)}
+                />
+            ))}
+            {thisGame && thisRound !== null &&
                 <ModalCard
                     isVisible={cardModal}
-                    game={game}
+                    game={thisGame}
                     setVisible={() => {
                         setCardModal(false);
-                        setGame(null);
+                        setThisGame(null);
                     }}
+                    round={thisRound}
+                    setValidated={setValidated}
                 />}
+                <ModalValidate
+                    open={validated}
+                    handleClose={() => setValidated(false)}
+                />
         </div>
     );
 
