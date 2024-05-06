@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import {SignerProvider} from "@alephium/web3";
 import {ServiceContext} from "../../App";
-import {ConnectButton} from "../../Assets/Connect/connect";
+import {ConnectButton} from "../Connect/connect";
 import Typography from "@mui/material/Typography";
 import {useNavigate} from "react-router-dom";
 

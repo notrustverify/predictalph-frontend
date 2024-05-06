@@ -1,5 +1,5 @@
 import {Game} from "../../domain/game";
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useMemo, useState} from "react";
 import {ServiceContext} from "../../App";
 import {Round, RoundPrice} from "../../domain/round";
 import {useTranslation} from "react-i18next";
@@ -7,6 +7,8 @@ import ButtonPink from "../Button/ButtonPink";
 import {Bet} from "../../domain/bet";
 import {backgroundColorArray, displayCircle, displayProgressBar} from "../../FunctionGlobal";
 import TradingViewWidget from "../OldFiles/tradingview";
+import { useTxStatus } from '@alephium/web3-react';
+import {NodeProvider} from "@alephium/web3";
 
 type cardType = {
     game: Game,
@@ -25,6 +27,15 @@ const CardZoom = ({ game, setVisible, round, setValidated }: cardType) => {
     const [choice, setChoice] = useState(0);
     const [amount, setAmount] = useState(0);
     const placeholder = t("Entrer le montant à miser")
+    const nodeUrl = 'http://127.0.0.1:12973'
+    const nodeProvider = new NodeProvider(nodeUrl)
+
+    // console.log("nodeProvider", nodeProvider)
+
+    // const { txStatus } = useTxStatus(txId)
+    // const confirmed = useMemo(() => {
+    //     return txStatus?.type === 'Confirmed'
+    // }, [txStatus])
 
     useEffect( () => {
         if (game && round) {

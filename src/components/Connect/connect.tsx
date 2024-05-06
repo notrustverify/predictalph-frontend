@@ -10,17 +10,26 @@ interface ConnectButtonProp {
     onConnect: (signer: SignerProvider) => void;
 }
 
+
 export function ConnectButton({onConnect}: ConnectButtonProp) {
 
     const { t } = useTranslation();
     const { account, signer } = useWallet();
     const [hovered, setHovered] = useState(false);
+    const services = useContext(ServiceContext);
+
+    useEffect(() => {
+
+    }, [services]);
+
 
     if (signer !== undefined) {
         onConnect(signer as unknown as SignerProvider);
     }
 
-    const displayButton = (state: () => void, text: string) => {
+    const displayButton = (state: () => void, address: boolean ) => {
+        const trimmedAddress = account?.address ? `${account.address.substring(0, 5)}...${account.address.substring(account.address.length - 5)}` : '';
+
         return (
             <button
                 className={"ButtonConnect"}
@@ -33,7 +42,7 @@ export function ConnectButton({onConnect}: ConnectButtonProp) {
                 onMouseEnter={() => setHovered(true)}
                 onMouseLeave={() => setHovered(false)}
             >
-                {t(text)}
+                {address ? trimmedAddress : t("Connecter le portefeuille")}
             </button>
         )
     }
@@ -42,9 +51,9 @@ export function ConnectButton({onConnect}: ConnectButtonProp) {
         <AlephiumConnectButton.Custom>
             {({ isConnected, disconnect, show, account }) => {
                 return isConnected ? (
-                    disconnect && displayButton(disconnect, "Déconnecter le portefeuille")
+                    disconnect && displayButton(disconnect, true)
                 ) : (
-                    show && displayButton(show, "Connecter le portefeuille")
+                    show && displayButton(show, false)
                 );
             }}
         </AlephiumConnectButton.Custom>

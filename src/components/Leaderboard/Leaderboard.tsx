@@ -1,11 +1,15 @@
-import {useState} from "react";
+import {useContext, useEffect, useState} from "react";
+import {ServiceContext} from "../../App";
+import {useBalance} from "@alephium/web3-react";
 
 
 const Leaderboard = () => {
 
+    const services = useContext(ServiceContext);
     const [title, setTitle] = useState("Leaderboard");
-    const [nameMoney, setNameMoney] = useState("alph");
-    const [amountMoney, setAmountMoney] = useState(0);
+    const { balance, updateBalanceForTx } = useBalance()
+
+
 
     return (
         <div className="Leaderboard">
@@ -13,9 +17,12 @@ const Leaderboard = () => {
                 <div className={"titleLeaderboard"}>
                     {title.toUpperCase()}
                 </div>
-                <div className={"amountLeaderboard"}>
-                    {amountMoney} {nameMoney.toUpperCase()}
-                </div>
+                {services.wallet && balance?.balanceHint && (
+                    <div className={"amountLeaderboard"}>
+                        {parseFloat(balance.balanceHint).toFixed(0) + " ALPH"}
+                    </div>
+                )}
+
             </div>
         </div>
     )

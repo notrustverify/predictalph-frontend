@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { ConnectButton } from '../../Assets/Connect/connect';
+import { ConnectButton } from '../Connect/connect';
 import { SignerProvider } from '@alephium/web3';
 import { ServiceContext } from '../../App';
 import ModalHelp from "../Modal/ModalHelp";
