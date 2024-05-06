@@ -80,7 +80,7 @@ const Card = ({ game, setCardModal, setGame, setThisRound }: cardType) => {
                 {round &&
                     <div className={"containerCheckRight"}>
                         <ButtonPink
-                            children={"Voir Bet"}
+                            children={t("Voir le pari")}
                             onClick={() => {
                                 setCardModal(true)
                                 setGame(game)

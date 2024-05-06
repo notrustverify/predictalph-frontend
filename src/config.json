@@ -16,7 +16,7 @@
       ],
       "type": "PRICE",
       "img": "/images/alephium-price.png",
-      "symbol": "ALPH/USDT"
+      "symbol": "BTC/USD"
     },
     {
       "name": "Will BTC price be higher than the locked price?",
@@ -32,7 +32,7 @@
       ],
       "type": "PRICE",
       "img": "/images/alephium-price.png",
-      "symbol": "BTC/USDT"
+      "symbol": "BTC/USD"
     },
     {
       "name": "Multiple choice example",
@@ -49,7 +49,7 @@
       ],
       "type": "MULTIPLE_CHOICE",
       "img": "/images/alephium-price.png",
-      "symbol": "BTC/USDT"
+      "symbol": "BTC/USD"
     },
     {
       "name": "BTC will hit $100K before end of year 2024",
@@ -65,7 +65,7 @@
       ],
       "type": "CHOICE",
       "img": "/images/alephium-price.png",
-      "symbol": "BTC/USDT"
+      "symbol": "BTC/USD"
     }
   ]
 }

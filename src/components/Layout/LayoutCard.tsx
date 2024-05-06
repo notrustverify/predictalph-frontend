@@ -36,8 +36,6 @@ const LayoutCard = ({ choice, ThisServices }: typeState) => {
                 }
                 return false;
             });
-            console.log("choice", choice)
-            console.log("roundGames", roundGames)
             setGame(roundGames);
         } catch (error) {
             console.error("Une erreur s'est produite lors de la récupération du tour actuel :", error);

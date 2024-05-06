@@ -1,5 +1,6 @@
 import ButtonClassic from "../Button/ButtonClassic";
 import { useState } from "react";
+import {useTranslation} from "react-i18next";
 
 type typeState = {
     setChoice: (value: number) => void,
@@ -9,7 +10,8 @@ type typeState = {
 
 const LayoutBet = ({ setChoice, choice }: typeState) => {
 
-    const [arrayButton, setArrayButton] = useState(["Double choix", "Multi Choix", "Soon"]);
+    const { t } = useTranslation();
+    const [arrayButton, setArrayButton] = useState(["Double choix", "Choix Multiple", "Prochainement"]);
 
     return (
         <div className="containerLayoutBet">
@@ -25,10 +27,13 @@ const LayoutBet = ({ setChoice, choice }: typeState) => {
                         background: index === choice ? "linear-gradient(to right, #600c30, #ff2e63, #600c30)" : "var(--SecondaryColor)",
                         color: index === choice ? "white" : "none",
                     }}
-                    onClick={() => setChoice(index)}
-                >
-                    {buttonText}
-                </ButtonClassic>
+                    children={t(buttonText)}
+                    onClick={() => {
+                        if (index !== 2) {
+                            setChoice(index)
+                        }
+                    }}
+                />
             ))}
         </div>
     );

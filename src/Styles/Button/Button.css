@@ -32,7 +32,7 @@
     /*min-width: 220px;*/
     font-weight: bold;
     border-radius: 20px;
-    min-width: 60px;
+    min-width: 100px;
 
 }
 
@@ -54,7 +54,7 @@
     }
 }
 
-@media screen and (max-width: 425px) and (max-height: 840px) {
+@media screen and (max-width: 450px) and (max-height: 1000px) {
     .ButtonClassic {
         padding: 6px 12px;
         font-size: 12px;
@@ -65,7 +65,24 @@
         padding: 8px 16px;
         font-size: 12px;
         border-radius: 20px;
+    }
+}
 
+
+@media screen and (max-width: 900px) and (max-height: 1300px) {
+
+    .ButtonClassic {
+        font-size: 16px;
+        min-width: 120px;
+    }
+}
+
+
+@media screen and (max-width: 450px) and (max-height: 950px) {
+
+    .ButtonClassic {
+        font-size: 12px;
+        min-width: 80px;
     }
 }
 
@@ -78,3 +95,5 @@
 
     }
 }
+
+

@@ -12,8 +12,6 @@
 }
 
 .containerLogo {
-    font-size: 24px;
-    font-weight: bold;
     margin-left: 2%;
 }
 
@@ -61,15 +59,27 @@
 }
 
 
-@media screen and (max-width: 425px) and (max-height: 840px) {
-    .containerButton {
-        margin-right: 6%;
+@media screen and (max-width: 500px) and (max-height: 900px) {
+
+    .containerMenu {
+        padding: 2px;
     }
 
     .containerLogo {
-        font-size: 12px;
-        font-weight: bold;
-        margin-left: 2%;
+        margin-left: 0%;
+    }
+
+    .logo {
+        width: 40px;
+        height: 40px;
+    }
+
+    .containerRight {
+        justify-content: center;
+    }
+
+    .containerButton {
+        margin-right: 2%;
     }
 
     .ButtonConnect {
@@ -86,5 +96,52 @@
         font-size: 14px;
     }
 
+}
+
+
+
+@media screen and (max-width: 450px) and (max-height: 1000px) {
+
+    .containerMenu {
+        padding: 2px;
+    }
+
+    .containerLogo {
+        margin-left: 2%;
+    }
+
+    .logo {
+        width: 40px;
+        height: 40px;
+    }
+
+
+}
+
+
+@media screen and (max-width: 360px) and (max-height: 760px) {
+
+    .logo {
+        width: 30px;
+        height: 30px;
+    }
+
+    .containerRight {
+        justify-content: flex-end;
+    }
+
+}
+
+
+@media screen and (max-width: 400px) and (max-height: 900px) {
+
+    .logo {
+        width: 30px;
+        height: 30px;
+    }
+
+    .containerRight {
+        justify-content: flex-end;
+    }
 }
 

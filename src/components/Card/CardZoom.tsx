@@ -2,12 +2,9 @@ import {Game} from "../../domain/game";
 import React, {useContext, useEffect, useState} from "react";
 import {ServiceContext} from "../../App";
 import {Round, RoundPrice} from "../../domain/round";
-import {useLocation, useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
-import ProgressBar from "./ProgressBar";
 import ButtonPink from "../Button/ButtonPink";
 import {Bet} from "../../domain/bet";
-import Chart from 'chart.js/auto';
 import {backgroundColorArray, displayCircle, displayProgressBar} from "../../FunctionGlobal";
 import TradingViewWidget from "../OldFiles/tradingview";
 
@@ -98,7 +95,7 @@ const CardZoom = ({ game, setVisible, round, setValidated }: cardType) => {
                     marginLeft: state ? 10 : 0,
                     backgroundColor:  buttonColor,
                     backgroundImage: state ? "none" : "linear-gradient(to right, var(--pink), var(--pinkDark))",
-                    border: borderColor,
+                    border: borderColor
                 });
             })
         );
@@ -146,7 +143,10 @@ const CardZoom = ({ game, setVisible, round, setValidated }: cardType) => {
                     onChange={(e) => setAmount(parseInt(e.target.value))}
                     min={0}
                 />
-            {/*{game && game.symbol && TradingViewWidget({symbol: game.symbol})}*/}
+            {/*{game &&*/}
+            {/*<div style={{height: "95%", marginTop: 25}}>*/}
+            {/*    <TradingViewWidget symbol={game.symbol}/>*/}
+            {/*</div>}*/}
             <div className={"zoomNote"}>
                     * {t("1 ALPH sera bloqué jusqu'à ce que vous le réclamiez")}
                 </div>

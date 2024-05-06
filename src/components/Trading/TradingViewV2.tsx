@@ -1,21 +1,62 @@
-import React, { useRef, useEffect } from 'react';
-type State = {
+// TradingViewWidget.jsx
+import React, {useEffect, useRef, memo} from 'react';
+
+type TradingViewWidgetType = {
     symbol: string,
 }
 
-const TradingViewV2 = ({ symbol }: State) => {
-    const tradingViewRef = useRef(null);
+function TradingViewWidget({symbol}: TradingViewWidgetType) {
+    const container = useRef();
 
     useEffect(() => {
-        if (tradingViewRef.current) {
+        const script = document.createElement("script");
+        script.src = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
+        script.type = "text/javascript";
+        script.async = true;
+        script.innerHTML = `
+      {
+        "autosize": true,
+        "symbol": "GATEIO:ALPHUSDT",
+        "interval": "D",
+        "timezone": "Etc/UTC",
+        "theme": "dark",
+        "style": "1",
+        "locale": "en",
+        "enable_publishing": false,
+        "hide_legend": true,
+        "save_image": false,
+        "calendar": false,
+        "hide_volume": true,
+        "support_host": "https://www.tradingview.com"
+      }`;
 
+        try {
+            // @ts-ignore
+            container.current.appendChild(script);
+        } catch (e) {
+            console.log(e);
         }
-    }, [symbol]);
+
+        return () => {
+            try {
+                // @ts-ignore
+                container.current.removeChild(script); // Cleanup
+            } catch (e) {
+                console.log(e);
+            }
+        };
+    }, []);
 
     return (
-        <div>
+        // @ts-ignore
+        <div className="tradingview-widget-container" ref={container} style={{height: "100%", width: "100%"}}>
+            <div className="tradingview-widget-container__widget"
+                 style={{height: "calc(100% - 32px)", width: "100%"}}></div>
+            <div className="tradingview-widget-copyright"><a href="src/components/OldFiles/tradingview" rel="noopener nofollow"
+                                                             target="_blank"><span className="blue-text">Track all markets on TradingView</span></a>
+            </div>
         </div>
     );
 }
 
-export default TradingViewV2;
+export default TradingViewWidget;
