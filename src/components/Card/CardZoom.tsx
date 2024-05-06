@@ -9,6 +9,7 @@ import ButtonPink from "../Button/ButtonPink";
 import {Bet} from "../../domain/bet";
 import Chart from 'chart.js/auto';
 import {backgroundColorArray, displayCircle, displayProgressBar} from "../../FunctionGlobal";
+import TradingViewWidget from "../OldFiles/tradingview";
 
 type cardType = {
     game: Game,
@@ -145,8 +146,7 @@ const CardZoom = ({ game, setVisible, round, setValidated }: cardType) => {
                     onChange={(e) => setAmount(parseInt(e.target.value))}
                     min={0}
                 />
-            {game && game.symbol &&
-                TradingViewWidget({symbol: game.symbol})}
+            {/*{game && game.symbol && TradingViewWidget({symbol: game.symbol})}*/}
             <div className={"zoomNote"}>
                     * {t("1 ALPH sera bloqué jusqu'à ce que vous le réclamiez")}
                 </div>

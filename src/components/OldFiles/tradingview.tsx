@@ -1,61 +1,55 @@
 // TradingViewWidget.jsx
-import React, {useEffect, useRef, memo} from 'react';
+import React, { useEffect, useRef } from 'react';
 
-type State = {
+type Props = {
     symbol: string,
 }
 
-function TradingViewWidget({ symbol }: State) {
-    const container = useRef();
+const TradingViewWidget: React.FC<Props> = ({ symbol }) => {
+    const container = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const script = document.createElement("script");
         script.src = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
         script.type = "text/javascript";
         script.async = true;
-        script.innerHTML = `
-      {
-        "autosize": true,
-        "symbol": "GATEIO:ALPHUSDT",
-        "interval": "D",
-        "timezone": "Etc/UTC",
-        "theme": "dark",
-        "style": "1",
-        "locale": "en",
-        "enable_publishing": false,
-        "hide_legend": true,
-        "save_image": false,
-        "calendar": false,
-        "hide_volume": true,
-        "support_host": "https://www.tradingview.com"
-      }`;
+        script.innerHTML = JSON.stringify({
+            "autosize": true,
+            "symbol": symbol, // Utiliser le symbole passé en tant que prop
+            "interval": "D",
+            "timezone": "Etc/UTC",
+            "theme": "dark",
+            "style": "1",
+            "locale": "en",
+            "enable_publishing": false,
+            "hide_legend": true,
+            "save_image": false,
+            "calendar": false,
+            "hide_volume": true,
+            "support_host": "https://www.tradingview.com"
+        });
 
         try {
-            // @ts-ignore
-            container.current.appendChild(script);
+            if (container.current) {
+                container.current.appendChild(script);
+            }
         } catch (e) {
             console.log(e);
         }
 
         return () => {
             try {
-                // @ts-ignore
-                container.current.removeChild(script); // Cleanup
+                if (container.current) {
+                    container.current.removeChild(script); // Cleanup
+                }
             } catch (e) {
                 console.log(e);
             }
         };
-    }, []);
+    }, [symbol]); // Effect will re-run whenever the symbol prop changes
 
     return (
-        // @ts-ignore
-        <div className="tradingview-widget-container" ref={container} style={{height: "100%", width: "100%"}}>
-            <div className="tradingview-widget-container__widget"
-                 style={{height: "calc(100% - 32px)", width: "100%"}}></div>
-            <div className="tradingview-widget-copyright"><a href="src/components/OldFiles/tradingview" rel="noopener nofollow"
-                                                             target="_blank"><span className="blue-text">Track all markets on TradingView</span></a>
-            </div>
-        </div>
+        <div ref={container}></div>
     );
 }
 
