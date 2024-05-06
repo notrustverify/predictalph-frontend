@@ -3,7 +3,7 @@ import { initReactI18next } from 'react-i18next';
 import frTranslation from './translation/fr.json';
 import enTranslation from './translation/en.json';
 
-const userLanguage = navigator.language.split('-')[0];
+// const userLanguage = navigator.language.split('-')[0];
 
 i18n
     .use(initReactI18next)
@@ -16,7 +16,8 @@ i18n
                 translation: frTranslation
             }
         },
-        lng: userLanguage , // Langue par défaut
+        // lng: userLanguage , // Langue par défaut
+        lng: 'en' , // Langue par défaut
         fallbackLng: 'en', // Langue de secours si la langue demandée n'est pas disponible
         interpolation: {
             escapeValue: false // Ne pas échapper les valeurs HTML dans les traductions

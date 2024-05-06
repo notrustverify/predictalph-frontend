@@ -3,8 +3,15 @@ import { ConnectButton } from '../../Assets/Connect/connect';
 import { SignerProvider } from '@alephium/web3';
 import { ServiceContext } from '../../App';
 import ModalHelp from "../Modal/ModalHelp";
+import LanguageSelector from "./selectorLangage";
 
-const Menu = () => {
+type state = {
+    language: string,
+    setLanguage: (value: string) => void,
+}
+
+const Menu = ({ language, setLanguage }: state) => {
+
     const [already, setAlready] = useState(false);
     const services = useContext(ServiceContext);
     const [open, setOpen] = useState(false);
@@ -21,7 +28,6 @@ const Menu = () => {
     return (
         <div className={"containerMenu"}>
             <div className={"containerLogo"} >
-                {/*ALPH.BET*/}
                 <img
                     src={require('./../../Assets/logo.png')}
                     alt="Logo ALPH.BET"
@@ -29,6 +35,10 @@ const Menu = () => {
                 />
             </div>
             <div className={"containerRight"}>
+                <LanguageSelector
+                    language={language}
+                    setLanguage={setLanguage}
+                />
                 <div
                     className="containerButtonQuestion"
                     onClick={() => setOpen(true)}

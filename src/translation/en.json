@@ -14,11 +14,11 @@
     "content10": "What is happening is if I don't claim my rewards ?",
     "content11": "You have 1 week to claim your rewards, if you wait to long to do, after this period of time anybody can claim them."
   },
-  "Connecter le portefeuille": "Connect Wallet",
+  "Connecter le portefeuille": "Connect",
   "Déconnecter le portefeuille": "Disconnect Wallet",
   "Bienvenue sur ALPH.BET, les paris décentralisé": "Welcome to ALPH.BET, the decentralized betting",
   "1 ALPH sera bloqué jusqu'à ce que vous le réclamiez": "1 ALPH will be locked until you claim it",
   "Entrer le montant à miser": "Enter the amount to bet",
-  "Fin du pari dans :": "End of the bet in :",
-  "Tour terminé dans :": "Round end in :"
+  "Fin du pari dans ": "End of the bet in : ",
+  "Tour terminé dans ": "Round end in : "
 }

@@ -1,11 +1,11 @@
 // TradingViewWidget.jsx
 import React, {useEffect, useRef, memo} from 'react';
 
-type TradingViewWidgetType = {
+type State = {
     symbol: string,
 }
 
-function TradingViewWidget({symbol}: TradingViewWidgetType) {
+function TradingViewWidget({ symbol }: State) {
     const container = useRef();
 
     useEffect(() => {

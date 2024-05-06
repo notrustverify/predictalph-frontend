@@ -63,7 +63,7 @@ const Card = ({ game, setCardModal, setGame, setThisRound }: cardType) => {
             <div className={"containerCardTitle"}>
                 {game.name}
             </div>
-            {game && game.choiceDescriptions.length === 2 &&
+            {game && ((game.type === "CHOICE") || (game.type === "PRICE")) &&
                 <div className={"containerProgressBar"} style={{flexDirection: "column"}}>
                     {round && round.pollAmounts.map((item, index) => (
                         <div key={index} className={"containerProgressBarFill"}>

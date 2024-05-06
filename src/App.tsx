@@ -37,7 +37,12 @@ export const ServiceContext = createContext(services);
 export default function App() {
 
     const [choice, setChoice] = useState(0);
+    const [language, setLanguage] = useState("en");
     const ThisServices = useContext(ServiceContext);
+
+    useEffect( () => {
+        i18n.changeLanguage(language);
+    }, [language])
 
   return (
     <AlephiumWalletProvider
@@ -45,10 +50,13 @@ export default function App() {
         addressGroup={config.games[0].contract.index}
     >
       <ServiceContext.Provider value={services}>
-        <I18nextProvider i18n={i18n}>
+        <I18nextProvider i18n={i18n} >
           <BrowserRouter>
-            <TradingView />
-            <Menu/>
+            {/*<TradingView />*/}
+            <Menu
+                language={language}
+                setLanguage={setLanguage}
+            />
             <Leaderboard/>
             <LayoutBet setChoice={setChoice} choice={choice}/>
             <LayoutCard choice={choice} ThisServices={ThisServices} />

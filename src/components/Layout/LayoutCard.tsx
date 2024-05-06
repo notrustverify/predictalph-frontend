@@ -29,13 +29,15 @@ const LayoutCard = ({ choice, ThisServices }: typeState) => {
         try {
             const roundGames = ThisServices.bet.getGames().filter((state: Game) => {
                 if (choice === 0) {
-                    return state && state.type.includes("PRICE");
+                    return state && (state.type === "PRICE" || state.type === "CHOICE");
                 }
                 if (choice === 1) {
-                    return state && state.type.includes("MULTIPLE_CHOICE") || state.type.includes("CHOICE");
+                    return state && state.type === "MULTIPLE_CHOICE";
                 }
                 return false;
             });
+            console.log("choice", choice)
+            console.log("roundGames", roundGames)
             setGame(roundGames);
         } catch (error) {
             console.error("Une erreur s'est produite lors de la récupération du tour actuel :", error);

@@ -103,8 +103,6 @@ const CardZoom = ({ game, setVisible, round, setValidated }: cardType) => {
         );
     };
 
-
-
     if (!game && !round) return null;
 
     return (
@@ -113,7 +111,7 @@ const CardZoom = ({ game, setVisible, round, setValidated }: cardType) => {
                 {game.name}
             </div>
             <div className={"containerProgressBar"}>
-                {game && game.choiceDescriptions.length === 2 &&
+                {game && ((game.type === "CHOICE") || (game.type === "PRICE")) &&
                     <div className={"zoomProgressBarFill"}>
                         {round && round.pollAmounts.map((item, index) => (
                             <div key={index} className={"zoomProgressBarFill"}>
@@ -121,24 +119,24 @@ const CardZoom = ({ game, setVisible, round, setValidated }: cardType) => {
                             </div>
                         ))}
                     </div>}
-                {game && game.choiceDescriptions.length > 2 &&
+                {game && game.type === "MULTIPLE_CHOICE" &&
                     <div className={"zoomProgressBarFill"} style={{alignItems: "center"}}>
                         {<div id="chartContainer" style={{ marginBottom: 24}}/>}
                     </div>}
-                {game && game.choiceDescriptions.length === 2 &&
+                {game && ((game.type === "CHOICE") || (game.type === "PRICE")) &&
                     <div className={"containerProgressBarButton"}>
                         {displayButtonChoice(false)}
                     </div>}
             </div>
-            {game && game.choiceDescriptions.length > 2 &&
+            {game && game.type === "MULTIPLE_CHOICE" &&
                 <div className={"containerButtonRow"}>
                     {displayButtonChoice(true)}
                 </div>}
-            { round instanceof RoundPrice ?
-                <div className={"containerZoomInfo"}>
-                    {displayInfo("Locked:", round.priceStart)}
-                    {displayInfo("Actual:", round.priceEnd)}
-                </div>
+            { round instanceof RoundPrice && game && ((game.type === "PRICE")) ?
+                    <div className={"containerZoomInfo"}>
+                        {displayInfo("Locked:", round.priceStart)}
+                        {displayInfo("Actual:", round.priceEnd)}
+                    </div>
                 : <div/>}
                 <input
                     className={"CardEnterAmount"}
@@ -147,6 +145,8 @@ const CardZoom = ({ game, setVisible, round, setValidated }: cardType) => {
                     onChange={(e) => setAmount(parseInt(e.target.value))}
                     min={0}
                 />
+            {game && game.symbol &&
+                TradingViewWidget({symbol: game.symbol})}
             <div className={"zoomNote"}>
                     * {t("1 ALPH sera bloqué jusqu'à ce que vous le réclamiez")}
                 </div>
