@@ -21,7 +21,7 @@ const ProgressBar = ({ index, width , number }: thisColor) => {
                 }}
             >
                 <div className="progressBarText">
-                    {number}
+                    {number.toFixed(0) + " ℵ"}
                 </div>
             </div>
         </div>

@@ -60,7 +60,7 @@ export const displayProgressBar = (index: number, roundAmount: number, round: an
         <ProgressBar
             index={index}
             width={percentage === 0 ? 50 : percentage}
-            number={percentage}
+            number={roundAmount}
         />
     )
 }
