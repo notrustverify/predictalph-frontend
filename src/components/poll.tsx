@@ -60,14 +60,14 @@ export function PollComponent({round}: PollComponentType) {
                 <Grid item><Typography>ALPH {round.pollAmounts[0]}</Typography></Grid>
                 <Grid item><Typography>ALPH {round.pollAmounts[1]}</Typography></Grid>
                 {
-                    round.game.type === GameType.MULTIPLE_CHOICE ?
+                    round.game.type === GameType.MULTIPLE_CHOICE  && round.pollAmounts[2] > 0 ?
                 <Grid item><Typography>ALPH {round.pollAmounts[2]}</Typography></Grid> :<></>
                 }
 
              
 
                 </Grid>
-               { round.game.type === GameType.MULTIPLE_CHOICE ? <></> :
+               { round.game.type === GameType.MULTIPLE_CHOICE && round.pollAmounts[2] > 0  ? <></> :
                 <Grid item sx={{height: '100%', padding: '10px'}} md={12} xs={12}>
                     <HorizontalBar polls={round.pollAmounts} height='20px'/>
                 </Grid> }

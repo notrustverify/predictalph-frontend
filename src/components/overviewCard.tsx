@@ -58,7 +58,7 @@ export function OverviewCard({game}: OverviewCardType) {
                         {game.choiceDescriptions[1]}
                     </Button>
                 </Grid>
-                { game.type === GameType.MULTIPLE_CHOICE ? 
+                { game.type === GameType.MULTIPLE_CHOICE && game.choiceDescriptions[2] !== undefined ? 
                 <Grid item md={6} sx={{marginTop: '10px'}}>
                     <Button
                         fullWidth

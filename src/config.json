@@ -60,8 +60,7 @@
       },
       "choiceDescriptions": [
         "Real Madrid",
-        "Bayern Munich",
-        ""
+        "Bayern Munich"
       ],
       "type": "MULTIPLE_CHOICE",
       "img": "/images/alephium-price.png",

@@ -113,7 +113,7 @@ export function BetPanel({game, selection }: BetPanelProps) {
                     </Grid>
                     
                     {
-                        game.type === GameType.MULTIPLE_CHOICE ? 
+                        game.type === GameType.MULTIPLE_CHOICE && game.choiceDescriptions[2] !== undefined ? 
                     <Grid item style={item} sx={{height: '100%'}} md={4} xs={12}>
                         {bet === null && round?.status === RoundStatus.RUNNING
                             ? <Button
