@@ -123,8 +123,12 @@
         "Bayern Munich"
 =======
         "Bayern Munich",
+<<<<<<< HEAD
         "Tie"
 >>>>>>> 2d730df (add: uefa semi finals)
+=======
+        ""
+>>>>>>> 5bb198f (add: uefa semi finals)
       ],
       "type": "MULTIPLE_CHOICE",
       "img": "/images/alephium-price.png",
