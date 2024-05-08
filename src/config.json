@@ -106,7 +106,11 @@
       "symbol": ""
     },
     {
+<<<<<<< HEAD
       "name": "Who will go to the finals of the UEFA Champions league?",
+=======
+      "name": "Who will go to the finals of the UEFA Champions leauge?",
+>>>>>>> 2d730df (add: uefa semi finals)
       "description": "",
       "contract": {
         "id": "55c8cf1048b7cd24fde6a8b95f901dd5fdc0ded3a4a4128d81e70e930e60c001",
@@ -115,15 +119,23 @@
       },
       "choiceDescriptions": [
         "Real Madrid",
+<<<<<<< HEAD
         "Bayern Munich"
+=======
+        "Bayern Munich",
+        "Tie"
+>>>>>>> 2d730df (add: uefa semi finals)
       ],
       "type": "MULTIPLE_CHOICE",
       "img": "/images/alephium-price.png",
       "symbol": ""
+<<<<<<< HEAD
 >>>>>>> PierreM33-UIV2_PierreM
 =======
       "symbol": ""
 >>>>>>> a8a5dab (new: bet 100k bitcoin)
+=======
+>>>>>>> 2d730df (add: uefa semi finals)
     }
   ]
 }
