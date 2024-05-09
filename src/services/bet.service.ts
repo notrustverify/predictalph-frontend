@@ -68,7 +68,7 @@ export class BetService {
     }
 
     getResult(dto: BetDTO) {
-        if (dto.typeBet === "choice") 
+        if (dto.typeBet === "choice")
             return dto.sideWon ? 0 : 1; // if contract is a choice type
         else if(dto.typeBet === "multiplechoice")
             return dto.sideWonMultipleChoice
@@ -98,6 +98,7 @@ export class BetService {
                 reward,
                 this.getResult(dto),
                 dto.epoch,
+                "" // TODO can we get tx id from API ?
                 )
         });
         const bets: Bet[] =  await Promise.all(promises)

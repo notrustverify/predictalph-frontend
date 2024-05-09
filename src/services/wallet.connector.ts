@@ -53,7 +53,7 @@ export class WalletConnector implements WalletConnector {
         const amnt = toBigInt(amount);
 
             if (round.game.type === GameType.PRICE) {
-                 await BidPrice.execute(this.window, {
+                 const res = await BidPrice.execute(this.window, {
                     initialFields: {
                         predict: round.game.contract.id,
                         amount: amnt,
@@ -62,9 +62,9 @@ export class WalletConnector implements WalletConnector {
                     attoAlphAmount: amnt+ BigInt(2) * DUST_AMOUNT,
                 });
 
-                 return new Bet(BetStatus.PENDING, await this.getAccount(), choice, amount, 0, 0, round.epoch);
+                 return new Bet(BetStatus.PENDING, await this.getAccount(), choice, amount, 0, 0, round.epoch, res.txId);
             }else if(round.game.type === GameType.MULTIPLE_CHOICE){
-                await BidMultipleChoice.execute(this.window, {
+                const res = await BidMultipleChoice.execute(this.window, {
                     initialFields: {
                         predict: round.game.contract.id,
                         amount: amnt,
@@ -73,10 +73,10 @@ export class WalletConnector implements WalletConnector {
                     attoAlphAmount: amnt+ BigInt(2) * DUST_AMOUNT,
                 });
 
-                 return new Bet(BetStatus.PENDING, await this.getAccount(), choice, amount, 0, 0, round.epoch);
-            
+                 return new Bet(BetStatus.PENDING, await this.getAccount(), choice, amount, 0, 0, round.epoch, res.txId);
+
             } else  {
-                await BidChoice.execute(this.window, {
+                const res = await BidChoice.execute(this.window, {
                     initialFields: {
                         predict: round.game.contract.id,
                         amount: amnt,
@@ -85,7 +85,7 @@ export class WalletConnector implements WalletConnector {
                     attoAlphAmount: amnt + BigInt(2) * DUST_AMOUNT,
                 });
 
-                return new Bet(BetStatus.PENDING, await this.getAccount(), choice, amount, 0, 0, round.epoch);
+                return new Bet(BetStatus.PENDING, await this.getAccount(), choice, amount, 0, 0, round.epoch, res.txId);
 
             }
     }
