@@ -3,6 +3,8 @@ import CardZoom from "../Card/CardZoom";
 import {Modal} from "@mui/material";
 import {Round} from "../../domain/round";
 import {useState} from "react";
+import {Historic} from "../OldFiles/historic";
+import * as React from "react";
 
 type State = {
     isVisible: boolean,
@@ -28,6 +30,7 @@ const ModalCard = ({ isVisible, game, setVisible, round, setValidated }: State) 
                 round={round}
                 setValidated={setValidated}
             />
+
         </Modal>
     )
 }

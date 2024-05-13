@@ -9,6 +9,7 @@ import {backgroundColorArray, displayCircle, displayProgressBar} from "../../Fun
 import TradingViewWidget from "../OldFiles/tradingview";
 import { useTxStatus } from '@alephium/web3-react';
 import {NodeProvider} from "@alephium/web3";
+import {Historic} from "../OldFiles/historic";
 
 type cardType = {
     game: Game,
@@ -27,10 +28,13 @@ const CardZoom = ({ game, setVisible, round, setValidated }: cardType) => {
     const [choice, setChoice] = useState(0);
     const [amount, setAmount] = useState(0);
     const placeholder = t("Entrer le montant à miser")
-    const nodeUrl = 'http://127.0.0.1:12973'
+    // const nodeUrl = 'https://lb-fullnode-alephium.notrustverify.ch/docs/'
+    const nodeUrl = 'https://predictalph-api.notrustverify.ch/'
     const nodeProvider = new NodeProvider(nodeUrl)
 
-    // console.log("nodeProvider", nodeProvider)
+    console.log("services", services)
+
+    console.log("nodeProvider", nodeProvider)
 
     // const { txStatus } = useTxStatus(txId)
     // const confirmed = useMemo(() => {
@@ -48,8 +52,15 @@ const CardZoom = ({ game, setVisible, round, setValidated }: cardType) => {
         if (choice === null || amount === 0)
             return;
         try {
-            await placeBet(choice);
-            setValidated(true);
+            const result = await placeBet(choice);
+            console.log('Résultat:', result);
+            // if (txId) {
+            //     const txStatus = await nodeProvider.transactions.getTransactionsStatus({ txId });
+            //     console.log('Transaction Status:', txStatus);
+            // } else {
+            //     console.log('L\'ID de transaction est introuvable.');
+            // }
+            // setValidated(true);
         } catch (error) {
             console.log(error);
         }

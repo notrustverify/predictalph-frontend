@@ -38,7 +38,7 @@ const ModalValidate = ({ open, handleClose }: { open: boolean, handleClose: () =
                         {t("VALIDATION")}
                     </div>
                     <div className={"validateText"}>
-                        {t("Votre pari a bien été enregistré.")}
+                        {t("Votre pari à bien été enreigstré")}
                     </div>
                 <ButtonPink
                     children={t("Fermer")}

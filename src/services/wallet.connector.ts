@@ -2,7 +2,7 @@ import {Account as AlephiumAccount, DUST_AMOUNT, SignerProvider} from "@alephium
 import {Round} from "../domain/round";
 import {Bet, BetStatus} from "../domain/bet";
 import {Account} from "../domain/account";
-import {BidChoice, BidPrice, WithdrawChoice, WithdrawPrice} from "../artifacts/ts";
+import {BidChoice, BidMultipleChoice, BidPrice, WithdrawChoice, WithdrawMultipleChoice, WithdrawPrice} from "../artifacts/ts";
 import {Game, GameType} from "../domain/game";
 import {WalletConnectionError} from "../errors/WalletConnectionError";
 import {WalletNotConnectedError} from "../errors/WalletNotConnected";
@@ -52,30 +52,42 @@ export class WalletConnector implements WalletConnector {
 
         const amnt = toBigInt(amount);
 
-            if (round.game.type === GameType.PRICE) {
-                 await BidPrice.execute(this.window, {
-                    initialFields: {
-                        predict: round.game.contract.id,
-                        amount: amnt,
-                        side: choice === 0,
-                    },
-                    attoAlphAmount: amnt+ BigInt(2) * DUST_AMOUNT,
-                });
+        if (round.game.type === GameType.PRICE) {
+            const res = await BidPrice.execute(this.window, {
+                initialFields: {
+                    predict: round.game.contract.id,
+                    amount: amnt,
+                    side: choice === 0,
+                },
+                attoAlphAmount: amnt+ BigInt(2) * DUST_AMOUNT,
+            });
 
-                 return new Bet(BetStatus.PENDING, await this.getAccount(), choice, amount, 0, 0, round.epoch);
-            } else  {
-                await BidChoice.execute(this.window, {
-                    initialFields: {
-                        predict: round.game.contract.id,
-                        amount: amnt,
-                        side: choice === 0,
-                    },
-                    attoAlphAmount: amnt + BigInt(2) * DUST_AMOUNT,
-                });
+            return new Bet(BetStatus.PENDING, await this.getAccount(), choice, amount, 0, 0, round.epoch, res.txId);
+        }else if(round.game.type === GameType.MULTIPLE_CHOICE){
+            const res = await BidMultipleChoice.execute(this.window, {
+                initialFields: {
+                    predict: round.game.contract.id,
+                    amount: amnt,
+                    side: BigInt(choice),
+                },
+                attoAlphAmount: amnt+ BigInt(2) * DUST_AMOUNT,
+            });
 
-                return new Bet(BetStatus.PENDING, await this.getAccount(), choice, amount, 0, 0, round.epoch);
+            return new Bet(BetStatus.PENDING, await this.getAccount(), choice, amount, 0, 0, round.epoch, res.txId);
 
-            }
+        } else  {
+            const res = await BidChoice.execute(this.window, {
+                initialFields: {
+                    predict: round.game.contract.id,
+                    amount: amnt,
+                    side: choice === 0,
+                },
+                attoAlphAmount: amnt + BigInt(2) * DUST_AMOUNT,
+            });
+
+            return new Bet(BetStatus.PENDING, await this.getAccount(), choice, amount, 0, 0, round.epoch, res.txId);
+
+        }
     }
 
     async claim(bets: Bet[], game: Game): Promise<string> {
@@ -86,6 +98,17 @@ export class WalletConnector implements WalletConnector {
 
         if (game.type === GameType.PRICE) {
             const res = await WithdrawPrice.execute(this.window, {
+                initialFields: {
+                    predict: game.contract.id,
+                    epochParticipation: arrayEpochToBytes(bets.map(b => Number(b.epoch))),
+                    addressToClaim: (await this.getAccount()).address
+                },
+                attoAlphAmount:  BigInt(2) * DUST_AMOUNT,
+            });
+            return res.txId;
+        } else if (game.type === GameType.MULTIPLE_CHOICE) {
+            console.log(bets.map(b => Number(b.epoch)))
+            const res = await WithdrawMultipleChoice.execute(this.window, {
                 initialFields: {
                     predict: game.contract.id,
                     epochParticipation: arrayEpochToBytes(bets.map(b => Number(b.epoch))),
