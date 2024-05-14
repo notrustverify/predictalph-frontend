@@ -127,6 +127,7 @@ export class BlockchainClient {
       getRoundContractId(game.contract.id, epoch, game.contract.index)
     );
     if( !await contractExists(subAddress) && game.type !== GameType.PRICE){
+      console.log(epoch)
        if(epoch > 0)
         subAddress = addressFromContractId(
           getRoundContractId(game.contract.id, epoch-BigInt(1), game.contract.index)
