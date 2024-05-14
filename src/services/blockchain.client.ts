@@ -40,7 +40,7 @@ export class BlockchainClient {
     private readonly coinGecko: CoinGeckoClient
   ) {
     if (network === "testnet")
-      web3.setCurrentNodeProvider(`https://wallet.${network}.alephium.org`);
+      web3.setCurrentNodeProvider(`https://node.${network}.alephium.org`);
     else if (network === "devnet")
       web3.setCurrentNodeProvider("http://127.0.0.1:22973");
     else
