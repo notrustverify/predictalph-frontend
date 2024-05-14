@@ -51,6 +51,10 @@ const LayoutCard = ({ choice, ThisServices }: typeState) => {
         setThisRound(event);
     }
 
+    useEffect( () => {
+        console.log("Round", thisRound)
+    }, [thisRound])
+
     return (
         <div className={"LayoutCard"}>
             {game && game.map((state, index) => (
