@@ -2,8 +2,6 @@ import { Game } from "../../domain/game";
 import CardZoom from "../Card/CardZoom";
 import {Modal} from "@mui/material";
 import {Round} from "../../domain/round";
-import {useState} from "react";
-import {Historic} from "../OldFiles/historic";
 import * as React from "react";
 
 type State = {
@@ -12,9 +10,10 @@ type State = {
     setVisible: () => void,
     round: Round,
     setValidated: (state: boolean) => void
+    language: string
 }
 
-const ModalCard = ({ isVisible, game, setVisible, round, setValidated }: State) => {
+const ModalCard = ({ isVisible, game, setVisible, round, setValidated, language }: State) => {
 
     if (!isVisible) return null;
 
@@ -29,8 +28,8 @@ const ModalCard = ({ isVisible, game, setVisible, round, setValidated }: State) 
                 setVisible={setVisible}
                 round={round}
                 setValidated={setValidated}
+                language={language}
             />
-
         </Modal>
     )
 }

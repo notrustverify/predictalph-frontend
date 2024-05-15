@@ -12,9 +12,10 @@ type cardType = {
     setCardModal: (value: boolean) => void,
     setGame: (value: Game) => void
     setThisRound: (value: Round) => void
+    language: string
 }
 
-const Card = ({ game, setCardModal, setGame, setThisRound }: cardType) => {
+const Card = ({ game, setCardModal, setGame, setThisRound, language }: cardType) => {
 
     const services = useContext(ServiceContext);
     const [round, setRound] = useState<Round | null>(null);
@@ -61,7 +62,11 @@ const Card = ({ game, setCardModal, setGame, setThisRound }: cardType) => {
     return (
         <div className={"containerCard"}>
             <div className={"containerCardTitle"}>
-                {game.name}
+                {game.name && Array.isArray(game.name) ? (
+                    game.name.map(nameObj => nameObj[language])
+                ) : (
+                    game.name
+                )}
             </div>
             {game && ((game.type === "CHOICE") || (game.type === "PRICE")) &&
                 <div className={"containerProgressBar"} style={{flexDirection: "column"}}>

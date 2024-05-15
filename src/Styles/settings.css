@@ -1,7 +1,9 @@
 @import "Leaderboard/Leaderboard.css";
 @import "Menu/Menu.css";
 @import "Card/Card.css";
+@import "Card/History.css";
 @import "Card/ProgressBar.css";
 @import "./Button/Button.css";
 @import "./Layout/LayoutBet.css";
 @import "./Modal/ModalCard.css";
+

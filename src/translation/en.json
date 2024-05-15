@@ -33,5 +33,11 @@
   "NO": "NO",
   "Yes": "YES",
   "No": "NO",
-  "Votre pari à bien été enreigstré": "Your bet has been saved"
+  "Votre pari à bien été enreigstré": "Your bet has been saved",
+  "Historique": "History & Rewards",
+  "Réclamer": "Claim",
+  "En attente": "Pending",
+  "Réclamé": "Claimed",
+  "Perdu": "Lost",
+  "Gagné": "Won"
 }

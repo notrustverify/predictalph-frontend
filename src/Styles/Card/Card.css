@@ -125,6 +125,14 @@
     margin-bottom: 24px;
 }
 
+.containerCardInput {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: space-around;
+    margin-top: 10px;
+}
+
 .CardEnterAmount {
     display: flex;
     flex-direction: column;

@@ -59,7 +59,7 @@ export default function App() {
             />
             <Leaderboard/>
             <LayoutBet setChoice={setChoice} choice={choice}/>
-            <LayoutCard choice={choice} ThisServices={ThisServices} />
+            <LayoutCard choice={choice} ThisServices={ThisServices} language={language} />
           </BrowserRouter>
         </I18nextProvider>
       </ServiceContext.Provider>

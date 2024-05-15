@@ -10,9 +10,10 @@ import {Historic} from "../OldFiles/historic";
 type typeState = {
     choice: number | null,
     ThisServices: any,
+    language: string
 }
 
-const LayoutCard = ({ choice, ThisServices }: typeState) => {
+const LayoutCard = ({ choice, ThisServices, language }: typeState) => {
 
 
     const [cardModal, setCardModal] = useState(false);
@@ -64,6 +65,7 @@ const LayoutCard = ({ choice, ThisServices }: typeState) => {
                     setCardModal={setCardModal}
                     setGame={event => onClick(event)}
                     setThisRound={event => onClickThisRound(event)}
+                    language={language}
                 />
             ))}
             {thisGame && thisRound !== null &&
@@ -76,6 +78,7 @@ const LayoutCard = ({ choice, ThisServices }: typeState) => {
                     }}
                     round={thisRound}
                     setValidated={setValidated}
+                    language={language}
                 />}
                 <ModalValidate
                     open={validated}
