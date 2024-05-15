@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import ButtonPink from "../Button/ButtonPink";
-import {Button} from "@mui/material";
+import {Alert, Button, Snackbar} from "@mui/material";
 import {Bet, BetStatus} from "../../domain/bet";
 import {ServiceContext} from "../../App";
 
@@ -20,16 +20,17 @@ const History = ({ bets, game, setStep }: State) => {
     const services = useContext(ServiceContext);
     const {t} = useTranslation();
     const [epoch, setEpoch] = useState(null)
-
+    const [claiming, setClaiming] = useState<ClaimRequest>(ClaimRequest.NONE);
+    const [buttonLocked, setButtonLocked] = useState(false)
 
     const getResult = (item: any) => {
-        if (item.winner === 1 && item.reward !== 0) {
+        if (item.reward > 0) {
             return getMessage("Gagné", "win", item)
         } else if (item.winner === 0 && item.reward !== 0) {
             return getMessage("Perdu", "lose", item)
         } else if (item.reward === 0) {
             return (
-                <div style={{display: "flex", flexDirection: "row"}}>
+                <div style={{display: "flex", flexDirection: "row", zIndex: 100}} >
                     <div className={"wait"}>
                         <span style={{ color: "var(--white)" }}>{"#" + item.epoch + " "}</span>
                         {" "}
@@ -42,7 +43,7 @@ const History = ({ bets, game, setStep }: State) => {
     }
 
     const getIcon = (item: any) => {
-        if (item.status === "In progress") {
+        if (item.status === "In progress" || item.status === "Not claimed") {
             return require("./../../Assets/attendreIcon.png")
         }
         if (item.status === "Claimed") {
@@ -69,14 +70,18 @@ const History = ({ bets, game, setStep }: State) => {
 
     const onClick = (item: any) => {
 
-        if (epoch === item.epoch) {
+        if (item.status === "Not claimed") {
+            setButtonLocked(true)
+        }
+
+        if (epoch === item.epoch && !buttonLocked) {
             setEpoch(null)
         } else {
             setEpoch(item.epoch)
         }
     }
 
-    const [claiming, setClaiming] = useState<ClaimRequest>(ClaimRequest.NONE);
+
 
     function computeReward(array: Bet[]): number {
         const filtered = array
@@ -96,6 +101,8 @@ const History = ({ bets, game, setStep }: State) => {
         }
     }
 
+
+
     const getStatus = (item: any) => {
         if (item.status === "In progress") {
             return t("En attente")
@@ -103,16 +110,30 @@ const History = ({ bets, game, setStep }: State) => {
         if (item.status === "Claimed") {
             return t("Réclamé")
         }
-        if (item.status === "notClaimed") {
+        if (item.status === "Not claimed") {
             return (
                 <ButtonPink
                     children={"Réclamer"}
                     textAdd={computeReward(bets).toFixed(2) + " ALPH"}
-                    onClick={claim}
+                    onClick={() => {
+                        claim()
+                    }}
+                    containerStyle={{
+                        fontSize: "14px",
+                        borderRadius: "10px",
+                    }}
                 />
             )
         }
     }
+
+    const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setClaiming(ClaimRequest.NONE);
+    };
 
 
     return (
@@ -123,7 +144,7 @@ const History = ({ bets, game, setStep }: State) => {
             {bets.map((item: any, index: number) => (
                 <div key={index} className={"history"} onClick={() => {onClick(item)}} style={{flexDirection: item.epoch === epoch ? "column" : "row"}}>
                     <div style={{display: "flex", flexDirection: "row", justifyContent: "space-between", flex: 1}}>
-                        {item.winner && getResult(item)}
+                        {getResult(item)}
                         <div style={{transform: "rotate(90deg)",cursor: "pointer"}} >
                             {">"}
                         </div>
@@ -155,6 +176,26 @@ const History = ({ bets, game, setStep }: State) => {
                     alignSelf: "center",
                 }}
             />
+            <Snackbar open={claiming === ClaimRequest.SUCCESS} autoHideDuration={6000} onClose={handleClose}>
+                <Alert
+                    onClose={handleClose}
+                    severity="success"
+                    variant="filled"
+                    sx={{ width: '100%' }}
+                >
+                    Claim success !
+                </Alert>
+            </Snackbar>
+            <Snackbar open={claiming === ClaimRequest.FAILED} autoHideDuration={6000} onClose={handleClose}>
+                <Alert
+                    onClose={handleClose}
+                    severity="error"
+                    variant="filled"
+                    sx={{ width: '100%' }}
+                >
+                    Claim failed !
+                </Alert>
+            </Snackbar>
         </div>
     )
 }

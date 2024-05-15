@@ -82,7 +82,10 @@ const LayoutCard = ({ choice, ThisServices, language }: typeState) => {
                 />}
                 <ModalValidate
                     open={validated}
-                    handleClose={() => setValidated(false)}
+                    handleClose={() => {
+                        setValidated(false)
+                        window.location.reload();
+                    }}
                 />
 
         </div>

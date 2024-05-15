@@ -33,15 +33,15 @@ const CardZoom = ({ game, setVisible, round, setValidated, language }: cardType)
     const [choice, setChoice] = useState(0);
     const [amount, setAmount] = useState(0);
     const placeholder = t("Entrer le montant à miser")
-    // const nodeUrl = 'https://lb-fullnode-alephium.notrustverify.ch/docs/'
+
     const nodeUrl = 'https://predictalph-api.notrustverify.ch/'
     const nodeProvider = new NodeProvider(nodeUrl)
 
     const [step, setStep] = useState(0)
     const [bets, setBets] = useState<Bet[]>([]);
 
-    // console.log("services", services)
-    // console.log("nodeProvider", nodeProvider)
+    console.log("services", services)
+    console.log("nodeProvider", nodeProvider)
 
     // const { txStatus } = useTxStatus(txId)
     // const confirmed = useMemo(() => {
@@ -55,13 +55,19 @@ const CardZoom = ({ game, setVisible, round, setValidated, language }: cardType)
     },[])
 
     useEffect(() => {
-        setBets([])
-        fetch();
-    }, []);
+        if (bets) {
+            setBets([])
+        }
+        if (game && round) {
+            fetch();
+        }
+    }, [game, round]);
 
     async function fetch(): Promise<void> {
         const rawBets = await services.bet.getPlayerBets(game, true);
-        setBets(rawBets.filter(notEmpty));
+        if (rawBets) {
+            setBets(rawBets.filter(notEmpty));
+        }
     }
 
 
@@ -70,18 +76,22 @@ const CardZoom = ({ game, setVisible, round, setValidated, language }: cardType)
             return;
         try {
             const result = await placeBet(choice);
-            console.log('Résultat:', result);
-            // if (txId) {
-            //     const txStatus = await nodeProvider.transactions.getTransactionsStatus({ txId });
-            //     console.log('Transaction Status:', txStatus);
-            // } else {
-            //     console.log('L\'ID de transaction est introuvable.');
-            // }
-            // setValidated(true);
-        } catch (error) {
-            console.log(error);
-        }
-    }
+            if (result) {
+                console.log('Résultat:', result.tx);
+                const status = result.status;
+                const txId = result.tx;
+                if (txId) {
+                    const txStatus = await nodeProvider.transactions.getTransactionsStatus({ txId });
+                    console.log('Transaction Status:', txStatus);
+                } else {
+                    console.log('L\'ID de transaction est introuvable.');
+                }
+                setValidated(true);
+            }
+                } catch (error) {
+                    console.log(error);
+                }
+            }
 
     async function placeBet(choice: number): Promise<Bet | undefined> {
         if (round === null || amount === 0) return;
@@ -209,20 +219,11 @@ const CardZoom = ({ game, setVisible, round, setValidated, language }: cardType)
         )
     }
 
-    const getDisplayHistoric = () => {
-        return (
-            <div>
-
-            </div>
-        )
-    }
-
     if (!game && !round) return null;
 
     return (
         <div className={"containerCard"} style={{ minWidth: "50%"}}>
             {step === 0 && getDisplayBet()}
-            {/*{step === 1 && getDisplayHistoric()}*/}
             {step === 1 && bets && bets.length > 0 &&
                 <History
                     bets={bets}
