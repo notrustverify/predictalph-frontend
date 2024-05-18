@@ -98,8 +98,10 @@
 
 .containerZoomInfo {
     display: flex;
+    flex: 1;
     flex-direction: row;
     justify-content: space-around;
+    align-items: center;
     background-color: var(--PrimaryColor);
     border: 2px solid var(--BorderColor);
     border-radius: 20px;
@@ -110,6 +112,9 @@
 }
 
 .ZoomInfoText {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     font-size: 18px;
     font-weight: bold;
     color: var(--white);

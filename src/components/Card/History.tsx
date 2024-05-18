@@ -56,7 +56,7 @@ const History = ({ bets, game, setStep }: State) => {
 
 
     const getMessage = (text: string, classname: string, item: any) => {
-
+        console.log("item", item)
         return (
             <div className={classname}>
                 <span style={{ color: "var(--white)" }}>{"#" + item.epoch + " "}</span>

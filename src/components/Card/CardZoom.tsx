@@ -118,11 +118,30 @@ const CardZoom = ({ game, setVisible, round, setValidated, language }: cardType)
         )
     }
 
-    const displayInfo = (text: string, price: number) => {
+    const getIcon = (state: boolean) => {
+
+        const icon = state ? require("./../../Assets/coinGecko.png") : require("./../../Assets/locked.png");
+
+        return (
+            <img
+                src={icon}
+                alt={""}
+                style={{
+                    width: "20px",
+                    height: "20px",
+                    display: "flex",
+                    alignItems: "center",
+                    marginRight: 15
+                }}
+            />
+        )
+    }
+
+    const displayInfo = (text: string, price: number, state: boolean) => {
         const formattedPrice = price.toLocaleString('en-US');
         return (
             <div className={"ZoomInfoText"}>
-                {text} {formattedPrice}$
+                {getIcon(state)} {text} {formattedPrice}$
             </div>
         );
     }
@@ -187,8 +206,8 @@ const CardZoom = ({ game, setVisible, round, setValidated, language }: cardType)
                     </div>}
                 { round instanceof RoundPrice && game && ((game.type === "PRICE")) ?
                     <div className={"containerZoomInfo"}>
-                        {displayInfo("Locked:", round.priceStart)}
-                        {displayInfo("Actual:", round.priceEnd)}
+                        {displayInfo("Locked:", round.priceStart, false)}
+                        {displayInfo("Actual:", round.priceEnd, true)}
                     </div>
                     : <div/>}
                 <div className={"containerCardInput"}>
