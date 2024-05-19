@@ -263,6 +263,8 @@ const CardZoom = ({ game, setVisible, round, setValidated, language, setInformat
                     bets={bets}
                     game={game}
                     setStep={setStep}
+                    setValidated={setValidated}
+                    setInformationValidation={setInformationValidation}
                 />}
         </div>
     )

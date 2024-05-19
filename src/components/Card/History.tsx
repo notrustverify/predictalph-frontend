@@ -8,14 +8,17 @@ import {ServiceContext} from "../../App";
 type State = {
     bets: any,
     game: any,
-    setStep: any
+    setStep: any,
+    setValidated: any,
+    setInformationValidation: any
+
 }
 
 enum ClaimRequest {
     PENDING,SUCCESS,FAILED,NONE
 }
 
-const History = ({ bets, game, setStep }: State) => {
+const History = ({ bets, game, setStep, setValidated, setInformationValidation }: State) => {
 
     const services = useContext(ServiceContext);
     const {t} = useTranslation();
@@ -56,7 +59,6 @@ const History = ({ bets, game, setStep }: State) => {
 
 
     const getMessage = (text: string, classname: string, item: any) => {
-        console.log("item", item)
         return (
             <div className={classname}>
                 <span style={{ color: "var(--white)" }}>{"#" + item.epoch + " "}</span>
@@ -92,9 +94,14 @@ const History = ({ bets, game, setStep }: State) => {
 
     async function claim(): Promise<void>{
         setClaiming(ClaimRequest.PENDING);
+        setValidated(true);
+        setInformationValidation({ type: "info", message: "Transaction en cours de traitement." });
         try {
             const res: boolean = await services.bet.claimMyRound(game);
             setClaiming(res ? ClaimRequest.SUCCESS : ClaimRequest.FAILED);
+            if (res) {
+                setInformationValidation({ type: "success", message: "Transaction confirmée avec succès." });
+            }
         } catch (e) {
             console.log(e);
             setClaiming(ClaimRequest.FAILED);

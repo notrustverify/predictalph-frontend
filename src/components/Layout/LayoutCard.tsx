@@ -5,7 +5,6 @@ import ModalCard from "../Modal/ModalCard";
 import { Game } from "../../domain/game";
 import {Round} from "../../domain/round";
 import ModalValidate from "../Modal/ModalValidate";
-import {Historic} from "../OldFiles/historic";
 
 type typeState = {
     choice: number | null,
