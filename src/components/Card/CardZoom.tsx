@@ -1,14 +1,12 @@
-import {Game} from "../../domain/game";
-import React, {useContext, useEffect, useMemo, useState} from "react";
-import {ServiceContext} from "../../App";
-import {Round, RoundPrice} from "../../domain/round";
-import {useTranslation} from "react-i18next";
+import { Game } from "../../domain/game";
+import React, { useContext, useEffect, useState } from "react";
+import { ServiceContext } from "../../App";
+import { Round, RoundPrice } from "../../domain/round";
+import { useTranslation } from "react-i18next";
 import ButtonPink from "../Button/ButtonPink";
-import {Bet} from "../../domain/bet";
-import {backgroundColorArray, displayCircle, displayProgressBar} from "../../FunctionGlobal";
-import TradingViewWidget from "../OldFiles/tradingview";
+import { Bet } from "../../domain/bet";
+import { backgroundColorArray, displayCircle, displayProgressBar } from "../../FunctionGlobal";
 import { useTxStatus } from '@alephium/web3-react';
-import {NodeProvider} from "@alephium/web3";
 import History from "./History";
 
 type cardType = {
@@ -16,14 +14,16 @@ type cardType = {
     setVisible: () => void,
     round: Round,
     setValidated: (state: boolean) => void
-    language: string
+    language: string,
+    setInformationValidation: ({ type, message }: { type: string, message: string }) => void
+
 }
 
 function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
     return value !== null && value !== undefined;
 }
 
-const CardZoom = ({ game, setVisible, round, setValidated, language }: cardType) => {
+const CardZoom = ({ game, setVisible, round, setValidated, language, setInformationValidation }: cardType) => {
 
     const { t } = useTranslation();
     const services = useContext(ServiceContext);
@@ -34,19 +34,44 @@ const CardZoom = ({ game, setVisible, round, setValidated, language }: cardType)
     const [amount, setAmount] = useState(0);
     const placeholder = t("Entrer le montant à miser")
 
-    const nodeUrl = 'https://predictalph-api.notrustverify.ch/'
-    const nodeProvider = new NodeProvider(nodeUrl)
-
     const [step, setStep] = useState(0)
     const [bets, setBets] = useState<Bet[]>([]);
+    const [txId, setTxId] = useState<string | null>(null);
+    const { txStatus } = useTxStatus(txId ?? "");
 
-    console.log("services", services)
-    console.log("nodeProvider", nodeProvider)
 
-    // const { txStatus } = useTxStatus(txId)
-    // const confirmed = useMemo(() => {
-    //     return txStatus?.type === 'Confirmed'
-    // }, [txStatus])
+
+    useEffect(() => {
+        if (txId) {
+            // console.log("Transaction ID:", txId);
+            if (txStatus) {
+                // console.log("Transaction Status:", txStatus);
+                setValidated(true);
+                switch (txStatus.type) {
+                    case 'Confirmed':
+                        setInformationValidation({ type: "success", message: "Transaction confirmée avec succès." });
+                        break;
+                    case 'MemPooled':
+                        setInformationValidation({ type: "info", message: "Transaction en attente de confirmation." });
+                        break;
+                    case 'Pending':
+                        setInformationValidation({ type: "info", message: "Transaction en cours de traitement." });
+                        break;
+                    case 'Failed':
+                        setInformationValidation({ type: "error", message: "La transaction a échoué." });
+                        break;
+                    case 'Dropped':
+                        setInformationValidation({ type: "error", message: "La transaction a été retirée du mempool." });
+                        break;
+                    default:
+                        setInformationValidation({ type: "info", message: "Transaction en cours de traitement." });
+                        break;
+                }
+
+            }
+        }
+    }, [txId, txStatus]);
+
 
     useEffect( () => {
         if (game && round) {
@@ -72,26 +97,23 @@ const CardZoom = ({ game, setVisible, round, setValidated, language }: cardType)
 
 
     const myBet = async () => {
-        if (choice === null || amount === 0)
-            return;
+        if (choice === null || amount === 0) return;
         try {
             const result = await placeBet(choice);
             if (result) {
-                console.log('Résultat:', result.tx);
-                const status = result.status;
                 const txId = result.tx;
                 if (txId) {
-                    const txStatus = await nodeProvider.transactions.getTransactionsStatus({ txId });
-                    console.log('Transaction Status:', txStatus);
+                    setTxId(txId);  // Mettre à jour le txId pour suivre son statut
                 } else {
+                    setInformationValidation({ type: "error", message: "L'ID de transaction est introuvable." });
                     console.log('L\'ID de transaction est introuvable.');
                 }
                 setValidated(true);
             }
-                } catch (error) {
-                    console.log(error);
-                }
-            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     async function placeBet(choice: number): Promise<Bet | undefined> {
         if (round === null || amount === 0) return;
@@ -119,20 +141,12 @@ const CardZoom = ({ game, setVisible, round, setValidated, language }: cardType)
     }
 
     const getIcon = (state: boolean) => {
-
         const icon = state ? require("./../../Assets/coinGecko.png") : require("./../../Assets/locked.png");
-
         return (
             <img
                 src={icon}
                 alt={""}
-                style={{
-                    width: "20px",
-                    height: "20px",
-                    display: "flex",
-                    alignItems: "center",
-                    marginRight: 15
-                }}
+                style={{ width: "20px", height: "20px", display: "flex", alignItems: "center", marginRight: 15}}
             />
         )
     }

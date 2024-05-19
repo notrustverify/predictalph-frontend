@@ -21,6 +21,8 @@ const LayoutCard = ({ choice, ThisServices, language }: typeState) => {
     const [thisRound, setThisRound] = useState<Round | null>(null);
     const [validated, setValidated] = useState(false);
     const [game, setGame] = useState([]);
+    const [informationValidation, setInformationValidation] = useState<{ type: string, message: string }>({ type: "", message: "" });
+
 
     useEffect(() => {
         fetchRoundData();
@@ -52,9 +54,6 @@ const LayoutCard = ({ choice, ThisServices, language }: typeState) => {
         setThisRound(event);
     }
 
-    useEffect( () => {
-        console.log("Round", thisRound)
-    }, [thisRound])
 
     return (
         <div className={"LayoutCard"}>
@@ -79,6 +78,7 @@ const LayoutCard = ({ choice, ThisServices, language }: typeState) => {
                     round={thisRound}
                     setValidated={setValidated}
                     language={language}
+                    setInformationValidation={setInformationValidation}
                 />}
                 <ModalValidate
                     open={validated}
@@ -86,6 +86,7 @@ const LayoutCard = ({ choice, ThisServices, language }: typeState) => {
                         setValidated(false)
                         window.location.reload();
                     }}
+                    informationValidation={informationValidation}
                 />
 
         </div>

@@ -10,10 +10,11 @@ type State = {
     setVisible: () => void,
     round: Round,
     setValidated: (state: boolean) => void
-    language: string
+    language: string,
+    setInformationValidation: ({ type, message }: { type: string, message: string }) => void
 }
 
-const ModalCard = ({ isVisible, game, setVisible, round, setValidated, language }: State) => {
+const ModalCard = ({ isVisible, game, setVisible, round, setValidated, language, setInformationValidation }: State) => {
 
     if (!isVisible) return null;
 
@@ -29,6 +30,7 @@ const ModalCard = ({ isVisible, game, setVisible, round, setValidated, language 
                 round={round}
                 setValidated={setValidated}
                 language={language}
+                setInformationValidation={setInformationValidation}
             />
         </Modal>
     )

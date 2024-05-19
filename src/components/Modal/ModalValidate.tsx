@@ -1,18 +1,59 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { useTranslation } from 'react-i18next';
 import {Modal} from "@mui/material";
 import ButtonPink from "../Button/ButtonPink";
 
+type state = {
+    open: boolean,
+    handleClose: () => void,
+    informationValidation: { type: string, message: string }
 
-const ModalValidate = ({ open, handleClose }: { open: boolean, handleClose: () => void }) => {
+}
+
+const ModalValidate = ({ open, handleClose, informationValidation }: state) => {
 
     const { t } = useTranslation();
+    const [type, setType] = useState<string>('')
+    const [message, setMessage] = useState<string>('')
 
+    useEffect(() => {
+        let messageType: string;
+
+        switch (informationValidation.type) {
+            case 'success':
+                messageType = 'Succès';
+                break;
+            case 'info':
+                messageType = 'Transaction en cours';
+                break;
+            case 'error':
+                messageType = 'Erreur';
+                break;
+            default:
+                messageType = 'Inconnu';
+                break;
+        }
+
+        setType(messageType);
+        setMessage(informationValidation.message)
+    }, [informationValidation])
+
+    const getMessage = (text: string, classname: string) => {
+        return (
+            <div className={classname}>
+                {t(text)}
+            </div>
+        )
+    }
 
     return (
         <Modal
             open={open}
-            onClose={handleClose}
+            onClose={ () => {
+                if (informationValidation.type === 'success') {
+                    handleClose()
+                }
+            }}
         >
             <div
                 style={{
@@ -34,15 +75,21 @@ const ModalValidate = ({ open, handleClose }: { open: boolean, handleClose: () =
                     alignItems: 'center',
                 }}
             >
-                    <div className={"validateTitle"}>
-                        {t("VALIDATION")}
-                    </div>
-                    <div className={"validateText"}>
-                        {t("Votre pari à bien été enreigstré")}
-                    </div>
+                {getMessage(type, "validateTitle")}
+                {getMessage(message, "validateText")}
+                    {/*<div className={"validateTitle"}>*/}
+                    {/*    {t("VALIDATION")}*/}
+                    {/*</div>*/}
+                    {/*<div className={"validateText"}>*/}
+                    {/*    {t("Votre pari à bien été enreigstré")}*/}
+                    {/*</div>*/}
                 <ButtonPink
                     children={t("Fermer")}
-                    onClick={handleClose}
+                    onClick={ () => {
+                        if (informationValidation.type === 'success') {
+                            handleClose()
+                        }
+                    }}
                     containerStyle={{marginTop: 20}}
                 />
             </div>
