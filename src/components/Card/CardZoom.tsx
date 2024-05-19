@@ -8,6 +8,7 @@ import { Bet } from "../../domain/bet";
 import { backgroundColorArray, displayCircle, displayProgressBar } from "../../FunctionGlobal";
 import { useTxStatus } from '@alephium/web3-react';
 import History from "./History";
+import TradingView from "../Trading/TradingView";
 
 type cardType = {
     game: Game,

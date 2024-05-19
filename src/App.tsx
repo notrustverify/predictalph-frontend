@@ -52,7 +52,7 @@ export default function App() {
       <ServiceContext.Provider value={services}>
         <I18nextProvider i18n={i18n} >
           <BrowserRouter>
-            {/*<TradingView />*/}
+            <TradingView />
             <Menu
                 language={language}
                 setLanguage={setLanguage}

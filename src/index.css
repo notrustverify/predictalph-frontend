@@ -7,7 +7,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: radial-gradient(circle, #262562, #11102F);
+  /*background: radial-gradient(circle, #262562, #11102F);*/
+  background: radial-gradient(circle, #364186, #1b1934);
   color: var(--TextColor);
   /*background: url('Assets/SVG/backgroundSVG.svg') center/cover no-repeat;*/
 }
@@ -19,10 +20,15 @@ code {
 }
 
 :root {
-  --black: rgba(0, 0, 0, 0.85);
+  /*--black: rgba(0, 0, 0, 0.85);*/
+  /*--PrimaryColor: #11102F;*/
+  /*--PrimaryColor: rgba(27, 25, 52, 0.5);*/
+  /*--SecondaryColor: rgba(19, 17, 52, 0.62);*/
+  --black: rgba(0, 0, 0, 0.7);
+  --PrimaryColor: rgba(27, 25, 52, 0.9);
+  --SecondaryColor: rgba(19, 17, 52, 0.45);
+
   --white: #fff;
-  --PrimaryColor: #11102F;
-  --SecondaryColor: rgba(19, 17, 52, 0.62);
   --SecondaryColorV1: #131134;
   --BorderColor: #2E2C51;
   --TextColor: #ACA5FF;

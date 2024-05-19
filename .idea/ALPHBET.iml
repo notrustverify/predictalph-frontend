@@ -12,5 +12,6 @@
     <orderEntry type="library" name="three" level="application" />
     <orderEntry type="library" name="three.js" level="application" />
     <orderEntry type="library" name="vanta" level="application" />
+    <orderEntry type="library" name="tv" level="application" />
   </component>
 </module>
