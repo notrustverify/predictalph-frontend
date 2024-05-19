@@ -40,5 +40,15 @@
   "En attente": "En attente",
   "Réclamé": "Réclamé",
   "Perdu": "Perdu",
-  "Gagné": "Gagné"
+  "Gagné": "Gagné",
+  "L'ID de transaction est introuvable." : "L'ID de transaction est introuvable.",
+  "Transaction confirmée avec succès.": "Transaction confirmée avec succès.",
+  "Transaction en attente de confirmation.": "Transaction en attente de confirmation.",
+  "Transaction en cours de traitement.": "Transaction en cours de traitement.",
+  "La transaction a échoué.": "La transaction a échoué.",
+  "La transaction a été retirée du mempool.": "La transaction a été retirée du mempool.",
+  "Succès": "Succès",
+  "Transaction en cours": "Transaction en cours",
+  "Erreur": "Erreur",
+  "Inconnu": "Inconnu"
 }

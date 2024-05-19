@@ -39,5 +39,15 @@
   "En attente": "Pending",
   "Réclamé": "Claimed",
   "Perdu": "Lost",
-  "Gagné": "Won"
+  "Gagné": "Won",
+  "L'ID de transaction est introuvable." : "Transaction ID not found.",
+  "Transaction confirmée avec succès.": "Transaction confirmed successfully.",
+  "Transaction en attente de confirmation.": "Transaction awaiting confirmation.",
+  "Transaction en cours de traitement.": "Transaction in process.",
+  "La transaction a échoué.": "The transaction failed.",
+  "La transaction a été retirée du mempool.": "The transaction was dropped from the mempool.",
+  "Succès": "Success",
+  "Transaction en cours": "Transaction in progress",
+  "Erreur": "Error",
+  "Inconnu": "Unknown"
 }
