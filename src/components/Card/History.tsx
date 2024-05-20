@@ -101,6 +101,10 @@ const History = ({ bets, game, setStep, setValidated, setInformationValidation }
             setClaiming(res ? ClaimRequest.SUCCESS : ClaimRequest.FAILED);
             if (res) {
                 setInformationValidation({ type: "success", message: "Transaction confirmée avec succès." });
+                setTimeout(() => {
+                    window.location.reload();
+                    setValidated(false);
+                }, 2000);
             }
         } catch (e) {
             console.log(e);

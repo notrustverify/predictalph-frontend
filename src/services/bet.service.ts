@@ -87,8 +87,17 @@ export class BetService {
             else
                 choice = dto.side ? 0 : 1;
 
-            const reward: number = await this.computeRewards(choice, dto, game);
-            const status: BetStatus = await this.getStatus(reward, dto)
+            // const reward: number = await this.computeRewards(choice, dto, game);
+            // const status: BetStatus = await this.getStatus(reward, dto)
+            let reward: number;
+            let status: BetStatus;
+            if (dto.claimed) {
+                reward = 0
+                status = BetStatus.CLAIMED;
+            } else {
+                reward = await this.computeRewards(choice, dto, game);
+                status = await this.getStatus(reward, dto)
+            }
 
             return new Bet(
                 status,
