@@ -23,6 +23,7 @@ export class Bet {
         public reward: number, // cf calcul dans le contract
         public winner: number,
         public epoch: bigint,
+        public tx: string,
     ) {}
 
     win(): WinStatus {

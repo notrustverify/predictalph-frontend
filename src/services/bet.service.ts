@@ -105,6 +105,7 @@ export class BetService {
                 reward,
                 this.getResult(dto),
                 dto.epoch,
+                "" // TODO can we get tx id from API ?
                 )
         });
         const bets: Bet[] =  await Promise.all(promises)
