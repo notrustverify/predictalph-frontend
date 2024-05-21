@@ -107,7 +107,7 @@ const CardZoom = ({ game, setVisible, round, setValidated, language, setInformat
                     setTxId(txId);  // Mettre à jour le txId pour suivre son statut
                 } else {
                     setInformationValidation({ type: "error", message: "L'ID de transaction est introuvable." });
-                    console.log('L\'ID de transaction est introuvable.');
+                    // console.log('L\'ID de transaction est introuvable.');
                 }
                 setValidated(true);
             }

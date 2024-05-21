@@ -107,7 +107,7 @@ export class WalletConnector implements WalletConnector {
             });
             return res.txId;
         } else if (game.type === GameType.MULTIPLE_CHOICE) {
-            console.log(bets.map(b => Number(b.epoch)))
+            // console.log(bets.map(b => Number(b.epoch)))
             const res = await WithdrawMultipleChoice.execute(this.window, {
                 initialFields: {
                     predict: game.contract.id,

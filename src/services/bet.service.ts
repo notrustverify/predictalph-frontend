@@ -22,7 +22,7 @@ export class BetService {
 
     async claimMyRound(game: Game): Promise<boolean> {
         const curr = await this.getCurrentRound(game);
-        console.log(curr)
+        // console.log(curr)
         const bets = (await this.getPlayerBets(game))
             .filter(b => b.epoch < curr.epoch || curr.rewardsComputed)
             .filter(b => b.status === BetStatus.NOTCLAIMED)

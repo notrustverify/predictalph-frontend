@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import ButtonPink from "../Button/ButtonPink";
 import {Alert, Button, Snackbar} from "@mui/material";
-import {Bet, BetStatus} from "../../domain/bet";
+import {Bet, BetStatus, WinStatus} from "../../domain/bet";
 import {ServiceContext} from "../../App";
 
 type State = {
@@ -26,12 +26,10 @@ const History = ({ bets, game, setStep, setValidated, setInformationValidation }
     const [claiming, setClaiming] = useState<ClaimRequest>(ClaimRequest.NONE);
     const [buttonLocked, setButtonLocked] = useState(false)
 
-    const getResult = (item: any) => {
-        if (item.reward > 0) {
+    const getResult = (item: Bet) => {
+        if (item.win() === WinStatus.WIN) {
             return getMessage("Gagné", "win", item)
-        } else if (item.winner === 0 && item.reward !== 0) {
-            return getMessage("Perdu", "lose", item)
-        } else if (item.reward === 0) {
+        } else if (item.win() === WinStatus.INPROGRESS) {
             return (
                 <div style={{display: "flex", flexDirection: "row", zIndex: 100}} >
                     <div className={"wait"}>
@@ -42,6 +40,8 @@ const History = ({ bets, game, setStep, setValidated, setInformationValidation }
                     <img src={getIcon(item)} alt={"icon"} style={{ width: "20px", height: "20px", marginLeft: 25 }} />
                 </div>
             )
+        } else {
+            return getMessage("Perdu", "lose", item)
         }
     }
 
