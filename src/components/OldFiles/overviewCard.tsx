@@ -52,11 +52,21 @@ export function OverviewCard({game}: OverviewCardType) {
                     <Button
                         fullWidth
                         onClick={() => setChoice(1)}
-                        color="warning"
+                        color={ game.type === GameType.MULTIPLE_CHOICE ? "secondary": "warning"}
                         variant="outlined">
                         {game.choiceDescriptions[1]}
                     </Button>
                 </Grid>
+                { game.type === GameType.MULTIPLE_CHOICE ? 
+                <Grid item md={6} sx={{marginTop: '10px'}}>
+                    <Button
+                        fullWidth
+                        onClick={() => setChoice(2)}
+                        color={ game.type === GameType.MULTIPLE_CHOICE ? "secondary": "warning"}
+                        variant="outlined">
+                        {game.choiceDescriptions[2]}
+                    </Button>
+                </Grid> : ''}
             </Grid>
         );
     }

@@ -87,6 +87,7 @@ export class BetService {
             else
                 choice = dto.side ? 0 : 1;
 
+<<<<<<< HEAD
             // const reward: number = await this.computeRewards(choice, dto, game);
             // const status: BetStatus = await this.getStatus(reward, dto)
             let reward: number;
@@ -98,6 +99,10 @@ export class BetService {
                 reward = await this.computeRewards(choice, dto, game);
                 status = await this.getStatus(reward, dto)
             }
+=======
+            const reward: number = await this.computeRewards(choice, dto, game);
+            const status: BetStatus = await this.getStatus(reward, dto)
+>>>>>>> c927f2b (Feature/multiplechoice (#22))
 
             return new Bet(
                 status,

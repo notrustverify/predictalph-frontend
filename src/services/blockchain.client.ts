@@ -90,6 +90,7 @@ export class BlockchainClient {
         this.lastFetchCurrentEpoch = now;
         return this.getRound(epoch, game);
     }
+  }
 
     private static key(epoch: bigint, game: Game): string {
         return `${epoch}${game.id}`;
@@ -213,4 +214,5 @@ export class BlockchainClient {
             return Number(price) / 10_000;
         }
     }
+  }
 }

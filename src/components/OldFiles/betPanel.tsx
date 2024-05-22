@@ -1,9 +1,9 @@
 import {useContext, useEffect, useState} from "react";
-import {ServiceContext} from "../../App";
-import {Box, Button, FormControl, Grid, InputAdornment, InputLabel, OutlinedInput} from "@mui/material";
-import {Game} from "../../domain/game";
-import {Bet} from "../../domain/bet";
-import {Round, RoundStatus} from "../../domain/round";
+import {ServiceContext} from "../App";
+import {Box, Button, FormControl, Grid, InputAdornment, InputLabel, OutlinedInput, } from "@mui/material";
+import {Game, GameType} from "../domain/game";
+import {Bet} from "../domain/bet";
+import {Round, RoundStatus} from "../domain/round";
 import Typography from "@mui/material/Typography";
 import {PollComponent} from "./poll";
 
@@ -11,6 +11,7 @@ type BetPanelProps = {
     game: Game,
     selection: { choice: number | null, amount: number | null }
 }
+
 
 export function BetPanel({game, selection }: BetPanelProps) {
     const services = useContext(ServiceContext);
@@ -88,7 +89,55 @@ export function BetPanel({game, selection }: BetPanelProps) {
                             </Button>}
 
                     </Grid>
+                            
                     <Grid item style={item} md={4} xs={12}>
+                        {bet === null && round?.status === RoundStatus.RUNNING
+                            ? <Button
+                                onClick={() => placeBet(1).catch(console.log).then()}
+                                size="large"
+                                fullWidth
+                                color={ game.type === GameType.MULTIPLE_CHOICE ? "secondary": "warning"}
+                                variant="contained">
+                                {game.choiceDescriptions[1]}
+                            </Button>
+                            : <Button
+                                fullWidth
+                                sx={{height: '100%'}}
+                                color= {game.type === GameType.MULTIPLE_CHOICE ? "secondary": "warning" }
+                                variant="contained"
+                                disabled={true}
+                                size="large">
+                                {bet?.choice === 1 ? 'You already bet' : '.'}
+                            </Button>}
+
+                    </Grid>
+                    
+                    {
+                        game.type === GameType.MULTIPLE_CHOICE ? 
+                    <Grid item style={item} sx={{height: '100%'}} md={4} xs={12}>
+                        {bet === null && round?.status === RoundStatus.RUNNING
+                            ? <Button
+                                fullWidth
+                                onClick={() => placeBet(2).catch(console.log).then()}
+                                sx={{height: '100%'}}
+                                color="secondary"
+                                variant="contained"
+                                size="large">
+                                {game.choiceDescriptions[2]}
+                            </Button>
+                            : <Button
+                                fullWidth
+                                sx={{height: '100%'}}
+                                color='secondary'
+                                variant="contained"
+                                disabled={true}
+                                size="large">
+                                {bet?.choice === 0 ? 'You already bet' : '.'}
+                            </Button>}
+
+                    </Grid> :''
+                        }
+                          <Grid item style={item} md={12} xs={12}>
                         <Grid
                             container
                             direction="column"
@@ -134,27 +183,6 @@ export function BetPanel({game, selection }: BetPanelProps) {
                                 </Grid>
                             </Grid>
                         </Grid>
-                    </Grid>
-                    <Grid item style={item} md={4} xs={12}>
-                        {bet === null && round?.status === RoundStatus.RUNNING
-                            ? <Button
-                                onClick={() => placeBet(1).catch(console.log).then()}
-                                size="large"
-                                fullWidth
-                                color="warning"
-                                variant="contained">
-                                {game.choiceDescriptions[1]}
-                            </Button>
-                            : <Button
-                                fullWidth
-                                sx={{height: '100%'}}
-                                color='warning'
-                                variant="contained"
-                                disabled={true}
-                                size="large">
-                                {bet?.choice === 1 ? 'You already bet' : '.'}
-                            </Button>}
-
                     </Grid>
                 </Grid>
             </Box>

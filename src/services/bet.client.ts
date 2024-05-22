@@ -56,7 +56,7 @@ export class BetClient {
     private async fetch(game: Game, account: Account): Promise<BetDTO[]> {
         const res = await axios.get(`${this.host}/allround/${game.contract.id}/${account.address}`)
             .then(res => res.status == 200 ? res.data : []);
-
+        
         return res.map((bet: any) => new BetDTO(
             bet.side,
             bet.sideMultipleChoice,
