@@ -45,7 +45,7 @@ export class BlockchainClient {
       web3.setCurrentNodeProvider("http://127.0.0.1:22973");
     else
       web3.setCurrentNodeProvider(
-        `https://lb-fullnode-alephium.notrustverify.ch/`
+        `https://lb-fullnode-alephium.notrustverify.ch`
       );
   }
 
