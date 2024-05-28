@@ -51,16 +51,16 @@
       "symbol": ""
     },
     {
-      "name": "Who will go to the finals of the UEFA Champions league?",
+      "name": "Who will win the finals of the UEFA Champions league?",
       "description": "",
       "contract": {
-        "id": "55c8cf1048b7cd24fde6a8b95f901dd5fdc0ded3a4a4128d81e70e930e60c001",
-        "address": "zTpN2cYM68g1YoUDoTMTA748mZqHYNDRVtRjmi4fknVW",
+        "id": "521a461e8bb20ca690affca1952d9566030a9703b2e6b3813750b67644f1cf01",
+        "address": "zDSnEV7PxT1zgQXaemv46HfoJA5jJ8UPMHZKsWv9omDA",
         "index": 1
       },
       "choiceDescriptions": [
         "Real Madrid",
-        "Bayern Munich"
+        "Dortmund"
       ],
       "type": "MULTIPLE_CHOICE",
       "img": "/images/alephium-price.png",
