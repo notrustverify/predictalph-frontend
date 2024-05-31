@@ -51,7 +51,7 @@
       "symbol": ""
     },
     {
-      "name": "Who will win the finals of the UEFA Champions league?",
+      "name": "⚽ Who will win the final of the UEFA Champions league?",
       "description": "",
       "contract": {
         "id": "521a461e8bb20ca690affca1952d9566030a9703b2e6b3813750b67644f1cf01",
@@ -61,6 +61,22 @@
       "choiceDescriptions": [
         "Real Madrid",
         "Dortmund"
+      ],
+      "type": "MULTIPLE_CHOICE",
+      "img": "/images/alephium-price.png",
+      "symbol": ""
+    },
+        {
+      "name": "🏀 Who will win the final of the NBA? (best of 7 matches)",
+      "description": "",
+      "contract": {
+        "id": "a2dab0dbdcaa75aaeb35279681901e37cfe6552e412688d3ad1c6ad4beb75701",
+        "address": "25efa5DVUbcuMYRvgHebvZ3vBt8NUpz6aS5UQLmpqdyWG",
+        "index": 1
+      },
+      "choiceDescriptions": [
+        "Dallas Mavericks",
+        "Boston Celtics"
       ],
       "type": "MULTIPLE_CHOICE",
       "img": "/images/alephium-price.png",
