@@ -1,5 +1,5 @@
-import { Game, GameType } from "../domain/game";
-import { Round, RoundPrice, RoundStatus } from "../domain/round";
+import {Game, GameType} from "../domain/game";
+import {Round, RoundPrice, RoundStatus} from "../domain/round";
 import {
   PredictChoice,
   PredictPrice,
@@ -7,12 +7,13 @@ import {
   Round as RoundPriceContract,
   RoundChoice,
 } from "../artifacts/ts";
-import { addressFromContractId, subContractId, web3 } from "@alephium/web3";
-import { CoinGeckoClient } from "./coinGeckoClient";
+import {addressFromContractId, subContractId, web3} from "@alephium/web3";
+import {CoinGeckoClient} from "./coinGeckoClient";
 import AsyncLock from "async-lock";
-import { contractExists, toDecimal } from "./utils";
-import { PredictMultipleChoice } from "../artifacts/ts/PredictMultipleChoice";
-import { RoundMultipleChoice } from "../artifacts/ts/RoundMultipleChoice";
+import {contractExists, toDecimal} from "./utils";
+import {PredictMultipleChoice} from "../artifacts/ts/PredictMultipleChoice";
+import {RoundMultipleChoice} from "../artifacts/ts/RoundMultipleChoice";
+import {CacheRepository} from "./cache.repository";
 
 export function getRoundContractId(
   predictAlphContractId: string,
@@ -27,12 +28,9 @@ function getEpochPath(epoch: bigint) {
 }
 
 export class BlockchainClient {
-  private static CACHE_EXP_ROUND_MS = 2000;
-  private static CACHE_EXP_CURRENT_EPOCH_MS = 2000;
-  private lastFetchCurrentRound: number = 0;
-  private lastFetchCurrentEpoch: number = 0;
-  private cachedRounds: Map<string, Round> = new Map();
-  private cachedCurrentEpoch: Map<string, bigint> = new Map();
+  private cacheRound = new CacheRepository<Round>(2000);
+  private cacheEpoch = new CacheRepository<bigint>(2000);
+  private cacheContractExist = new CacheRepository<boolean>(2000);
   private lock = new AsyncLock();
 
   constructor(
@@ -50,16 +48,11 @@ export class BlockchainClient {
   }
 
   async getCurrentRound(game: Game): Promise<Round> {
-    const cached = this.cachedCurrentEpoch.get(game.id);
-    const now = Date.now();
+    const cached: bigint | null = this.cacheEpoch.get(game.id);
     let epoch: bigint = BigInt("0");
 
     // Used cached current epoch from main contract state
-    if (
-      cached !== undefined &&
-      now - this.lastFetchCurrentEpoch <
-        BlockchainClient.CACHE_EXP_CURRENT_EPOCH_MS
-    ) {
+    if (cached !== null ) {
       epoch = cached;
       return this.getRound(epoch, game);
     }
@@ -86,9 +79,19 @@ export class BlockchainClient {
         epoch = gameState.fields.epoch-BigInt(1)
    }
 
-    this.cachedCurrentEpoch.set(game.id, epoch);
-    this.lastFetchCurrentEpoch = now;
+    this.cacheEpoch.set(game.id, epoch);
     return this.getRound(epoch, game);
+  }
+
+  private async contractExists(address: string): Promise<boolean> {
+    const cached: boolean | null = this.cacheContractExist.get(address);
+    if (cached !== null) {
+      return cached;
+    }
+
+    const exist = await contractExists(address);
+    this.cacheContractExist.set(address, exist);
+    return exist;
   }
 
   private static key(epoch: bigint, game: Game): string {
@@ -97,27 +100,17 @@ export class BlockchainClient {
 
   async getRound(epoch: bigint, game: Game): Promise<Round> {
     return this.lock.acquire("GETROUND", async () => {
-      const cache = this.cachedRounds.get(BlockchainClient.key(epoch, game));
+      const cached: Round | null = this.cacheRound.get(BlockchainClient.key(epoch, game));
       const now = Date.now();
 
-      // if round finished and cached return it
-      if (cache !== undefined && cache.status !== RoundStatus.RUNNING) {
-        return cache;
-      }
-
-      // if running round but cache not expire return it
-      if (
-        cache !== undefined &&
-        now - this.lastFetchCurrentRound < BlockchainClient.CACHE_EXP_ROUND_MS
-      ) {
-        return cache;
+      // if round cached return it
+      if (cached !== null) {
+        return cached;
       }
 
       const round = await this.fetchRound(epoch, game);
-      if (round.status === RoundStatus.RUNNING) {
-        this.lastFetchCurrentRound = now;
-      }
-      this.cachedRounds.set(BlockchainClient.key(epoch, game), round);
+      const notExpire = round.status !== RoundStatus.RUNNING;
+      this.cacheRound.set(BlockchainClient.key(epoch, game), round, notExpire);
       return round;
     });
   }

@@ -3,6 +3,7 @@ import {Account} from "../domain/account";
 import axios from "axios";
 import AsyncLock from "async-lock";
 import {toDecimal} from "./utils";
+import {CacheRepository} from "./cache.repository";
 
 export class BetDTO {
     constructor(
@@ -22,11 +23,8 @@ export class BetDTO {
 }
 
 export class BetClient {
-
-    private static CACHE_MS = 1000;
-    private lastFetch = new Map<string, number>;
-    private caches = new Map<string, BetDTO[]>();
     private lock = new AsyncLock();
+    private cacheRepository = new CacheRepository<BetDTO[]>(1000);
 
     constructor(private readonly host: string) {
     }
@@ -36,8 +34,9 @@ export class BetClient {
             const now = Date.now();
 
             // use cache
-            if (now < (this.lastFetch.get(game.id) ?? 0) + BetClient.CACHE_MS) {
-                return this.caches.get(game.id)!;
+            const cached: BetDTO[] | null = this.cacheRepository.get(game.id);
+            if (cached !== null) {
+                return cached
             }
 
             // fetch
@@ -47,8 +46,7 @@ export class BetClient {
                     return[]
                 });
 
-            this.lastFetch.set(game.id, now);
-            this.caches.set(game.id, bets);
+            this.cacheRepository.set(game.id, bets);
             return bets;
         });
     }
@@ -56,7 +54,7 @@ export class BetClient {
     private async fetch(game: Game, account: Account): Promise<BetDTO[]> {
         const res = await axios.get(`${this.host}/allround/${game.contract.id}/${account.address}`)
             .then(res => res.status == 200 ? res.data : []);
-        
+
         return res.map((bet: any) => new BetDTO(
             bet.side,
             bet.sideMultipleChoice,

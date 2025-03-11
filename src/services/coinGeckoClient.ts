@@ -1,28 +1,32 @@
 import axios from "axios";
+import {CacheRepository} from "./cache.repository";
 
 export class CoinGeckoClient {
-    private static readonly ONE_MINUTE = 60*1000;
-    private lastValues: Map<string, number> = new Map();
-    private lastDates: Map<string, number> = new Map();
+    private cacheRepository = new CacheRepository<number>(60 * 1000);
 
     constructor() {
     }
 
     async getPriceAlph(symbol: string): Promise<number> {
-        if ((Date.now() - (this.lastDates.get(symbol) ?? 0)) > CoinGeckoClient.ONE_MINUTE) {
-            try {
-                const res = await axios.get(
-                    `https://api.coingecko.com/api/v3/simple/price?ids=${symbol}&vs_currencies=usd`,
-                    {validateStatus: (status) => true},
-                );
-                if (res.status === 200) {
-                    this.lastValues.set(symbol, res.data[symbol].usd);
-                }
-            } catch (e) {} finally {
-                this.lastDates.set(symbol, Date.now());
-            }
+        const cached: number | null = this.cacheRepository.get(symbol);
+        if (cached !== null) {
+            return cached;
         }
 
-        return this.lastValues.get(symbol) ?? 0;
+        try {
+            const res = await axios.get(
+                `https://api.coingecko.com/api/v3/simple/price?ids=${symbol}&vs_currencies=usd`,
+                {validateStatus: (status) => true},
+            );
+            if (res.status === 200) {
+                this.cacheRepository.set(symbol, res.data[symbol].usd);
+            } else {
+                this.cacheRepository.set(symbol, 0);
+            }
+        } catch (e) {
+            this.cacheRepository.set(symbol, 0);
+        }
+
+        return this.cacheRepository.get(symbol) ?? 0;
     }
 }
